@@ -1,101 +1,118 @@
-# Erp
+# Micro-Frontend ERP System
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+**Managed by Antigravity Agent**
+**Current Phase**: Phase 4 - Implementation Execution
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+---
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## 🚀 Project Objective
 
-## Run tasks
+To architect and bootstrap a scalable, enterprise-grade **Micro-Frontend ERP System** using **Angular 21+**, **Nx**, and **native Webpack Module Federation**. The system addresses the need for independent domain deployment, team autonomy, and strict architectural boundaries.
 
-To run the dev server for your app, use:
+---
 
-```sh
-npx nx serve shell
+## 📐 Architecture Overview
+
+- **Pattern**: Monorepo with Shell (Host) + Remote Applications.
+- **Tooling**: Nx Workspace (Angular Monorepo Preset).
+- **Integration**: Native Webpack Module Federation (No `single-spa`, no `iframes`).
+- **Styling**: SCSS.
+- **Routing**: Angular Standalone Router (Lazy loading Remotes).
+
+### Domain Boundaries
+
+1.  **Shell**: Orchestration, Layout, Global Auth State.
+2.  **Auth (Remote)**: Login, Registration, Session Management.
+3.  **Finance (Remote)**: Invoicing, Reporting, Ledgers.
+4.  **HR (Remote)**: Employee Management, Payroll.
+5.  **Supply (Remote)**: Inventory, Procurement, Vendors.
+
+---
+
+## 🛠 Project Requirements (Non-Negotiable)
+
+- **Framework**: Angular 21.0.8+ (Latest Stable).
+- **Build System**: Nx 22.3.3+ (Latest Stable).
+- **Node.js**: `v20.19.x`, `v22.12.x`, or `v24.x`.
+- **Constraint**: **Strict Mode** enabled (TypeScript).
+- **Communication**: Remotes **MUST NOT** import from other Remotes. All communication via Shell or Shared Libs.
+- **Libs vs Apps**: Apps are thin shells; Business logic lives in `libs/`.
+
+---
+
+## 📊 Work Completed (Phases 1-3 Completed)
+
+### Phase 1: Architecture Design ✅
+
+- [x] Defined Micro-Frontend strategy (Host-Remote).
+- [x] Established Domain Boundaries (Auth, Finance, HR, Supply).
+- [x] Approved Monorepo structure.
+
+### Phase 2: Workspace Structure ✅
+
+- [x] Selected **Nx** over plain Angular CLI.
+- [x] Defined Directory Structure (`apps/`, `libs/domain/type`).
+- [x] Established Naming Conventions (`scope:auth`, `type:feature`).
+- [x] Defined Dependency Rules (`type:feature` cannot import `type:app`).
+
+### Phase 3: Technical Preparation ✅
+
+- [x] Validated Environment (Node 20.19.6, npm 10.8.2).
+- [x] Defined **EXACT** commands for implementation (See `.gemini/brain/.../technical-preparation.md`).
+- [x] Configured Nx Tags schema.
+
+---
+
+## 🚧 Current Status & Handover (Phase 4)
+
+The **Nx Workspace** has been initialized.
+
+**Next Immediate Steps for Developer:**
+
+1.  **Configure Shell**: Convert `apps/shell` to Module Federation Host.
+2.  **Generate Remotes**: Create `remote-auth`, `remote-finance`, `remote-hr`, `remote-supply`.
+3.  **Generate Libraries**: Create `shared/ui`, `shared/utils`, `auth/feature-login`, etc.
+4.  **Enforce Boundaries**: Update `nx.json` with dependency constraints.
+
+### 📚 Enterprise Documentation
+
+The following documentation serves as the **Single Source of Truth** for this project.
+
+| Document                                               | Description                                                       |
+| ------------------------------------------------------ | ----------------------------------------------------------------- |
+| [**Architecture Guide**](docs/architecture.md)         | High-level system design, domain boundaries, and ADRs.            |
+| [**Workspace Structure**](docs/workspace-structure.md) | Nx Apps/Libs layout, naming conventions, and dependency rules.    |
+| [**CI/CD Strategy**](docs/ci-cd.md)                    | Pipeline stages, artifact management, and caching.                |
+| [**Deployment Guide**](docs/deployment.md)             | Dynamic remote discovery, versioning, and rollback.               |
+| [**Runtime Architecture**](docs/runtime.md)            | Bootstrapping, error handling, and lazy loading flow.             |
+| [**Technical Prep**](docs/technical-preparation.md)    | **Exact commands** to bootstrap the environment (Phase 3 output). |
+| [**Implementation Plan**](docs/implementation_plan.md) | Original phased execution plan.                                   |
+| [**Cheat Sheet**](docs/examples.md)                    | Common CLI commands and code snippets.                            |
+
+---
+
+### Phase 4: Implementation (Active)
+
+**Next Step**: Execute the commands in [Technical Prep](docs/technical-preparation.md) to generate the Remotes.
+
+---
+
+## 💻 Running the Project (Future State)
+
+Once Phase 4 is complete:
+
+**Start Shell (Port 4200)**
+
+```bash
+nx serve shell
 ```
 
-To create a production bundle:
+**Start Shell + All Remotes**
 
-```sh
-npx nx build shell
+```bash
+nx serve shell --devRemotes=remote-auth,remote-finance,remote-hr,remote-supply
 ```
 
-To see all available targets to run for a project, run:
+---
 
-```sh
-npx nx show project shell
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+_Documentation generated by Antigravity on 2026-01-13._
