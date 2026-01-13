@@ -26,7 +26,9 @@
         "scripts": [],
         "customWebpackConfig": {
           "path": "apps/shell/webpack.config.ts"
-        }
+        },
+        "optimization": false,
+        "sourceMap": true
       },
       "configurations": {
         "production": {
@@ -54,7 +56,7 @@
     },
     "serve": {
       "continuous": true,
-      "executor": "@angular/build:dev-server",
+      "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "shell:build:production"
@@ -63,7 +65,11 @@
           "buildTarget": "shell:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint"

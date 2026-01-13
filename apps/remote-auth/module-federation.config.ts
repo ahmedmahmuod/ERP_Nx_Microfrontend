@@ -11,7 +11,7 @@ const config: ModuleFederationConfig = {
       return {
         ...defaultConfig,
         singleton: true,
-        strictVersion: true,
+        strictVersion: false,
         requiredVersion: 'auto',
       };
     }
@@ -21,7 +21,7 @@ const config: ModuleFederationConfig = {
       return {
         ...defaultConfig,
         singleton: true,
-        strictVersion: true,
+        strictVersion: false,
         requiredVersion: 'auto',
       };
     }

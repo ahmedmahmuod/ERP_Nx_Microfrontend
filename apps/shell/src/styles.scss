@@ -1,2 +1,7 @@
 /* Import Design System Global Styles */
-@import '../../../libs/shared/theme/src/lib/styles/global.scss';
+@use '../../../libs/shared/theme/src/lib/styles/global.scss';
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

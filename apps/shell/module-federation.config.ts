@@ -7,7 +7,7 @@ const config = {
       return {
         ...defaultConfig,
         singleton: true,
-        strictVersion: true,
+        strictVersion: false,
         requiredVersion: 'auto',
       };
     }
@@ -17,7 +17,7 @@ const config = {
       return {
         ...defaultConfig,
         singleton: true,
-        strictVersion: true,
+        strictVersion: false,
         requiredVersion: 'auto',
       };
     }

@@ -110,11 +110,6 @@ export abstract class BaseComponent implements OnDestroy {
 @Directive()
 export abstract class InteractiveBaseComponent extends BaseComponent {
   /**
-   * Disabled state signal
-   */
-  readonly disabled = signal(false);
-  
-  /**
    * Focus state signal
    */
   readonly focused = signal(false);
@@ -130,18 +125,11 @@ export abstract class InteractiveBaseComponent extends BaseComponent {
   readonly pressed = signal(false);
   
   /**
-   * Computed signal for interactive state
-   */
-  readonly isInteractive = computed(() => !this.disabled());
-  
-  /**
    * Handle focus event
    */
   protected handleFocus(): void {
-    if (this.isInteractive()) {
-      this.focused.set(true);
-      this.onFocus();
-    }
+    this.focused.set(true);
+    this.onFocus();
   }
   
   /**
@@ -156,10 +144,8 @@ export abstract class InteractiveBaseComponent extends BaseComponent {
    * Handle mouse enter event
    */
   protected handleMouseEnter(): void {
-    if (this.isInteractive()) {
-      this.hovered.set(true);
-      this.onHover();
-    }
+    this.hovered.set(true);
+    this.onHover();
   }
   
   /**
@@ -174,10 +160,8 @@ export abstract class InteractiveBaseComponent extends BaseComponent {
    * Handle mouse down event
    */
   protected handleMouseDown(): void {
-    if (this.isInteractive()) {
-      this.pressed.set(true);
-      this.onPress();
-    }
+    this.pressed.set(true);
+    this.onPress();
   }
   
   /**
