@@ -14,7 +14,32 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "remoteAuth/Routes": [
+        "apps/remote-auth/src/app/remote-entry/entry.routes.ts"
+      ],
+      "remoteFinance/Routes": [
+        "apps/remote-finance/src/app/remote-entry/entry.routes.ts"
+      ],
+      "remoteHr/Routes": [
+        "apps/remote-hr/src/app/remote-entry/entry.routes.ts"
+      ],
+      "remoteSupply/Routes": [
+        "apps/remote-supply/src/app/remote-entry/entry.routes.ts"
+      ],
+      "@erp/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@erp/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@erp/shared/models": ["libs/shared/models/src/index.ts"],
+      "@erp/auth/feature-login": ["libs/auth/feature-login/src/index.ts"],
+      "@erp/auth/data-access": ["libs/auth/data-access/src/index.ts"],
+      "@erp/shared/theme": ["libs/shared/theme/src/index.ts"]
+    },
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": ["node_modules", "tmp"]
 }
