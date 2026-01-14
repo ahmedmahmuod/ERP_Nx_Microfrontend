@@ -88,8 +88,8 @@ export class AuthFacadeService {
       // Mock API call - replace with real implementation
       await this.mockApiDelay(1000);
       
-      // Validate credentials (mock)
-      if (credentials.email === 'admin@erp.com' && credentials.password === 'admin123') {
+      // Validate credentials (mock) - accept both test accounts
+      if ((credentials.email === 'admin@erp.com' || credentials.email === 'admin@assemble.com') && credentials.password === 'admin123') {
         const user: AuthUser = {
           id: '1',
           name: 'Admin User',
@@ -105,12 +105,10 @@ export class AuthFacadeService {
           error: null
         }));
         
-        // Store token (mock)
-        if (credentials.rememberMe) {
-          localStorage.setItem('auth_token', 'mock_token_123');
-        } else {
-          sessionStorage.setItem('auth_token', 'mock_token_123');
-        }
+        // Store token (mock) - use same key as shell app
+        const mockToken = 'mock-jwt-token-' + Date.now();
+        localStorage.setItem('erp-auth-token', mockToken);
+        localStorage.setItem('erp-user', JSON.stringify(user));
       } else {
         throw new Error('Invalid email or password');
       }
@@ -158,8 +156,10 @@ export class AuthFacadeService {
         error: null
       }));
       
-      // Store token (mock)
-      sessionStorage.setItem('auth_token', 'mock_token_' + user.id);
+      // Store token (mock) - use same key as shell app
+      const mockToken = 'mock-jwt-token-' + Date.now();
+      localStorage.setItem('erp-auth-token', mockToken);
+      localStorage.setItem('erp-user', JSON.stringify(user));
     } catch (error) {
       this._state.update(state => ({
         ...state,
@@ -181,8 +181,8 @@ export class AuthFacadeService {
       error: null
     });
     
-    localStorage.removeItem('auth_token');
-    sessionStorage.removeItem('auth_token');
+    localStorage.removeItem('erp-auth-token');
+    localStorage.removeItem('erp-user');
   }
   
   /**
@@ -199,7 +199,7 @@ export class AuthFacadeService {
    * Check if user is authenticated (on app init)
    */
   checkAuth(): void {
-    const token = localStorage.getItem('auth_token') || sessionStorage.getItem('auth_token');
+    const token = localStorage.getItem('erp-auth-token');
     
     if (token) {
       // Mock user restoration - replace with real API call

@@ -30,6 +30,7 @@
       "@erp/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@erp/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@erp/shared/models": ["libs/shared/models/src/index.ts"],
+      "@erp/shared/config": ["libs/shared/config/src/index.ts"],
       "@erp/auth/feature-login": ["libs/auth/feature-login/src/index.ts"],
       "@erp/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@erp/shared/theme": ["libs/shared/theme/src/index.ts"]

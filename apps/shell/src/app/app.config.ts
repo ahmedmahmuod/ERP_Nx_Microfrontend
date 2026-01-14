@@ -5,6 +5,7 @@ import {
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import { MessageService } from 'primeng/api';
 import { appRoutes } from './app.routes';
 import { ERPTheme } from '@erp/shared/theme';
 
@@ -13,6 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(appRoutes),
     provideAnimationsAsync(),
+    MessageService,
     providePrimeNG({
       theme: {
         preset: ERPTheme,

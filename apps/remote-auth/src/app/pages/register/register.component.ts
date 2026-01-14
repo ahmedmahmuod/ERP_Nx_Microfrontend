@@ -29,20 +29,12 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
             <!-- Header -->
             <div class="register-header">
               <div class="brand">
-                <span class="brand-icon">🏢</span>
-                <h1 class="brand-title">ERP System</h1>
+                <i class="pi pi-building brand-icon"></i>
+                <h1 class="brand-title">Assemble ERP</h1>
               </div>
               <h2 class="register-title">Create Account</h2>
-              <p class="register-subtitle">Sign up to get started with ERP System</p>
+              <p class="register-subtitle">Sign up to get started with Assemble ERP</p>
             </div>
-            
-            <!-- Error Message -->
-            @if (authFacade.error()) {
-              <div class="error-message" role="alert">
-                <span class="error-icon">⚠️</span>
-                <span>{{ authFacade.error() }}</span>
-              </div>
-            }
             
             <!-- Register Form -->
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">

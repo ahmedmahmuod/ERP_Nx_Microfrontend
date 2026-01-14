@@ -1,5 +1,8 @@
-/* Import Design System Global Styles */
+/* Import Design System Global Styles - @use must come first */
 @use '../../../libs/shared/theme/src/lib/styles/global.scss';
+
+/* PrimeIcons */
+@import 'primeicons/primeicons.css';
 
 /* Tailwind CSS */
 @tailwind base;

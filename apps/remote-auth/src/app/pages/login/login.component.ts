@@ -5,11 +5,13 @@
  * Smart component - uses AuthFacadeService.
  */
 
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { InputComponent, ButtonComponent, CardComponent } from '@erp/shared/ui';
+import { ToastService } from '@erp/shared/utils';
 import { AuthFacadeService } from '../../services/auth-facade.service';
+import { BRAND, DEMO_CREDENTIALS, LENGTH_CONSTRAINTS, AUTH_ROUTES, DEFAULT_REDIRECTS } from '@erp/shared/config';
 
 @Component({
   selector: 'app-login',
@@ -22,34 +24,28 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
     CardComponent
   ],
   template: `
+    
     <div class="login-container">
       <div class="login-card-wrapper">
         <erp-card elevation="lg">
           <div card-body>
+            
             <!-- Header -->
             <div class="login-header">
               <div class="brand">
-                <span class="brand-icon">🏢</span>
-                <h1 class="brand-title">ERP System</h1>
+                <i class="pi pi-building brand-icon"></i>
+                <h1 class="brand-title">{{ brandName }}</h1>
               </div>
               <h2 class="login-title">Sign In</h2>
               <p class="login-subtitle">Enter your credentials to access your account</p>
             </div>
-            
-            <!-- Error Message -->
-            @if (authFacade.error()) {
-              <div class="error-message" role="alert">
-                <span class="error-icon">⚠️</span>
-                <span>{{ authFacade.error() }}</span>
-              </div>
-            }
             
             <!-- Login Form -->
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
               <erp-input
                 type="email"
                 label="Email Address"
-                placeholder="admin@erp.com"
+                [placeholder]="demoEmail"
                 formControlName="email"
                 [required]="true"
                 [invalid]="isFieldInvalid('email')"
@@ -96,13 +92,6 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
                 <a routerLink="/auth/register" class="signup-link">Sign up</a>
               </p>
             </div>
-            
-            <!-- Demo Credentials -->
-            <div class="demo-credentials">
-              <p class="demo-title">Demo Credentials:</p>
-              <p class="demo-text">Email: admin@erp.com</p>
-              <p class="demo-text">Password: admin123</p>
-            </div>
           </div>
         </erp-card>
       </div>
@@ -142,6 +131,7 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
 
     .brand-icon {
       font-size: 2.5rem;
+      color: #2563eb;
     }
 
     .brand-title {
@@ -174,6 +164,30 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
 
     :host-context(.dark) .login-subtitle {
       color: rgb(156 163 175);
+    }
+
+    .test-account-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background-color: #eff6ff;
+      border: 1px solid #dbeafe;
+      border-radius: 0.5rem;
+      color: #1e40af;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .test-account-info i {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    :host-context(.dark) .test-account-info {
+      background-color: #1e3a8a;
+      border-color: #1e40af;
+      color: #bfdbfe;
     }
 
     .error-message {
@@ -315,22 +329,39 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
   readonly authFacade = inject(AuthFacadeService);
   
+  // Centralized branding constants
+  readonly brandName = BRAND.NAME;
+  readonly demoEmail = DEMO_CREDENTIALS.EMAIL;
+  
+  // Default test account credentials for easy testing
   readonly loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    email: [DEMO_CREDENTIALS.EMAIL, [Validators.required, Validators.email]],
+    password: [DEMO_CREDENTIALS.PASSWORD, [Validators.required, Validators.minLength(LENGTH_CONSTRAINTS.PASSWORD.MIN)]],
     rememberMe: [false]
   });
   
   async onSubmit(): Promise<void> {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      this.toast.warning('Please fill in all required fields');
+      return;
+    }
     
     try {
       await this.authFacade.login(this.loginForm.value);
-      await this.router.navigate(['/dashboard']);
+      
+      // Show success toast
+      this.toast.success(`Login successful! Welcome to ${BRAND.NAME}`);
+      
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        // Use window.location for cross-microfrontend navigation
+        window.location.href = DEFAULT_REDIRECTS.AFTER_LOGIN;
+      }, 800);
     } catch (error) {
-      // Error handled by facade
+      this.toast.error('Login failed. Invalid email or password.');
     }
   }
   

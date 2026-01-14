@@ -1,36 +1,23 @@
-import { ModuleFederationConfig } from '@nx/module-federation';
-
-const config: ModuleFederationConfig = {
-  name: 'remoteSupply',
-  exposes: {
-    './Routes': 'apps/remote-supply/src/app/remote-entry/entry.routes.ts',
-  },
-  shared: (libraryName: string, defaultConfig: any) => {
-    // Angular core packages MUST be singletons
-    if (libraryName.startsWith('@angular/')) {
-      return {
-        ...defaultConfig,
-        singleton: true,
-        strictVersion: false,
-        requiredVersion: 'auto',
-      };
-    }
-
-    // RxJS should also be singleton
-    if (libraryName === 'rxjs') {
-      return {
-        ...defaultConfig,
-        singleton: true,
-        strictVersion: false,
-        requiredVersion: 'auto',
-      };
-    }
-
-    return defaultConfig;
-  },
-};
+import {
+  createRemoteConfig,
+  REMOTE_NAMES,
+  REMOTE_ENTRY_POINTS,
+  REMOTE_EXPOSES,
+  MF_COMMENTS,
+} from '@erp/shared/config';
 
 /**
- * Nx requires a default export of the config to allow correct resolution of the module federation graph.
- **/
+ * Remote Supply Module Federation Configuration
+ * Using centralized factory for consistency and DRY principle
+ */
+const config = createRemoteConfig({
+  name: REMOTE_NAMES.SUPPLY,
+  exposes: {
+    [REMOTE_EXPOSES.ROUTES]: REMOTE_ENTRY_POINTS[REMOTE_NAMES.SUPPLY],
+  },
+});
+
+/**
+ * ${MF_COMMENTS.NX_REQUIREMENT}
+ */
 export default config;

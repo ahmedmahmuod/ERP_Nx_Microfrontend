@@ -15,3 +15,4 @@ export * from './lib/table/table.component';
 export * from './lib/services/theme.service';
 export * from './lib/services/responsive.service';
 export * from './lib/services/accessibility.service';
+export * from './lib/services/toast.service';

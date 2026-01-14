@@ -6,57 +6,47 @@
  */
 
 import { Component, output, input, inject, ChangeDetectionStrategy } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '@erp/shared/ui';
-import { LayoutService, UserProfile } from '../../services/layout.service';
+import { CommonModule } from '@angular/common';
+import { LayoutService } from '../../services/layout.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, ButtonComponent],
+  imports: [CommonModule],
   template: `
     <header class="header">
+      <!-- Left Section -->
       <div class="header-left">
-        <button 
-          class="menu-toggle"
-          (click)="menuToggle.emit()"
-          aria-label="Toggle menu">
-          <span class="menu-icon">☰</span>
-        </button>
-        
-        <a routerLink="/" class="brand">
-          <span class="brand-icon">🏢</span>
-          <span class="brand-text">ERP System</span>
-        </a>
+        <h1 class="page-title">{{ pageTitle() }}</h1>
       </div>
       
+      <!-- Right Section -->
       <div class="header-right">
+        <!-- Theme Toggle -->
         <button 
-          class="theme-toggle"
-          (click)="themeToggle.emit()"
-          [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'">
-          <span class="theme-icon">{{ isDarkMode() ? '☀️' : '🌙' }}</span>
+          class="icon-btn"
+          (click)="layoutService.toggleTheme()"
+          aria-label="Toggle theme">
+          <i class="pi pi-moon"></i>
         </button>
         
-        @if (currentUser()) {
-          <div class="user-menu">
-            <button class="user-button" aria-label="User menu">
-              @if (currentUser()?.avatar) {
-                <img [src]="currentUser()!.avatar" [alt]="currentUser()!.name" class="user-avatar">
-              } @else {
-                <span class="user-avatar-placeholder">{{ getUserInitials() }}</span>
-              }
-              <span class="user-name">{{ currentUser()?.name }}</span>
-            </button>
-          </div>
-        } @else {
-          <erp-button 
-            variant="primary" 
-            size="sm"
-            routerLink="/auth/login">
-            Sign In
-          </erp-button>
-        }
+        <!-- Notifications -->
+        <button class="icon-btn" aria-label="Notifications">
+          <i class="pi pi-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        
+        <!-- User Menu -->
+        <div class="user-menu">
+          <button class="user-button" aria-label="User menu">
+            <div class="user-avatar">{{ userInitials }}</div>
+            <div class="user-info">
+              <span class="user-name">{{ userName }}</span>
+              <span class="user-email">{{ userEmail }}</span>
+            </div>
+            <i class="pi pi-chevron-down"></i>
+          </button>
+        </div>
       </div>
     </header>
   `,
@@ -67,22 +57,33 @@ import { LayoutService, UserProfile } from '../../services/layout.service';
       justify-content: space-between;
       height: 4rem;
       padding: 0 1.5rem;
-      background-color: white;
-      border-bottom: 1px solid rgb(229 231 235);
+      background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+      border-bottom: 1px solid #e5e7eb;
       position: sticky;
       top: 0;
       z-index: 50;
+      gap: 1rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     :host-context(.dark) .header {
-      background-color: rgb(31 41 55);
-      border-bottom-color: rgb(55 65 81);
+      background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
+      border-bottom-color: #374151;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
 
     .header-left {
       display: flex;
       align-items: center;
       gap: 1rem;
+      flex: 0 0 auto;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex: 0 0 auto;
     }
 
     .menu-toggle {
@@ -93,87 +94,153 @@ import { LayoutService, UserProfile } from '../../services/layout.service';
       height: 2.5rem;
       border: none;
       background-color: transparent;
-      color: rgb(55 65 81);
+      color: #6b7280;
       cursor: pointer;
       border-radius: 0.375rem;
-      transition: background-color 0.2s;
+      transition: all 0.15s ease;
     }
 
     .menu-toggle:hover {
-      background-color: rgb(243 244 246);
+      background-color: #f5f5f5;
+      color: #1a1a1a;
     }
 
-    :host-context(.dark) .menu-toggle {
-      color: rgb(209 213 219);
-    }
-
-    :host-context(.dark) .menu-toggle:hover {
-      background-color: rgb(55 65 81);
-    }
-
-    .menu-icon {
-      font-size: 1.5rem;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-      color: rgb(17 24 39);
-      font-weight: 600;
+    .menu-toggle i {
       font-size: 1.25rem;
     }
 
-    :host-context(.dark) .brand {
-      color: rgb(243 244 246);
+    .page-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0;
     }
 
-    .brand-icon {
-      font-size: 1.75rem;
+    :host-context(.dark) .page-title {
+      color: #fafafa;
     }
 
-    .brand-text {
+    /* Search Container */
+    .search-container {
+      position: relative;
       display: none;
     }
 
-    @media (min-width: 640px) {
-      .brand-text {
-        display: inline;
+    @media (min-width: 768px) {
+      .search-container {
+        display: flex;
+        align-items: center;
       }
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+    .search-icon {
+      position: absolute;
+      left: 0.75rem;
+      color: #9ca3af;
+      font-size: 1rem;
     }
 
-    .theme-toggle {
+    .search-input {
+      width: 20rem;
+      padding: 0.5rem 2.5rem 0.5rem 2.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      background-color: #fafafa;
+      color: #1a1a1a;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .search-shortcut {
+      position: absolute;
+      right: 0.75rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      padding: 0.125rem 0.375rem;
+      background-color: #f3f4f6;
+      border-radius: 0.25rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    :host-context(.dark) .search-input {
+      background-color: #2a2a2a;
+      border-color: #404040;
+      color: #fafafa;
+    }
+
+    :host-context(.dark) .search-input:focus {
+      background-color: #1a1a1a;
+      border-color: #3b82f6;
+    }
+
+    /* Icon Button */
+    .icon-btn {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
+      width: 2.25rem;
+      height: 2.25rem;
       border: none;
       background-color: transparent;
+      color: #6b7280;
       cursor: pointer;
       border-radius: 0.375rem;
-      transition: background-color 0.2s;
+      transition: all 0.15s ease;
     }
 
-    .theme-toggle:hover {
-      background-color: rgb(243 244 246);
+    .icon-btn:hover {
+      background-color: #f5f5f5;
+      color: #1a1a1a;
     }
 
-    :host-context(.dark) .theme-toggle:hover {
-      background-color: rgb(55 65 81);
+    .icon-btn i {
+      font-size: 1.125rem;
     }
 
-    .theme-icon {
-      font-size: 1.25rem;
+    :host-context(.dark) .icon-btn {
+      color: #9ca3af;
     }
 
+    :host-context(.dark) .icon-btn:hover {
+      background-color: #2a2a2a;
+      color: #fafafa;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.125rem;
+      height: 1.125rem;
+      padding: 0 0.25rem;
+      background-color: #ef4444;
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 600;
+      border-radius: 9999px;
+      border: 2px solid #ffffff;
+    }
+
+    :host-context(.dark) .notification-badge {
+      border-color: #1a1a1a;
+    }
+
+    /* User Menu */
     .user-menu {
       position: relative;
     }
@@ -182,75 +249,134 @@ import { LayoutService, UserProfile } from '../../services/layout.service';
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 0.5rem 0.75rem;
+      padding: 0.375rem 0.75rem;
       border: none;
       background-color: transparent;
-      color: rgb(55 65 81);
       cursor: pointer;
-      border-radius: 0.5rem;
-      transition: background-color 0.2s;
+      border-radius: 0.375rem;
+      transition: all 0.15s ease;
     }
 
     .user-button:hover {
-      background-color: rgb(243 244 246);
-    }
-
-    :host-context(.dark) .user-button {
-      color: rgb(209 213 219);
+      background-color: #f5f5f5;
     }
 
     :host-context(.dark) .user-button:hover {
-      background-color: rgb(55 65 81);
+      background-color: #2a2a2a;
     }
 
-    .user-avatar,
-    .user-avatar-placeholder {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 9999px;
-      object-fit: cover;
-    }
-
-    .user-avatar-placeholder {
+    .user-avatar {
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: rgb(59 130 246);
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      background-color: #2563eb;
       color: white;
+      font-size: 0.75rem;
       font-weight: 600;
-      font-size: 0.875rem;
+    }
+
+    .user-info {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    @media (min-width: 1024px) {
+      .user-info {
+        display: flex;
+      }
     }
 
     .user-name {
-      display: none;
+      font-size: 0.875rem;
       font-weight: 500;
+      color: #1a1a1a;
+      line-height: 1.25;
     }
 
-    @media (min-width: 768px) {
-      .user-name {
-        display: inline;
+    .user-email {
+      font-size: 0.75rem;
+      color: #6b7280;
+      line-height: 1.25;
+    }
+
+    :host-context(.dark) .user-name {
+      color: #fafafa;
+    }
+
+    :host-context(.dark) .user-email {
+      color: #9ca3af;
+    }
+
+    .user-button i {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    /* Dropdown Customization */
+    ::ng-deep .language-dropdown,
+    ::ng-deep .company-dropdown {
+      font-size: 0.875rem;
+    }
+
+    ::ng-deep .language-dropdown .p-dropdown,
+    ::ng-deep .company-dropdown .p-dropdown {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      background-color: #ffffff;
+      transition: all 0.15s ease;
+    }
+
+    ::ng-deep .language-dropdown .p-dropdown:hover,
+    ::ng-deep .company-dropdown .p-dropdown:hover {
+      border-color: #2563eb;
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .dropdown-item i {
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 767px) {
+      .header {
+        padding: 0 1rem;
+      }
+
+      .page-title {
+        font-size: 1.125rem;
+      }
+
+      .header-right {
+        gap: 0.5rem;
+      }
+
+      ::ng-deep .language-dropdown,
+      ::ng-deep .company-dropdown {
+        display: none;
       }
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
-  private readonly layoutService = inject(LayoutService);
+  readonly layoutService = inject(LayoutService);
   
-  readonly currentUser = input<UserProfile | null>(null);
-  readonly isDarkMode = input<boolean>(false);
-  
+  readonly pageTitle = input<string>('Dashboard');
   readonly menuToggle = output<void>();
-  readonly themeToggle = output<void>();
   
-  getUserInitials(): string {
-    const user = this.currentUser();
-    if (!user) return '';
-    
-    const names = user.name.split(' ');
-    if (names.length >= 2) {
-      return `${names[0][0]}${names[1][0]}`.toUpperCase();
-    }
-    return user.name.substring(0, 2).toUpperCase();
-  }
+  // Mock user data (replace with auth service)
+  readonly userName = 'Ahmed Mahmoud';
+  readonly userEmail = 'ahmed@company.com';
+  readonly userInitials = 'AM';
 }
