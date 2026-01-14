@@ -1,0 +1,149 @@
+name: CI/CD - Shell
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'apps/shell/**'
+      - 'libs/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'nx.json'
+      - 'tsconfig.base.json'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'apps/shell/**'
+      - 'libs/**'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20.x'
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+jobs:
+  lint:
+    name: Lint Shell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npx nx lint shell
+
+  test:
+    name: Test Shell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npx nx test shell --coverage
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/apps/shell/lcov.info
+          flags: shell
+
+  build:
+    name: Build Shell
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npx nx build shell --configuration=production
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: shell-dist
+          path: dist/apps/shell
+          retention-days: 7
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://shell-staging.erp.example.com
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: shell-dist
+          path: dist
+
+      - name: Deploy to staging
+        run: |
+          echo "Deploying Shell to staging environment..."
+          # Add your deployment script here (e.g., AWS S3, Netlify, Vercel)
+          # Example: aws s3 sync dist s3://shell-staging-bucket --delete
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://shell.erp.example.com
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: shell-dist
+          path: dist
+
+      - name: Deploy to production
+        run: |
+          echo "Deploying Shell to production environment..."
+          # Add your deployment script here
+          # Example: aws s3 sync dist s3://shell-production-bucket --delete
+
+      - name: Create deployment tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git tag -a "shell-v${{ github.run_number }}" -m "Shell deployment v${{ github.run_number }}"
+          git push origin "shell-v${{ github.run_number }}"
