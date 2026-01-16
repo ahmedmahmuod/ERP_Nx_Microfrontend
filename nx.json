@@ -1,8 +1,12 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "master",
+  "useDaemonProcess": false,
+  "defaultBase": "main",
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -18,8 +22,13 @@
   "targetDefaults": {
     "@angular/build:application": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
     "@nx/eslint:lint": {
       "cache": true,
@@ -42,51 +51,84 @@
           },
           {
             "sourceTag": "type:data-access",
-            "onlyDependOnLibsWithTags": ["type:util", "type:model"]
+            "onlyDependOnLibsWithTags": [
+              "type:util",
+              "type:model"
+            ]
           },
           {
             "sourceTag": "type:ui",
-            "onlyDependOnLibsWithTags": ["type:util", "type:model"]
+            "onlyDependOnLibsWithTags": [
+              "type:util",
+              "type:model"
+            ]
           },
           {
             "sourceTag": "type:util",
-            "onlyDependOnLibsWithTags": ["type:model"]
+            "onlyDependOnLibsWithTags": [
+              "type:model"
+            ]
           },
           {
             "sourceTag": "scope:auth",
-            "onlyDependOnLibsWithTags": ["scope:auth", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:auth",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:finance",
-            "onlyDependOnLibsWithTags": ["scope:finance", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:finance",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:hr",
-            "onlyDependOnLibsWithTags": ["scope:hr", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:hr",
+              "scope:shared"
+            ]
           },
           {
             "sourceTag": "scope:supply",
-            "onlyDependOnLibsWithTags": ["scope:supply", "scope:shared"]
+            "onlyDependOnLibsWithTags": [
+              "scope:supply",
+              "scope:shared"
+            ]
           }
         ]
       }
     },
     "@angular/build:unit-test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": [
+        "default",
+        "^production"
+      ]
     },
     "@angular-devkit/build-angular:browser": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
     "@nx/vitest:test": {
       "cache": true,
-      "inputs": ["default", "^production"]
+      "inputs": [
+        "default",
+        "^production"
+      ]
     },
     "@nx/angular:webpack-browser": {
       "cache": true,
-      "dependsOn": ["^build"],
+      "dependsOn": [
+        "^build"
+      ],
       "inputs": [
         "production",
         "^production",
@@ -97,8 +139,13 @@
     },
     "@nx/angular:ng-packagr-lite": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "plugins": [

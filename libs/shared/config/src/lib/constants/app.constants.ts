@@ -67,7 +67,7 @@ export const APP_URLS = {
  * API Configuration
  */
 export const API_CONFIG = {
-  BASE_URL: process.env['API_BASE_URL'] || 'http://localhost:3000/api',
+  BASE_URL: (globalThis as any).API_BASE_URL || 'http://localhost:3000/api',
   TIMEOUT: 30000, // 30 seconds
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000, // 1 second
