@@ -27,6 +27,11 @@
           {
             "glob": "**/*",
             "input": "apps/shell/public"
+          },
+          {
+            "glob": "module-federation.manifest.json",
+            "input": "apps/shell",
+            "output": "/assets"
           }
         ],
         "styles": [
@@ -66,6 +71,22 @@
     "serve": {
       "continuous": true,
       "executor": "@nx/angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "shell:build:production"
+        },
+        "development": {
+          "buildTarget": "shell:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      }
+    },
+    "serve-mf": {
+      "executor": "@nx/angular:module-federation-dev-server",
       "configurations": {
         "production": {
           "buildTarget": "shell:build:production"

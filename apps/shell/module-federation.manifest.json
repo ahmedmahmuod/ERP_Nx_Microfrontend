@@ -1,0 +1,6 @@
+{
+  "remoteAuth": "http://localhost:4201",
+  "remoteFinance": "http://localhost:4202",
+  "remoteHr": "http://localhost:4203",
+  "remoteSupply": "http://localhost:4204"
+}

@@ -73,6 +73,22 @@
       },
       "defaultConfiguration": "development"
     },
+    "serve-mf": {
+      "executor": "@nx/angular:module-federation-dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "remoteAuth:build:production"
+        },
+        "development": {
+          "buildTarget": "remoteAuth:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4201,
+        "publicHost": "http://localhost:4201"
+      }
+    },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
