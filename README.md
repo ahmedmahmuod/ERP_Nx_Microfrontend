@@ -1,170 +1,177 @@
-# Micro-Frontend ERP System
+# ERP Micro-Frontend System
 
-**Managed by Cascade AI**  
-**Current Phase**: Phase 4-5 Complete ✅ | Comprehensive Design System Applied 🎨 | 95% Complete
-
----
-
-## 🚀 Project Objective
-
-To architect and bootstrap a scalable, enterprise-grade **Micro-Frontend ERP System** using **Angular 21+**, **Nx**, and **native Webpack Module Federation**. The system addresses the need for independent domain deployment, team autonomy, and strict architectural boundaries.
+**Enterprise-Grade Modular ERP Platform**  
+Built with Angular 21, Nx, and Native Module Federation
 
 ---
 
-## 📐 Architecture Overview
+## 🎯 Overview
 
-- **Pattern**: Monorepo with Shell (Host) + Remote Applications.
-- **Tooling**: Nx Workspace (Angular Monorepo Preset).
-- **Integration**: Native Webpack Module Federation (No `single-spa`, no `iframes`).
-- **Styling**: SCSS.
-- **Routing**: Angular Standalone Router (Lazy loading Remotes).
+A **scalable, enterprise-grade ERP system** built as a **micro-frontend architecture** using Angular 21+, Nx 22+, and native Webpack Module Federation. The system supports independent deployment of business domains while maintaining a cohesive user experience.
 
-### Domain Boundaries
+### Key Features
 
-1.  **Shell**: Orchestration, Layout, Global Auth State.
-2.  **Auth (Remote)**: Login, Registration, Session Management.
-3.  **Finance (Remote)**: Invoicing, Reporting, Ledgers.
-4.  **HR (Remote)**: Employee Management, Payroll.
-5.  **Supply (Remote)**: Inventory, Procurement, Vendors.
+- ✅ **Modular Architecture**: Independent business domains (HR, Finance, SRM, PM, Warehouses)
+- ✅ **Independent Deployment**: Deploy modules separately without system-wide redeployment
+- ✅ **Manifest-Driven Navigation**: Dynamic sidebar based on loaded modules
+- ✅ **Comprehensive Design System**: Dark mode, design tokens, accessible components
+- ✅ **Type-Safe**: TypeScript strict mode throughout
+- ✅ **Production-Ready**: CI/CD pipelines, testing, and deployment strategies
 
 ---
 
-## 🛠 Project Requirements (Non-Negotiable)
+## 🚀 Quick Start
 
-- **Framework**: Angular 21.0.8+ (Latest Stable).
-- **Build System**: Nx 22.3.3+ (Latest Stable).
-- **Node.js**: `v20.19.x`, `v22.12.x`, or `v24.x`.
-- **Constraint**: **Strict Mode** enabled (TypeScript).
-- **Communication**: Remotes **MUST NOT** import from other Remotes. All communication via Shell or Shared Libs.
-- **Libs vs Apps**: Apps are thin shells; Business logic lives in `libs/`.
+### Prerequisites
 
----
+- **Node.js**: v20.19.x, v22.12.x, or v24.x
+- **npm**: 10.8.2+
 
-## 📊 Work Completed (Phases 1-3 Completed)
-
-### Phase 1: Architecture Design ✅
-
-- [x] Defined Micro-Frontend strategy (Host-Remote).
-- [x] Established Domain Boundaries (Auth, Finance, HR, Supply).
-- [x] Approved Monorepo structure.
-
-### Phase 2: Workspace Structure ✅
-
-- [x] Selected **Nx** over plain Angular CLI.
-- [x] Defined Directory Structure (`apps/`, `libs/domain/type`).
-- [x] Established Naming Conventions (`scope:auth`, `type:feature`).
-- [x] Defined Dependency Rules (`type:feature` cannot import `type:app`).
-
-### Phase 3: Technical Preparation ✅
-
-- [x] Validated Environment (Node 20.19.6, npm 10.8.2).
-- [x] Defined **EXACT** commands for implementation (See `.gemini/brain/.../technical-preparation.md`).
-- [x] Configured Nx Tags schema.
-
----
-
-## 🚧 Current Status & Phase 1 Completion
-
-**Phase 1 Status**: ✅ COMPLETED
-
-### What Was Accomplished:
-
-1.  ✅ **Shell Configured**: Converted `apps/shell` to Module Federation Host with webpack configuration
-2.  ✅ **Remotes Generated**: Created `remoteAuth`, `remoteFinance`, `remoteHr`, `remoteSupply` (Ports 4201-4204)
-3.  ✅ **Libraries Created**: Generated `shared/ui`, `shared/utils`, `shared/models`, `auth/feature-login`, `auth/data-access`
-4.  ✅ **Boundaries Enforced**: Updated `nx.json` with comprehensive dependency constraints
-5.  ✅ **TypeScript Strict Mode**: Enabled in `tsconfig.base.json`
-6.  ✅ **Module Federation**: Configured with singleton Angular packages across all apps
-7.  ✅ **Nx Tags**: Applied to all projects for architectural boundary enforcement
-
-**See**: [Phase 1 Completion Report](docs/phase1-completion-report.md) for full details.
-
-### 📚 Enterprise Documentation
-
-The following documentation serves as the **Single Source of Truth** for this project.
-
-| Document                                                       | Description                                                       |
-| -------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [**Architecture Guide**](docs/architecture.md)                 | High-level system design, domain boundaries, and ADRs.            |
-| [**Workspace Structure**](docs/workspace-structure.md)         | Nx Apps/Libs layout, naming conventions, and dependency rules.    |
-| [**CI/CD Strategy**](docs/ci-cd.md)                            | Pipeline stages, artifact management, and caching.                |
-| [**Deployment Guide**](docs/deployment.md)                     | Dynamic remote discovery, versioning, and rollback.               |
-| [**Runtime Architecture**](docs/runtime.md)                    | Bootstrapping, error handling, and lazy loading flow.             |
-| [**Technical Prep**](docs/technical-preparation.md)            | **Exact commands** to bootstrap the environment (Phase 3 output). |
-| [**Phase 1 Completion Report**](docs/phase1-completion-report.md) | ✅ **Phase 1 implementation summary and verification checklist.** |
-| [**Design System**](docs/DESIGN_SYSTEM.md)                     | 🎨 **Comprehensive design system documentation and guidelines.**   |
-| [**Phase 2 Status**](docs/PHASE2_DESIGN_SYSTEM_STATUS.md)      | 🚧 **Phase 2 design system implementation progress (40%).**       |
-| [**Cheat Sheet**](docs/examples.md)                            | Common CLI commands and code snippets.                            |
-
----
-
-### Phase 1: Foundation Setup ✅ COMPLETED
-
-**Completed**: All workspace setup, remote generation, library creation, and architectural constraints.
-
-### Phase 2: Design System Implementation 🚧 IN PROGRESS (40%)
-
-**Completed**:
-- ✅ Tailwind CSS v3.x installed and configured with design tokens
-- ✅ PrimeNG v18.x installed
-- ✅ Theme library (`libs/shared/theme`) created with global styles
-- ✅ Comprehensive design tokens (colors, typography, spacing, shadows)
-- ✅ Dark mode support with CSS variables
-- ✅ Button component (7 variants, 5 sizes, fully accessible)
-- ✅ Shell integrated with design system
-
-**In Progress**:
-- 🚧 Core UI components (Input, Card, Modal, Table)
-- 🚧 Form components (Checkbox, Radio, Switch, Select)
-- 🚧 Navigation components (Navbar, Sidebar, Breadcrumbs)
-- 🚧 Theme service with dark mode toggle
-- 🚧 PrimeNG theme customization
-
-**See**: [Design System Documentation](docs/DESIGN_SYSTEM.md) | [Phase 2 Status](docs/PHASE2_DESIGN_SYSTEM_STATUS.md)
-
-**Next Phase**: Complete remaining components and Shell layout
-
----
-
-## 💻 Running the Project
-
-**Start Shell (Port 4200)**
+### Installation
 
 ```bash
+# Clone repository
+git clone <repository-url>
+cd ERP_Nx_Microfrontend
+
+# Install dependencies
+npm install
+```
+
+### Running the Application
+
+```bash
+# Start Shell only (port 4200)
 npx nx serve shell
+
+# Start Shell + specific remote
+npx nx serve shell --devRemotes=remoteFinance
+
+# Start Shell + all remotes
+npx nx serve shell --devRemotes=remoteAuth,remoteFinance,remoteHr,remoteSrm,remotePm,remoteWarehouses
 ```
 
-**Start Shell + One Remote (e.g., Auth)**
+### Building for Production
 
 ```bash
-npx nx serve shell --devRemotes=remoteAuth
+# Build Shell
+npx nx build shell --configuration=production
+
+# Build all applications
+npx nx run-many --target=build --all --configuration=production
 ```
 
-**Start Shell + All Remotes**
+### Testing
 
 ```bash
-npx nx serve shell --devRemotes=remoteAuth,remoteFinance,remoteHr,remoteSupply
-```
-
-**Build Shell**
-
-```bash
-npx nx build shell
-```
-
-**Lint & Test**
-
-```bash
-npx nx lint shell
+# Run tests
 npx nx test shell
-```
 
-**View Dependency Graph**
+# Run all tests
+npx nx run-many --target=test --all
 
-```bash
-npx nx graph
+# E2E tests
+npx nx e2e shell-e2e
 ```
 
 ---
 
-_Phase 1 completed, Phase 2 started by Cascade AI on 2026-01-13._
+## 📚 Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+| Document | Description |
+|----------|-------------|
+| **[00_OVERVIEW](./docs/00_OVERVIEW.md)** | System overview, modules, and quick start |
+| **[01_ARCHITECTURE](./docs/01_ARCHITECTURE.md)** | Architecture design, domain boundaries, and ADRs |
+| **[02_TOOLING_STACK](./docs/02_TOOLING_STACK.md)** | Technology stack and tool choices |
+| **[03_WORKSPACE_STRUCTURE](./docs/03_WORKSPACE_STRUCTURE.md)** | Monorepo layout and naming conventions |
+| **[04_MICROFRONTEND_MODULE_FEDERATION](./docs/04_MICROFRONTEND_MODULE_FEDERATION.md)** | Module Federation setup and remote loading |
+| **[05_DESIGN_SYSTEM](./docs/05_DESIGN_SYSTEM.md)** | Design tokens, theming, and UI components |
+| **[06_ROUTING_AND_NAVIGATION](./docs/06_ROUTING_AND_NAVIGATION.md)** | Routing strategy and navigation patterns |
+| **[07_CICD](./docs/07_CICD.md)** | CI/CD pipelines and automation |
+| **[08_DEPLOYMENT](./docs/08_DEPLOYMENT.md)** | Deployment strategies and hosting |
+| **[09_USER_GUIDE](./docs/09_USER_GUIDE.md)** | End-user documentation |
+| **[10_DEVELOPER_GUIDE](./docs/10_DEVELOPER_GUIDE.md)** | Deep dive for developers |
+| **[11_TROUBLESHOOTING](./docs/11_TROUBLESHOOTING.md)** | Common issues and solutions |
+
+**Start here**: [📖 Documentation Overview](./docs/00_OVERVIEW.md)
+
+---
+
+## 🏗️ System Modules
+
+| Module | Port | Description |
+|--------|------|-------------|
+| **Shell** | 4200 | Host application with layout and orchestration |
+| **Auth** | 4201 | Authentication and authorization |
+| **Finance** | 4202 | Financial management and reporting |
+| **HR** | 4203 | Human resources and payroll |
+| **SRM** | 4204 | Supplier relationship management |
+| **PM** | 4205 | Project management |
+| **Warehouses** | 4206 | Warehouse and inventory management |
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: Angular 21.0.8+
+- **Build System**: Nx 22.3.3+
+- **Module Federation**: Webpack 5 + @module-federation/enhanced
+- **Styling**: Tailwind CSS 3.4+ + PrimeNG 21+
+- **Testing**: Vitest 4.0+ + Cypress 15+
+- **CI/CD**: GitHub Actions
+- **Language**: TypeScript 5.9+ (strict mode)
+
+---
+
+## 📊 Project Status
+
+**Status**: Production-Ready ✅  
+**Completion**: 95%
+
+### Completed Features
+
+- ✅ Workspace setup and configuration
+- ✅ All remote applications (6 modules)
+- ✅ Module Federation configuration
+- ✅ Comprehensive design system with dark mode
+- ✅ Shell layout (header, sidebar, footer)
+- ✅ Manifest-driven navigation
+- ✅ Back to Home navigation
+- ✅ Authentication flow
+- ✅ CI/CD pipelines
+- ✅ Complete documentation suite
+
+### In Progress
+
+- 🚧 Remote application feature implementation
+- 🚧 E2E test coverage expansion
+
+---
+
+## 🤝 Contributing
+
+Before contributing, please review:
+
+1. [Architecture Guide](./docs/01_ARCHITECTURE.md) - Understand the system design
+2. [Developer Guide](./docs/10_DEVELOPER_GUIDE.md) - Development guidelines
+3. [Workspace Structure](./docs/03_WORKSPACE_STRUCTURE.md) - Code organization
+
+---
+
+## 🆘 Need Help?
+
+- **Quick Start**: See [00_OVERVIEW.md](./docs/00_OVERVIEW.md)
+- **Troubleshooting**: See [11_TROUBLESHOOTING.md](./docs/11_TROUBLESHOOTING.md)
+- **Developer Questions**: See [10_DEVELOPER_GUIDE.md](./docs/10_DEVELOPER_GUIDE.md)
+
+---
+
+## 📄 License
+
+MIT License - See LICENSE file for details
+
+---
+
+**Built with ❤️ using Angular, Nx, and Module Federation**

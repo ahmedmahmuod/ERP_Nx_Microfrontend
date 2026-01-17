@@ -9,6 +9,7 @@ import { Component, output, input, inject, ChangeDetectionStrategy, computed } f
 import { CommonModule } from '@angular/common';
 import { LayoutService } from '../../services/layout.service';
 import { NavigationFacadeService } from '../../../core/services/navigation-facade.service';
+import { RouteContextService } from '../../../core/services/route-context.service';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,19 @@ import { NavigationFacadeService } from '../../../core/services/navigation-facad
         >
           <i class="pi pi-bars"></i>
         </button>
+
+        <!-- Back to Home Button (Remote Areas Only) -->
+        @if (routeContext.isInRemoteArea()) {
+          <button
+            class="back-to-home-btn"
+            (click)="routeContext.navigateToHome()"
+            aria-label="Back to Home"
+            title="Back to Home"
+          >
+            <i class="pi pi-arrow-left"></i>
+            <span class="back-to-home-label">Back to Home</span>
+          </button>
+        }
 
         <h1 class="page-title">
           @if (currentModuleName()) {
@@ -136,6 +150,79 @@ import { NavigationFacadeService } from '../../../core/services/navigation-facad
 
     :host-context(.dark) .mobile-menu-toggle:hover {
       background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Back to Home Button */
+    .back-to-home-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #e5e7eb;
+      background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-md, 0.5rem);
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+      &:hover {
+        background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+        border-color: var(--accent-primary, var(--color-primary, #2563eb));
+        color: var(--accent-primary, var(--color-primary, #2563eb));
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--accent-primary, var(--color-primary, #2563eb));
+        outline-offset: 2px;
+      }
+
+      i {
+        font-size: 1rem;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover i {
+        transform: translateX(-2px);
+      }
+    }
+
+    :host-context(.dark) .back-to-home-btn {
+      background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
+      border-color: #4b5563;
+      color: #d1d5db;
+
+      &:hover {
+        background: linear-gradient(180deg, #4b5563 0%, #374151 100%);
+        border-color: var(--accent-primary, var(--color-primary, #3b82f6));
+        color: var(--accent-primary, var(--color-primary, #3b82f6));
+      }
+    }
+
+    .back-to-home-label {
+      white-space: nowrap;
+    }
+
+    /* Hide label on smaller screens */
+    @media (max-width: 640px) {
+      .back-to-home-label {
+        display: none;
+      }
+
+      .back-to-home-btn {
+        padding: 0.5rem;
+        min-width: 2.5rem;
+        justify-content: center;
+      }
     }
 
     .menu-toggle {
@@ -433,6 +520,7 @@ import { NavigationFacadeService } from '../../../core/services/navigation-facad
 export class HeaderComponent {
   readonly layoutService = inject(LayoutService);
   readonly navigationFacade = inject(NavigationFacadeService);
+  readonly routeContext = inject(RouteContextService);
 
   readonly pageTitle = input<string>('Dashboard');
   readonly menuToggle = output<void>();
