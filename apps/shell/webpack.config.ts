@@ -1,7 +1,7 @@
 import { withModuleFederation } from '@nx/angular/module-federation';
 import config from './module-federation.config';
 import type { Configuration } from 'webpack';
-import webpack from 'webpack';
+import * as webpack from 'webpack';
 
 export default async (webpackConfig: Configuration) => {
   const federatedConfig = await withModuleFederation(config);
