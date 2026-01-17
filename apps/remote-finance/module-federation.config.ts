@@ -14,6 +14,7 @@ const config = createRemoteConfig({
   name: REMOTE_NAMES.FINANCE,
   exposes: {
     [REMOTE_EXPOSES.ROUTES]: REMOTE_ENTRY_POINTS[REMOTE_NAMES.FINANCE],
+    [REMOTE_EXPOSES.MANIFEST]: 'apps/remote-finance/src/app/remote-entry/manifest.ts',
   },
 });
 

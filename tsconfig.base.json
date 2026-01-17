@@ -33,7 +33,17 @@
       "@erp/shared/config": ["libs/shared/config/src/index.ts"],
       "@erp/auth/feature-login": ["libs/auth/feature-login/src/index.ts"],
       "@erp/auth/data-access": ["libs/auth/data-access/src/index.ts"],
-      "@erp/shared/theme": ["libs/shared/theme/src/index.ts"]
+      "@erp/shared/theme": ["libs/shared/theme/src/index.ts"],
+      "remotePm/Routes": ["apps/remotePm/src/app/remote-entry/entry.routes.ts"],
+      "remotePm/Manifest": ["apps/remotePm/src/app/remote-entry/manifest.ts"],
+      "remoteSrm/Routes": ["apps/remote-srm/src/app/remote-entry/entry.routes.ts"],
+      "remoteSrm/Manifest": ["apps/remote-srm/src/app/remote-entry/manifest.ts"],
+      "remoteWarehouses/Routes": [
+        "apps/remote-warehouses/src/app/remote-entry/entry.routes.ts"
+      ],
+      "remoteWarehouses/Manifest": [
+        "apps/remote-warehouses/src/app/remote-entry/manifest.ts"
+      ]
     },
     "strict": true,
     "strictNullChecks": true,

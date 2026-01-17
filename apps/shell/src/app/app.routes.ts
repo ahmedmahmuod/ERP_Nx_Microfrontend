@@ -55,9 +55,23 @@ export const appRoutes: Route[] = [
             .catch(() => remoteFallbackRoutes),
       },
       {
-        path: 'supply',
+        path: 'srm',
         loadChildren: () =>
-          loadRemoteModule('remoteSupply', './Routes')
+          loadRemoteModule('remoteSrm', './Routes')
+            .then((m) => m.remoteRoutes)
+            .catch(() => remoteFallbackRoutes),
+      },
+      {
+        path: 'pm',
+        loadChildren: () =>
+          loadRemoteModule('remotePm', './Routes')
+            .then((m) => m.remoteRoutes)
+            .catch(() => remoteFallbackRoutes),
+      },
+      {
+        path: 'warehouses',
+        loadChildren: () =>
+          loadRemoteModule('remoteWarehouses', './Routes')
             .then((m) => m.remoteRoutes)
             .catch(() => remoteFallbackRoutes),
       },

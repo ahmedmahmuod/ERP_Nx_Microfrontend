@@ -1,6 +1,13 @@
 const config = {
   name: 'shell',
-  remotes: ['remoteAuth', 'remoteFinance', 'remoteHr', 'remoteSupply'],
+  remotes: [
+    'remoteAuth',
+    'remoteFinance',
+    'remoteHr',
+    'remoteSrm',
+    'remotePm',
+    'remoteWarehouses',
+  ],
   shared: (libraryName: string, defaultConfig: any) => {
     // Angular core packages MUST be singletons
     if (libraryName.startsWith('@angular/')) {

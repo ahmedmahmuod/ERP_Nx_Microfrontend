@@ -1,13 +1,14 @@
 /**
  * Header Component
- * 
+ *
  * Top navigation bar with branding, user menu, and theme toggle.
  * Dumb component - all state from LayoutService.
  */
 
-import { Component, output, input, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, output, input, inject, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutService } from '../../services/layout.service';
+import { NavigationFacadeService } from '../../../core/services/navigation-facade.service';
 
 @Component({
   selector: 'app-header',
@@ -17,25 +18,40 @@ import { LayoutService } from '../../services/layout.service';
     <header class="header">
       <!-- Left Section -->
       <div class="header-left">
-        <h1 class="page-title">{{ pageTitle() }}</h1>
+        <!-- Mobile Menu Toggle -->
+        <button
+          class="mobile-menu-toggle"
+          (click)="layoutService.toggleSidebar()"
+          aria-label="Toggle menu"
+        >
+          <i class="pi pi-bars"></i>
+        </button>
+
+        <h1 class="page-title">
+          @if (currentModuleName()) {
+            <span class="module-name">{{ currentModuleName() }}</span>
+          } @else {
+            <span class="brand-name">Assemble ERP</span>
+          }
+        </h1>
       </div>
-      
+
       <!-- Right Section -->
       <div class="header-right">
         <!-- Theme Toggle -->
-        <button 
+        <button
           class="icon-btn"
           (click)="layoutService.toggleTheme()"
           aria-label="Toggle theme">
           <i class="pi pi-moon"></i>
         </button>
-        
+
         <!-- Notifications -->
         <button class="icon-btn" aria-label="Notifications">
           <i class="pi pi-bell"></i>
           <span class="notification-badge">3</span>
         </button>
-        
+
         <!-- User Menu -->
         <div class="user-menu">
           <button class="user-button" aria-label="User menu">
@@ -86,6 +102,42 @@ import { LayoutService } from '../../services/layout.service';
       flex: 0 0 auto;
     }
 
+    /* Mobile Menu Toggle - Only visible on mobile */
+    .mobile-menu-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border: none;
+      background-color: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      border-radius: var(--radius-md);
+      transition: all 0.15s ease;
+
+      &:hover {
+        background-color: var(--nav-item-hover-bg);
+        color: var(--accent-primary, var(--color-primary));
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      i {
+        font-size: 1.5rem;
+      }
+
+      @media (max-width: 1024px) {
+        display: flex;
+      }
+    }
+
+    :host-context(.dark) .mobile-menu-toggle:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
     .menu-toggle {
       display: flex;
       align-items: center;
@@ -112,12 +164,21 @@ import { LayoutService } from '../../services/layout.service';
     .page-title {
       font-size: 1.25rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--color-text);
       margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    :host-context(.dark) .page-title {
-      color: #fafafa;
+    .brand-name {
+      font-weight: 700;
+      color: var(--accent-primary, var(--color-primary, #2563eb));
+    }
+
+    .module-name {
+      color: var(--accent-primary, var(--color-primary));
+      font-weight: 600;
     }
 
     /* Search Container */
@@ -371,10 +432,20 @@ import { LayoutService } from '../../services/layout.service';
 })
 export class HeaderComponent {
   readonly layoutService = inject(LayoutService);
-  
+  readonly navigationFacade = inject(NavigationFacadeService);
+
   readonly pageTitle = input<string>('Dashboard');
   readonly menuToggle = output<void>();
-  
+
+  // Computed module name from navigation facade
+  readonly currentModuleName = computed(() => {
+    const appId = this.navigationFacade.activeAppId();
+    if (!appId || appId === 'shell') {
+      return null;
+    }
+    return this.navigationFacade.activeManifest()?.appName || null;
+  });
+
   // Mock user data (replace with auth service)
   readonly userName = 'Ahmed Mahmoud';
   readonly userEmail = 'ahmed@company.com';

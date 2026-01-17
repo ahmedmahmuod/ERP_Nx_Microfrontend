@@ -34,18 +34,18 @@
   --color-bg-tertiary: #f3f4f6;
   --color-bg-hover: #f3f4f6;
   --color-bg-active: #e5e7eb;
-  
+
   /* Text Colors - Light Mode */
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
   --color-text-tertiary: #9ca3af;
   --color-text-inverse: #ffffff;
-  
+
   /* Border Colors - Light Mode */
   --color-border-primary: #e5e7eb;
   --color-border-secondary: #d1d5db;
   --color-border-focus: #0ea5e9;
-  
+
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
@@ -53,13 +53,13 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
-  
+
   /* Layout Dimensions */
   --sidebar-width: 16rem;
   --sidebar-collapsed-width: 4rem;
   --topbar-height: 4rem;
   --footer-height: 3rem;
-  
+
   /* Spacing Unit */
   --spacing-unit: 0.25rem;
   --spacing-xs: 0.25rem;
@@ -68,19 +68,19 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
-  
+
   /* Border Radius */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   --radius-2xl: 1.5rem;
-  
+
   /* Transitions */
   --transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: 100ms cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* Z-Index Scale */
   --z-dropdown: 1000;
   --z-sticky: 1020;
@@ -89,17 +89,17 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
-  
+
   /* Font Family */
   --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
-  
+
   /* Sidebar Colors - Light Mode */
   --sidebar-bg: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
   --sidebar-header-bg: #ffffff;
   --sidebar-border: #e5e7eb;
   --sidebar-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-  
+
   /* Navigation Colors - Light Mode */
   --nav-item-color: #6b7280;
   --nav-item-hover-bg: #f3f4f6;
@@ -108,17 +108,17 @@
   --nav-item-active-color: #2563eb;
   --nav-item-active-border: #3b82f6;
   --nav-item-active-icon: #3b82f6;
-  
+
   /* Logo Colors - Light Mode */
   --logo-text-color: #5558a0;
-  
+
   /* Scrollbar Colors - Light Mode */
   --scrollbar-thumb: #d1d5db;
-  
+
   /* Badge Colors - Light Mode */
   --badge-primary-bg: #dbeafe;
   --badge-primary-color: #1e40af;
-  
+
   /* Button Colors - Light Mode */
   --btn-bg: #f3f4f6;
   --btn-color: #6b7280;
@@ -130,62 +130,62 @@
 
 /* Dark Mode Variables */
 .dark {
-  /* Background Colors - Dark Mode */
-  --color-bg-primary: #1f2937;
-  --color-bg-secondary: #111827;
-  --color-bg-tertiary: #374151;
-  --color-bg-hover: #374151;
-  --color-bg-active: #4b5563;
-  
-  /* Text Colors - Dark Mode */
-  --color-text-primary: #f3f4f6;
-  --color-text-secondary: #9ca3af;
-  --color-text-tertiary: #6b7280;
-  --color-text-inverse: #111827;
-  
-  /* Border Colors - Dark Mode */
-  --color-border-primary: #374151;
-  --color-border-secondary: #4b5563;
+  /* Background Colors - Dark Mode (Improved: lighter, better separation) */
+  --color-bg-primary: #1e1e1e;
+  --color-bg-secondary: #2a2a2a;
+  --color-bg-tertiary: #3a3a3a;
+  --color-bg-hover: #2f2f2f;
+  --color-bg-active: #3f3f3f;
+
+  /* Text Colors - Dark Mode (Improved: better contrast) */
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a8a8a8;
+  --color-text-tertiary: #8a8a8a;
+  --color-text-inverse: #1e1e1e;
+
+  /* Border Colors - Dark Mode (Improved: more visible) */
+  --color-border-primary: #3a3a3a;
+  --color-border-secondary: #4a4a4a;
   --color-border-focus: #60a5fa;
-  
+
   /* Enhanced Shadows for Dark Mode */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  
-  /* Sidebar Colors - Dark Mode */
-  --sidebar-bg: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-  --sidebar-header-bg: #1f2937;
-  --sidebar-border: #374151;
-  --sidebar-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-  
-  /* Navigation Colors - Dark Mode */
-  --nav-item-color: #9ca3af;
-  --nav-item-hover-bg: #374151;
-  --nav-item-hover-color: #f3f4f6;
-  --nav-item-active-bg: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.15) 100%);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+
+  /* Sidebar Colors - Dark Mode (Improved: better visibility) */
+  --sidebar-bg: linear-gradient(180deg, #252525 0%, #1e1e1e 100%);
+  --sidebar-header-bg: #252525;
+  --sidebar-border: #3a3a3a;
+  --sidebar-shadow: 2px 0 8px rgba(0, 0, 0, 0.5);
+
+  /* Navigation Colors - Dark Mode (Improved: better contrast) */
+  --nav-item-color: #b0b0b0;
+  --nav-item-hover-bg: #2f2f2f;
+  --nav-item-hover-color: #e5e5e5;
+  --nav-item-active-bg: linear-gradient(90deg, rgba(96, 165, 250, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
   --nav-item-active-color: #60a5fa;
   --nav-item-active-border: #60a5fa;
   --nav-item-active-icon: #60a5fa;
-  
+
   /* Logo Colors - Dark Mode */
-  --logo-text-color: #8083c8;
-  
+  --logo-text-color: #9b9dd8;
+
   /* Scrollbar Colors - Dark Mode */
-  --scrollbar-thumb: #4b5563;
-  
+  --scrollbar-thumb: #4a4a4a;
+
   /* Badge Colors - Dark Mode */
   --badge-primary-bg: #1e3a8a;
   --badge-primary-color: #93c5fd;
-  
-  /* Button Colors - Dark Mode */
-  --btn-bg: #374151;
-  --btn-color: #9ca3af;
-  --btn-hover-bg: #4b5563;
-  --btn-hover-color: #f3f4f6;
-  --btn-border: #4b5563;
-  --btn-hover-border: #3b82f6;
+
+  /* Button Colors - Dark Mode (Improved: better visibility) */
+  --btn-bg: #2f2f2f;
+  --btn-color: #b0b0b0;
+  --btn-hover-bg: #3f3f3f;
+  --btn-hover-color: #e5e5e5;
+  --btn-border: #3a3a3a;
+  --btn-hover-border: #60a5fa;
 }
 
 /* Base Styles - Clean Flat Design (NO GRADIENTS) */
@@ -201,8 +201,8 @@ body {
 }
 
 .dark body {
-  background-color: #0f0f0f;
-  color: #fafafa;
+  background-color: #1a1a1a;
+  color: #e5e5e5;
 }
 
 /* Ensure NO gradients on any element */
@@ -223,7 +223,7 @@ body {
 }
 
 .dark ::-webkit-scrollbar-track {
-  background-color: rgb(31 41 55);
+  background-color: #2a2a2a;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -284,7 +284,7 @@ body {
     background-color: white !important;
     color: black !important;
   }
-  
+
   .no-print {
     display: none !important;
   }
@@ -312,8 +312,8 @@ body {
 }
 
 .dark .card {
-  background-color: rgb(38 38 38);
-  border-color: rgb(64 64 64);
+  background-color: #252525;
+  border-color: #3a3a3a;
 }
 
 .card-header {
@@ -322,7 +322,7 @@ body {
 }
 
 .dark .card-header {
-  border-bottom-color: rgb(64 64 64);
+  border-bottom-color: #3a3a3a;
 }
 
 .card-body {
@@ -335,7 +335,7 @@ body {
 }
 
 .dark .card-footer {
-  border-top-color: rgb(64 64 64);
+  border-top-color: #3a3a3a;
 }
 
 /* Button Components */
@@ -380,12 +380,12 @@ body {
 }
 
 .dark .btn-secondary {
-  background-color: rgb(64 64 64);
-  color: rgb(250 250 250);
+  background-color: #2f2f2f;
+  color: #e5e5e5;
 }
 
 .dark .btn-secondary:hover:not(:disabled) {
-  background-color: rgb(82 82 82);
+  background-color: #3f3f3f;
 }
 
 .btn-success {
@@ -418,9 +418,9 @@ body {
 }
 
 .dark .input {
-  background-color: rgb(38 38 38);
-  border-color: rgb(82 82 82);
-  color: rgb(250 250 250);
+  background-color: #252525;
+  border-color: #3a3a3a;
+  color: #e5e5e5;
 }
 
 .input:focus {
@@ -435,7 +435,7 @@ body {
 }
 
 .dark .input:disabled {
-  background-color: rgb(23 23 23);
+  background-color: #1a1a1a;
 }
 
 .label {
@@ -447,7 +447,7 @@ body {
 }
 
 .dark .label {
-  color: rgb(163 163 163);
+  color: #a8a8a8;
 }
 
 /* Badge Components */
@@ -520,7 +520,7 @@ body {
 }
 
 .dark .data-table {
-  background-color: #1a1a1a;
+  background-color: #252525;
 }
 
 .data-table table {
@@ -534,8 +534,8 @@ body {
 }
 
 .dark .data-table thead {
-  background-color: #0f0f0f;
-  border-bottom-color: #2a2a2a;
+  background-color: #1e1e1e;
+  border-bottom-color: #3a3a3a;
 }
 
 .data-table th {
@@ -560,8 +560,8 @@ body {
 }
 
 .dark .data-table td {
-  color: #fafafa;
-  border-bottom-color: #2a2a2a;
+  color: #e5e5e5;
+  border-bottom-color: #3a3a3a;
 }
 
 .data-table tbody tr:hover {
@@ -657,14 +657,14 @@ body {
 }
 
 .dark .search-input {
-  background-color: #1a1a1a;
-  border-color: #2a2a2a;
-  color: #fafafa;
+  background-color: #252525;
+  border-color: #3a3a3a;
+  color: #e5e5e5;
 }
 
 .dark .search-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
 }
 
 /* Action Button - Matching Image */
@@ -703,11 +703,11 @@ body {
 }
 
 .dark .action-btn.secondary {
-  background-color: #1a1a1a;
-  color: #fafafa;
-  border-color: #2a2a2a;
+  background-color: #252525;
+  color: #e5e5e5;
+  border-color: #3a3a3a;
 }
 
 .dark .action-btn.secondary:hover {
-  background-color: #2a2a2a;
+  background-color: #2f2f2f;
 }

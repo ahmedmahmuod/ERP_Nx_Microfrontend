@@ -14,6 +14,7 @@ const config = createRemoteConfig({
   name: REMOTE_NAMES.HR,
   exposes: {
     [REMOTE_EXPOSES.ROUTES]: REMOTE_ENTRY_POINTS[REMOTE_NAMES.HR],
+    [REMOTE_EXPOSES.MANIFEST]: 'apps/remote-hr/src/app/remote-entry/manifest.ts',
   },
 });
 

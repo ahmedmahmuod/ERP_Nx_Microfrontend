@@ -1,0 +1,112 @@
+{
+  "name": "remoteSrm",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/remote-srm/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/remote-srm",
+        "index": "apps/remote-srm/src/index.html",
+        "main": "apps/remote-srm/src/main.ts",
+        "tsConfig": "apps/remote-srm/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/remote-srm/public"
+          }
+        ],
+        "styles": ["apps/remote-srm/src/styles.scss"],
+        "customWebpackConfig": {
+          "path": "apps/remote-srm/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/remote-srm/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4204,
+        "publicHost": "http://localhost:4204"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "remoteSrm:build:production"
+        },
+        "development": {
+          "buildTarget": "remoteSrm:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "dependsOn": ["shell:serve"]
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "remoteSrm:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/remote-srm"
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "remoteSrm:build",
+        "port": 4204,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "remoteSrm:build:development"
+        },
+        "production": {
+          "buildTarget": "remoteSrm:build:production"
+        }
+      }
+    }
+  }
+}

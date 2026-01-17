@@ -2,5 +2,7 @@
   "remoteAuth": "http://localhost:4201",
   "remoteFinance": "http://localhost:4202",
   "remoteHr": "http://localhost:4203",
-  "remoteSupply": "http://localhost:4204"
+  "remoteSrm": "http://localhost:4204",
+  "remotePm": "http://localhost:4205",
+  "remoteWarehouses": "http://localhost:4206"
 }

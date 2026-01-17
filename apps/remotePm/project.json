@@ -1,0 +1,112 @@
+{
+  "name": "remotePm",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/remotePm/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/remotePm",
+        "index": "apps/remotePm/src/index.html",
+        "main": "apps/remotePm/src/main.ts",
+        "tsConfig": "apps/remotePm/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/remotePm/public"
+          }
+        ],
+        "styles": ["apps/remotePm/src/styles.scss"],
+        "customWebpackConfig": {
+          "path": "apps/remotePm/webpack.config.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/remotePm/webpack.prod.config.ts"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "port": 4205,
+        "publicHost": "http://localhost:4205"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "remotePm:build:production"
+        },
+        "development": {
+          "buildTarget": "remotePm:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "dependsOn": ["shell:serve"]
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "remotePm:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/remotePm"
+      }
+    },
+    "serve-static": {
+      "continuous": true,
+      "executor": "@nx/web:file-server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "remotePm:build",
+        "port": 4205,
+        "watch": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "remotePm:build:development"
+        },
+        "production": {
+          "buildTarget": "remotePm:build:production"
+        }
+      }
+    }
+  }
+}

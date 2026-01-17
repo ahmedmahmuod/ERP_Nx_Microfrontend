@@ -1,6 +1,6 @@
 /**
  * Dashboard Component
- * 
+ *
  * Main dashboard landing page.
  */
 
@@ -20,10 +20,10 @@ import { Router } from '@angular/router';
           <p class="dashboard-subtitle">Select a module to get started</p>
         </div>
       </div>
-      
+
       <div class="modules-grid">
         @for (module of modules; track module.id) {
-          <div 
+          <div
             class="module-card"
             [class]="'module-card-' + module.color"
             (click)="navigateToModule(module.route)"
@@ -59,31 +59,23 @@ import { Router } from '@angular/router';
     .dashboard-title {
       font-size: 2rem;
       font-weight: 700;
-      color: #1a1a1a;
+      color: var(--color-text-primary);
       margin: 0 0 0.5rem 0;
     }
 
     .dashboard-subtitle {
       font-size: 1rem;
-      color: #6b7280;
+      color: var(--color-text-secondary);
       margin: 0;
-    }
-
-    :host-context(.dark) .dashboard-title {
-      color: #fafafa;
-    }
-
-    :host-context(.dark) .dashboard-subtitle {
-      color: #9ca3af;
     }
 
     .modules-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: 1fr;
       gap: 1.5rem;
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
       .modules-grid {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -91,35 +83,31 @@ import { Router } from '@angular/router';
 
     @media (min-width: 1024px) {
       .modules-grid {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
     .module-card {
       position: relative;
       padding: 2rem 1.5rem;
-      background-color: #ffffff;
-      border: 1px solid #f0f0f0;
-      border-radius: 0.75rem;
+      background-color: var(--color-bg-primary);
+      border: 1px solid var(--color-border-primary);
+      border-radius: var(--radius-lg);
       cursor: pointer;
       transition: all 0.2s ease;
       overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
 
     .module-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-lg);
       border-color: currentColor;
     }
 
     .module-card:focus {
-      outline: 2px solid #2563eb;
+      outline: 2px solid var(--color-border-focus);
       outline-offset: 2px;
-    }
-
-    :host-context(.dark) .module-card {
-      background-color: #1a1a1a;
-      border-color: #2a2a2a;
     }
 
     .module-icon {
@@ -141,23 +129,15 @@ import { Router } from '@angular/router';
     .module-title {
       font-size: 1.125rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--color-text-primary);
       margin: 0 0 0.5rem 0;
     }
 
     .module-description {
       font-size: 0.875rem;
-      color: #6b7280;
+      color: var(--color-text-secondary);
       margin: 0 0 1rem 0;
       line-height: 1.5;
-    }
-
-    :host-context(.dark) .module-title {
-      color: #fafafa;
-    }
-
-    :host-context(.dark) .module-description {
-      color: #9ca3af;
     }
 
     .module-arrow {
@@ -180,32 +160,56 @@ import { Router } from '@angular/router';
     }
 
     /* Color Variants */
-    .module-card-blue {
-      color: #2563eb;
+    .module-card-amber {
+      color: #f59e0b;
     }
 
-    .module-card-blue .module-icon {
-      background-color: #eff6ff;
+    .module-card-amber .module-icon {
+      background-color: #fef3c7;
     }
 
-    :host-context(.dark) .module-card-blue .module-icon {
-      background-color: #1e3a8a;
+    :host-context(.dark) .module-card-amber .module-icon {
+      background-color: #78350f;
     }
 
-    .module-card-green {
-      color: #059669;
+    .module-card-emerald {
+      color: #10b981;
     }
 
-    .module-card-green .module-icon {
+    .module-card-emerald .module-icon {
       background-color: #d1fae5;
     }
 
-    :host-context(.dark) .module-card-green .module-icon {
+    :host-context(.dark) .module-card-emerald .module-icon {
       background-color: #064e3b;
     }
 
+    .module-card-violet {
+      color: #8b5cf6;
+    }
+
+    .module-card-violet .module-icon {
+      background-color: #f5f3ff;
+    }
+
+    :host-context(.dark) .module-card-violet .module-icon {
+      background-color: #5b21b6;
+    }
+
+    .module-card-pink {
+      color: #ec4899;
+    }
+
+    .module-card-pink .module-icon {
+      background-color: #fce7f3;
+    }
+
+    :host-context(.dark) .module-card-pink .module-icon {
+      background-color: #831843;
+    }
+
     .module-card-orange {
-      color: #ea580c;
+      color: #f97316;
     }
 
     .module-card-orange .module-icon {
@@ -214,18 +218,6 @@ import { Router } from '@angular/router';
 
     :host-context(.dark) .module-card-orange .module-icon {
       background-color: #7c2d12;
-    }
-
-    .module-card-purple {
-      color: #9333ea;
-    }
-
-    .module-card-purple .module-icon {
-      background-color: #faf5ff;
-    }
-
-    :host-context(.dark) .module-card-purple .module-icon {
-      background-color: #581c87;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -236,11 +228,11 @@ export class DashboardComponent {
   readonly modules = [
     {
       id: 'hr',
-      title: 'Human Resources',
+      title: 'HR & Payroll',
       description: 'Manage employees, payroll, and HR operations',
       icon: 'pi-users',
       route: '/hr',
-      color: 'blue'
+      color: 'amber'
     },
     {
       id: 'finance',
@@ -248,23 +240,31 @@ export class DashboardComponent {
       description: 'Track finances, invoices, and accounting',
       icon: 'pi-wallet',
       route: '/finance',
-      color: 'green'
+      color: 'emerald'
     },
     {
-      id: 'supply',
-      title: 'Supply Chain',
-      description: 'Manage inventory, suppliers, and logistics',
-      icon: 'pi-box',
-      route: '/supply',
-      color: 'orange'
+      id: 'srm',
+      title: 'SRM',
+      description: 'Supplier relationship and procurement management',
+      icon: 'pi-building',
+      route: '/srm',
+      color: 'violet'
     },
     {
-      id: 'projects',
+      id: 'pm',
       title: 'Project Management',
       description: 'Plan, track, and deliver projects',
-      icon: 'pi-folder',
-      route: '/tasks',
-      color: 'purple'
+      icon: 'pi-sitemap',
+      route: '/pm',
+      color: 'pink'
+    },
+    {
+      id: 'warehouses',
+      title: 'Warehouses',
+      description: 'Manage inventory, stock, and warehouse operations',
+      icon: 'pi-box',
+      route: '/warehouses',
+      color: 'orange'
     }
   ];
 
