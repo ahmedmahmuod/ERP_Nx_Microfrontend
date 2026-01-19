@@ -17,7 +17,7 @@ export class LanguageFacade {
     { code: Language; label: string; flag: string }[]
   >([
     { code: 'en', label: 'English', flag: '🇺🇸' },
-    { code: 'ar', label: 'العربية', flag: '🇸🇦' },
+    { code: 'ar', label: 'العربية', flag: '🇪🇬' },
   ]);
 
   // Selectors

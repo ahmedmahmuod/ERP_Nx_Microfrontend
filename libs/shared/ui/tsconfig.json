@@ -7,7 +7,7 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "emitDecoratorMetadata": false,
-    "module": "preserve"
+    "module": "esnext"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { ThemeService } from '@erp/shared/ui';
+import { PopoverModule } from 'primeng/popover';
+import { InputTextModule } from 'primeng/inputtext';
 import { CompanyFacade } from '@erp/shared/util-state';
 import { LanguageSwitchComponent } from '@erp/shared/ui';
 
@@ -13,140 +13,145 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     AvatarModule,
     ButtonModule,
-    MenuModule,
+    PopoverModule,
+    InputTextModule,
     LanguageSwitchComponent,
   ],
   template: `
-    <div class="flex align-items-center gap-3">
+    <div 
+      class="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-gray-100 transition-colors duration-150 focus:outline-none" 
+      (click)="$any(op).toggle($event)"
+      (keyup.enter)="$any(op).toggle($event)"
+      role="button"
+      tabindex="0"
+    >
+      <div class="text-right flex flex-col">
+        <span class="font-bold text-sm text-gray-900 leading-none">Admin</span>
+        <span class="text-xs text-gray-600 leading-none mt-1">administrator</span>
+      </div>
       <p-avatar
         image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
         shape="circle"
-        class="cursor-pointer"
-        (click)="menu.toggle($event)"
+        size="normal"
       >
       </p-avatar>
-
-      <p-menu
-        #menu
-        [model]="items()"
-        [popup]="true"
-        appendTo="body"
-        styleClass="w-64"
-      >
-        <ng-template pTemplate="start">
-          <div
-            class="p-3 border-bottom-1 surface-border flex align-items-center gap-2"
-          >
-            <span class="font-bold">Admin User</span>
-          </div>
-        </ng-template>
-
-        <!-- Custom Template for Language Switch -->
-        <ng-template pTemplate="item" let-item>
-          <div *ngIf="item.id === 'language-switch'" class="p-2">
-            <lib-language-switch styleClass="w-full"></lib-language-switch>
-          </div>
-
-          <a
-            *ngIf="item.id !== 'language-switch'"
-            [attr.href]="item.url"
-            class="p-menuitem-link flex align-items-center p-3 cursor-pointer"
-          >
-            <span [class]="item.icon"></span>
-            <span class="ml-2">{{ item.label }}</span>
-            <span
-              *ngIf="item.badge"
-              class="ml-auto bg-primary text-white border-round py-1 px-2 text-xs"
-              >{{ item.badge }}</span
-            >
-            <span
-              *ngIf="item.shortcut"
-              class="ml-auto border-1 surface-border border-round surface-100 text-xs p-1"
-              >{{ item.shortcut }}</span
-            >
-          </a>
-        </ng-template>
-      </p-menu>
+      <i class="pi pi-chevron-down text-[10px] text-gray-600 ml-1"></i>
     </div>
+
+    <!-- Main Profile Overlay -->
+    <p-popover #op styleClass="profile-overlay shadow-lg p-0 overflow-hidden rounded-xl">
+      <div class="flex flex-col w-72">
+        
+        <!-- User Section -->
+        <div class="flex items-center gap-3 p-3 border-b border-gray-200">
+          <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" size="large"></p-avatar>
+          <div class="flex flex-col">
+            <span class="font-bold text-gray-900">Admin User</span>
+            <span class="text-xs text-gray-600">admin@assemble.com</span>
+          </div>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="flex flex-col py-2">
+          
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-3 py-3 rounded-none hover:bg-gray-100">
+            <i class="pi pi-user mr-3 text-gray-600"></i>
+            <span class="font-medium text-gray-700">User Profile</span>
+          </button>
+
+          <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-3 py-3 rounded-none hover:bg-gray-100">
+            <i class="pi pi-building mr-3 text-gray-600"></i>
+            <span class="font-medium text-gray-700">Switch Company</span>
+            <i class="pi pi-chevron-right ml-auto text-[10px] text-gray-500"></i>
+          </button>
+
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-3 py-3 rounded-none hover:bg-gray-100">
+            <i class="pi pi-question-circle mr-3 text-gray-600"></i>
+            <span class="font-medium text-gray-700">Supports</span>
+          </button>
+
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-3 py-3 rounded-none hover:bg-gray-100">
+            <i class="pi pi-lock mr-3 text-gray-600"></i>
+            <span class="font-medium text-gray-700">Change Password</span>
+          </button>
+
+          <!-- Language Section (Styled as item) -->
+          <lib-language-switch></lib-language-switch>
+
+          <div class="border-t border-gray-200 my-1"></div>
+
+          <!-- Logout -->
+          <button pButton class="p-button-text p-button-danger justify-start w-full px-3 py-3 rounded-none hover:bg-red-50">
+            <i class="pi pi-sign-out mr-3 text-red-500"></i>
+            <span class="font-bold text-red-500">Sign Out</span>
+          </button>
+
+        </div>
+      </div>
+    </p-popover>
+
+    <!-- Company Switch Overlay -->
+    <p-popover #companyOp styleClass="company-overlay shadow-lg p-0 overflow-hidden rounded-xl">
+      <div class="flex flex-col w-80">
+        <div class="p-3 border-b border-gray-200 bg-gray-50">
+          <span class="font-bold block mb-2 text-gray-700">Switch Company</span>
+          <div class="relative w-full">
+            <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            <input type="text" pInputText placeholder="Search company..." class="w-full pl-9 py-2 text-sm" [(ngModel)]="searchQuery" />
+          </div>
+        </div>
+        
+        <div class="flex flex-col max-h-60 overflow-auto py-1">
+          @for (company of filteredCompanies(); track company.id) {
+            <button 
+              pButton 
+              (click)="selectCompany(company.id); companyOp.hide(); op.hide()"
+              class="p-button-text p-button-plain justify-start w-full px-3 py-3 rounded-none hover:bg-gray-100"
+              [ngClass]="{'bg-blue-50': company.id === activeCompany()?.id}"
+            >
+              <div class="flex flex-col items-start">
+                <span class="font-medium" [ngClass]="{'text-blue-600': company.id === activeCompany()?.id}">{{ company.name }}</span>
+                <span class="text-xs text-gray-500">{{ company.id }}</span>
+              </div>
+              @if (company.id === activeCompany()?.id) {
+                <i class="pi pi-check ml-auto text-blue-600"></i>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    </p-popover>
   `,
+  styles: [
+    `
+      :host ::ng-deep {
+        .p-popover {
+          @apply p-0 border border-gray-200 bg-white;
+        }
+        .p-popover-content {
+          @apply p-0;
+        }
+      }
+    `,
+  ],
 })
 export class ProfileDropdownComponent {
-  private themeService = inject(ThemeService);
   private companyFacade = inject(CompanyFacade);
 
-  items = signal<MenuItem[]>([
-    {
-      label: 'Profile',
-      icon: 'pi pi-user',
-      command: () => {
-        /* Navigate to profile */
-      },
-    },
-    {
-      separator: true,
-    },
-    {
-      label: 'Language',
-      id: 'language-switch', // Marker for custom template
-      styleClass: 'p-0', // Reset padding for custom component
-    },
-    {
-      label: 'Theme',
-      icon: 'pi pi-palette',
-      items: [
-        {
-          label: 'Light',
-          icon: 'pi pi-sun',
-          command: () => this.themeService.setTheme('light'),
-        },
-        {
-          label: 'Dark',
-          icon: 'pi pi-moon',
-          command: () => this.themeService.setTheme('dark'),
-        },
-        {
-          label: 'System',
-          icon: 'pi pi-desktop',
-          command: () => this.themeService.setTheme('system'),
-        },
-      ],
-    },
-    {
-      label: 'Switch Company',
-      icon: 'pi pi-building',
-      items: this.getCompanyItems(),
-    },
-    {
-      separator: true,
-    },
-    {
-      label: 'Logout',
-      icon: 'pi pi-sign-out',
-      routerLink: '/auth/login',
-    },
-  ]);
+  searchQuery = '';
 
-  constructor() {
-    // Reactively update company items if companies list changes (in a real app)
-    // For now static mock is fine, but structurally:
-    /*
-      effect(() => {
-          const companies = this.companyFacade.companies();
-          // Logic to update `items` signal deep in the structure
-      });
-      */
-  }
+  activeCompany = this.companyFacade.activeCompany;
+  companies = this.companyFacade.companies;
 
-  getCompanyItems(): MenuItem[] {
-    return this.companyFacade.companies().map((c) => ({
-      label: c.name,
-      icon:
-        c.id === this.companyFacade.activeCompany()?.id
-          ? 'pi pi-check'
-          : 'pi pi-building', // Show checkmark for active
-      command: () => this.companyFacade.setCompany(c.id),
-    }));
+  filteredCompanies = () => {
+    const q = this.searchQuery.toLowerCase();
+    return this.companies().filter((c) => c.name.toLowerCase().includes(q));
+  };
+
+  selectCompany(id: string) {
+    this.companyFacade.setCompany(id);
   }
 }
