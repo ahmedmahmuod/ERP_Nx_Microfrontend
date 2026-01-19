@@ -24,506 +24,81 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
   standalone: true,
   imports: [CommonModule, ProfileDropdownComponent],
   template: `
-    <header class="header">
+    <header
+      class="flex items-center justify-between h-16 px-4 sm:px-6 sticky top-0 z-50 bg-white dark:bg-[#1e1e1e] border-b border-gray-100 dark:border-gray-800 transition-colors"
+    >
       <!-- Left Section -->
-      <div class="header-left">
+      <div class="flex items-center gap-4">
         <!-- Mobile Menu Toggle -->
         <button
-          class="mobile-menu-toggle"
+          class="lg:hidden flex items-center justify-center w-10 h-10 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           (click)="layoutService.toggleSidebar()"
           aria-label="Toggle menu"
         >
-          <i class="pi pi-bars"></i>
+          <i class="pi pi-bars text-xl"></i>
         </button>
 
         <!-- Back to Home Button (Remote Areas Only) -->
         @if (routeContext.isInRemoteArea()) {
           <button
-            class="back-to-home-btn"
+            class="flex items-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all shadow-sm group"
             (click)="routeContext.navigateToHome()"
             aria-label="Back to Home"
-            title="Back to Home"
           >
-            <i class="pi pi-arrow-left"></i>
-            <span class="back-to-home-label">Back to Home</span>
+            <i
+              class="pi pi-arrow-left transition-transform group-hover:-translate-x-1"
+            ></i>
+            <span class="hidden sm:inline font-medium text-sm"
+              >Back to Home</span
+            >
           </button>
         }
 
-        <h1 class="page-title">
+        <h1 class="flex items-center gap-2 m-0 mt-0.5">
           @if (currentModuleName()) {
-            <span class="module-name">{{ currentModuleName() }}</span>
+            <span class="text-[var(--accent-primary)] font-semibold text-lg">{{
+              currentModuleName()
+            }}</span>
           } @else {
-            <span class="brand-name">Assemble ERP</span>
+            <span
+              class="text-[var(--accent-primary)] font-bold text-xl tracking-tight"
+              >Assemble ERP</span
+            >
           }
         </h1>
       </div>
 
       <!-- Right Section -->
-      <div class="header-right">
+      <div class="flex items-center gap-1 sm:gap-3">
         <!-- Theme Toggle -->
         <button
-          class="icon-btn"
+          class="hidden sm:flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           (click)="layoutService.toggleTheme()"
           aria-label="Toggle theme"
         >
-          <i class="pi pi-moon"></i>
+          <i class="pi pi-moon text-lg"></i>
         </button>
 
         <!-- Notifications -->
-        <button class="icon-btn" aria-label="Notifications">
-          <i class="pi pi-bell"></i>
-          <span class="notification-badge">3</span>
+        <button
+          class="flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
+          aria-label="Notifications"
+        >
+          <i class="pi pi-bell text-lg"></i>
+          <span
+            class="absolute top-1 right-1 flex items-center justify-center min-w-[1.25rem] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-white dark:border-[#1e1e1e]"
+            >3</span
+          >
         </button>
 
         <!-- User Menu -->
-        <div class="user-menu">
+        <div class="ml-1 sm:ml-2">
           <app-profile-dropdown></app-profile-dropdown>
         </div>
       </div>
     </header>
   `,
-  styles: [
-    `
-      .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 4rem;
-        padding: 0 1.5rem;
-        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
-        border-bottom: 1px solid #e5e7eb;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        gap: 1rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      }
-
-      :host-context(.dark) .header {
-        background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-        border-bottom-color: #374151;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      }
-
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        flex: 0 0 auto;
-      }
-
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        flex: 0 0 auto;
-      }
-
-      /* Mobile Menu Toggle - Only visible on mobile */
-      .mobile-menu-toggle {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        border: none;
-        background-color: transparent;
-        color: var(--color-text-secondary);
-        cursor: pointer;
-        border-radius: var(--radius-md);
-        transition: all 0.15s ease;
-
-        &:hover {
-          background-color: var(--nav-item-hover-bg);
-          color: var(--accent-primary, var(--color-primary));
-        }
-
-        &:active {
-          transform: scale(0.95);
-        }
-
-        i {
-          font-size: 1.5rem;
-        }
-
-        @media (max-width: 1024px) {
-          display: flex;
-        }
-      }
-
-      :host-context(.dark) .mobile-menu-toggle:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      /* Back to Home Button */
-      .back-to-home-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        border: 1px solid #e5e7eb;
-        background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
-        color: var(--color-text-secondary);
-        cursor: pointer;
-        border-radius: var(--radius-md, 0.5rem);
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-
-        &:hover {
-          background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
-          border-color: var(--accent-primary, var(--color-primary, #2563eb));
-          color: var(--accent-primary, var(--color-primary, #2563eb));
-          transform: translateY(-1px);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        &:active {
-          transform: translateY(0);
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        &:focus-visible {
-          outline: 2px solid
-            var(--accent-primary, var(--color-primary, #2563eb));
-          outline-offset: 2px;
-        }
-
-        i {
-          font-size: 1rem;
-          transition: transform 0.2s ease;
-        }
-
-        &:hover i {
-          transform: translateX(-2px);
-        }
-      }
-
-      :host-context(.dark) .back-to-home-btn {
-        background: linear-gradient(180deg, #374151 0%, #1f2937 100%);
-        border-color: #4b5563;
-        color: #d1d5db;
-
-        &:hover {
-          background: linear-gradient(180deg, #4b5563 0%, #374151 100%);
-          border-color: var(--accent-primary, var(--color-primary, #3b82f6));
-          color: var(--accent-primary, var(--color-primary, #3b82f6));
-        }
-      }
-
-      .back-to-home-label {
-        white-space: nowrap;
-      }
-
-      /* Hide label on smaller screens */
-      @media (max-width: 640px) {
-        .back-to-home-label {
-          display: none;
-        }
-
-        .back-to-home-btn {
-          padding: 0.5rem;
-          min-width: 2.5rem;
-          justify-content: center;
-        }
-      }
-
-      .menu-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
-        border: none;
-        background-color: transparent;
-        color: #6b7280;
-        cursor: pointer;
-        border-radius: 0.375rem;
-        transition: all 0.15s ease;
-      }
-
-      .menu-toggle:hover {
-        background-color: #f5f5f5;
-        color: #1a1a1a;
-      }
-
-      .menu-toggle i {
-        font-size: 1.25rem;
-      }
-
-      .page-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: var(--color-text);
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .brand-name {
-        font-weight: 700;
-        color: var(--accent-primary, var(--color-primary, #2563eb));
-      }
-
-      .module-name {
-        color: var(--accent-primary, var(--color-primary));
-        font-weight: 600;
-      }
-
-      /* Search Container */
-      .search-container {
-        position: relative;
-        display: none;
-      }
-
-      @media (min-width: 768px) {
-        .search-container {
-          display: flex;
-          align-items: center;
-        }
-      }
-
-      .search-icon {
-        position: absolute;
-        left: 0.75rem;
-        color: #9ca3af;
-        font-size: 1rem;
-      }
-
-      .search-input {
-        width: 20rem;
-        padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.375rem;
-        background-color: #fafafa;
-        color: #1a1a1a;
-        font-size: 0.875rem;
-        transition: all 0.15s ease;
-      }
-
-      .search-input:focus {
-        outline: none;
-        border-color: #2563eb;
-        background-color: #ffffff;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-
-      .search-input::placeholder {
-        color: #9ca3af;
-      }
-
-      .search-shortcut {
-        position: absolute;
-        right: 0.75rem;
-        font-size: 0.75rem;
-        color: #9ca3af;
-        padding: 0.125rem 0.375rem;
-        background-color: #f3f4f6;
-        border-radius: 0.25rem;
-        border: 1px solid #e5e7eb;
-      }
-
-      :host-context(.dark) .search-input {
-        background-color: #2a2a2a;
-        border-color: #404040;
-        color: #fafafa;
-      }
-
-      :host-context(.dark) .search-input:focus {
-        background-color: #1a1a1a;
-        border-color: #3b82f6;
-      }
-
-      /* Icon Button */
-      .icon-btn {
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.25rem;
-        height: 2.25rem;
-        border: none;
-        background-color: transparent;
-        color: #6b7280;
-        cursor: pointer;
-        border-radius: 0.375rem;
-        transition: all 0.15s ease;
-      }
-
-      .icon-btn:hover {
-        background-color: #f5f5f5;
-        color: #1a1a1a;
-      }
-
-      .icon-btn i {
-        font-size: 1.125rem;
-      }
-
-      :host-context(.dark) .icon-btn {
-        color: #9ca3af;
-      }
-
-      :host-context(.dark) .icon-btn:hover {
-        background-color: #2a2a2a;
-        color: #fafafa;
-      }
-
-      .notification-badge {
-        position: absolute;
-        top: 0.25rem;
-        right: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 1.125rem;
-        height: 1.125rem;
-        padding: 0 0.25rem;
-        background-color: #ef4444;
-        color: white;
-        font-size: 0.625rem;
-        font-weight: 600;
-        border-radius: 9999px;
-        border: 2px solid #ffffff;
-      }
-
-      :host-context(.dark) .notification-badge {
-        border-color: #1a1a1a;
-      }
-
-      /* User Menu */
-      .user-menu {
-        position: relative;
-      }
-
-      .user-button {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.375rem 0.75rem;
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        border-radius: 0.375rem;
-        transition: all 0.15s ease;
-      }
-
-      .user-button:hover {
-        background-color: #f5f5f5;
-      }
-
-      :host-context(.dark) .user-button:hover {
-        background-color: #2a2a2a;
-      }
-
-      .user-avatar {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2rem;
-        height: 2rem;
-        border-radius: 9999px;
-        background-color: #2563eb;
-        color: white;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-
-      .user-info {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      @media (min-width: 1024px) {
-        .user-info {
-          display: flex;
-        }
-      }
-
-      .user-name {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #1a1a1a;
-        line-height: 1.25;
-      }
-
-      .user-email {
-        font-size: 0.75rem;
-        color: #6b7280;
-        line-height: 1.25;
-      }
-
-      :host-context(.dark) .user-name {
-        color: #fafafa;
-      }
-
-      :host-context(.dark) .user-email {
-        color: #9ca3af;
-      }
-
-      .user-button i {
-        font-size: 0.875rem;
-        color: #9ca3af;
-      }
-
-      /* Dropdown Customization */
-      ::ng-deep .language-dropdown,
-      ::ng-deep .company-dropdown {
-        font-size: 0.875rem;
-      }
-
-      ::ng-deep .language-dropdown .p-dropdown,
-      ::ng-deep .company-dropdown .p-dropdown,
-      ::ng-deep .language-dropdown .p-select,
-      ::ng-deep .company-dropdown .p-select {
-        border: 1px solid #e5e7eb;
-        border-radius: 0.375rem;
-        background-color: #ffffff;
-        transition: all 0.15s ease;
-      }
-
-      ::ng-deep .language-dropdown .p-dropdown:hover,
-      ::ng-deep .company-dropdown .p-dropdown:hover,
-      ::ng-deep .language-dropdown .p-select:hover,
-      ::ng-deep .company-dropdown .p-select:hover {
-        border-color: #2563eb;
-      }
-
-      .dropdown-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.875rem;
-      }
-
-      .dropdown-item i {
-        font-size: 1rem;
-        color: #6b7280;
-      }
-
-      /* Mobile Responsive */
-      @media (max-width: 767px) {
-        .header {
-          padding: 0 1rem;
-        }
-
-        .page-title {
-          font-size: 1.125rem;
-        }
-
-        .header-right {
-          gap: 0.5rem;
-        }
-
-        ::ng-deep .language-dropdown,
-        ::ng-deep .company-dropdown {
-          display: none;
-        }
-      }
-    `,
-  ],
+  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
