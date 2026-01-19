@@ -45,10 +45,10 @@ npm install
 npx nx serve shell
 
 # Start Shell + specific remote
-npx nx serve shell --devRemotes=remoteFinance
+npx nx run shell:serve-mf --devRemotes=remoteHr
 
 # Start Shell + all remotes
-npx nx serve shell --devRemotes=remoteAuth,remoteFinance,remoteHr,remoteSrm,remotePm,remoteWarehouses
+npx nx run shell:serve-mf --devRemotes=remoteAuth,remoteFinance,remoteHr,remoteSrm,remotePm,remoteWarehouses
 ```
 
 ### Building for Production
@@ -80,20 +80,20 @@ npx nx e2e shell-e2e
 
 Comprehensive documentation is available in the `/docs` directory:
 
-| Document | Description |
-|----------|-------------|
-| **[00_OVERVIEW](./docs/00_OVERVIEW.md)** | System overview, modules, and quick start |
-| **[01_ARCHITECTURE](./docs/01_ARCHITECTURE.md)** | Architecture design, domain boundaries, and ADRs |
-| **[02_TOOLING_STACK](./docs/02_TOOLING_STACK.md)** | Technology stack and tool choices |
-| **[03_WORKSPACE_STRUCTURE](./docs/03_WORKSPACE_STRUCTURE.md)** | Monorepo layout and naming conventions |
-| **[04_MICROFRONTEND_MODULE_FEDERATION](./docs/04_MICROFRONTEND_MODULE_FEDERATION.md)** | Module Federation setup and remote loading |
-| **[05_DESIGN_SYSTEM](./docs/05_DESIGN_SYSTEM.md)** | Design tokens, theming, and UI components |
-| **[06_ROUTING_AND_NAVIGATION](./docs/06_ROUTING_AND_NAVIGATION.md)** | Routing strategy and navigation patterns |
-| **[07_CICD](./docs/07_CICD.md)** | CI/CD pipelines and automation |
-| **[08_DEPLOYMENT](./docs/08_DEPLOYMENT.md)** | Deployment strategies and hosting |
-| **[09_USER_GUIDE](./docs/09_USER_GUIDE.md)** | End-user documentation |
-| **[10_DEVELOPER_GUIDE](./docs/10_DEVELOPER_GUIDE.md)** | Deep dive for developers |
-| **[11_TROUBLESHOOTING](./docs/11_TROUBLESHOOTING.md)** | Common issues and solutions |
+| Document                                                                               | Description                                      |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| **[00_OVERVIEW](./docs/00_OVERVIEW.md)**                                               | System overview, modules, and quick start        |
+| **[01_ARCHITECTURE](./docs/01_ARCHITECTURE.md)**                                       | Architecture design, domain boundaries, and ADRs |
+| **[02_TOOLING_STACK](./docs/02_TOOLING_STACK.md)**                                     | Technology stack and tool choices                |
+| **[03_WORKSPACE_STRUCTURE](./docs/03_WORKSPACE_STRUCTURE.md)**                         | Monorepo layout and naming conventions           |
+| **[04_MICROFRONTEND_MODULE_FEDERATION](./docs/04_MICROFRONTEND_MODULE_FEDERATION.md)** | Module Federation setup and remote loading       |
+| **[05_DESIGN_SYSTEM](./docs/05_DESIGN_SYSTEM.md)**                                     | Design tokens, theming, and UI components        |
+| **[06_ROUTING_AND_NAVIGATION](./docs/06_ROUTING_AND_NAVIGATION.md)**                   | Routing strategy and navigation patterns         |
+| **[07_CICD](./docs/07_CICD.md)**                                                       | CI/CD pipelines and automation                   |
+| **[08_DEPLOYMENT](./docs/08_DEPLOYMENT.md)**                                           | Deployment strategies and hosting                |
+| **[09_USER_GUIDE](./docs/09_USER_GUIDE.md)**                                           | End-user documentation                           |
+| **[10_DEVELOPER_GUIDE](./docs/10_DEVELOPER_GUIDE.md)**                                 | Deep dive for developers                         |
+| **[11_TROUBLESHOOTING](./docs/11_TROUBLESHOOTING.md)**                                 | Common issues and solutions                      |
 
 **Start here**: [📖 Documentation Overview](./docs/00_OVERVIEW.md)
 
@@ -101,15 +101,15 @@ Comprehensive documentation is available in the `/docs` directory:
 
 ## 🏗️ System Modules
 
-| Module | Port | Description |
-|--------|------|-------------|
-| **Shell** | 4200 | Host application with layout and orchestration |
-| **Auth** | 4201 | Authentication and authorization |
-| **Finance** | 4202 | Financial management and reporting |
-| **HR** | 4203 | Human resources and payroll |
-| **SRM** | 4204 | Supplier relationship management |
-| **PM** | 4205 | Project management |
-| **Warehouses** | 4206 | Warehouse and inventory management |
+| Module         | Port | Description                                    |
+| -------------- | ---- | ---------------------------------------------- |
+| **Shell**      | 4200 | Host application with layout and orchestration |
+| **Auth**       | 4201 | Authentication and authorization               |
+| **Finance**    | 4202 | Financial management and reporting             |
+| **HR**         | 4203 | Human resources and payroll                    |
+| **SRM**        | 4204 | Supplier relationship management               |
+| **PM**         | 4205 | Project management                             |
+| **Warehouses** | 4206 | Warehouse and inventory management             |
 
 ---
 
