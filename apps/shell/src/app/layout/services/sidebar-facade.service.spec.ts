@@ -13,11 +13,12 @@ import { SidebarFacadeService } from './sidebar-facade.service';
 import { NavigationFacadeService } from '../../core/services/navigation-facade.service';
 import { signal } from '@angular/core';
 import { NavItem } from '@erp/shared/models';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 describe('SidebarFacadeService', () => {
   let service: SidebarFacadeService;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockNavigationFacade: jasmine.SpyObj<NavigationFacadeService>;
+  let mockRouter: any;
+  let mockNavigationFacade: any;
 
   const mockMenuItems: NavItem[] = [
     {
@@ -46,16 +47,16 @@ describe('SidebarFacadeService', () => {
   ];
 
   beforeEach(() => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate'], {
+    mockRouter = {
+      navigate: vi.fn(),
       events: signal(null).asReadonly(),
       url: '/dashboard',
-    });
+    };
 
-    mockNavigationFacade = jasmine.createSpyObj('NavigationFacadeService', [
-      'searchMenuItems',
-    ], {
+    mockNavigationFacade = {
+      searchMenuItems: vi.fn(),
       menuItems: signal(mockMenuItems),
-    });
+    };
 
     TestBed.configureTestingModule({
       providers: [
@@ -113,14 +114,12 @@ describe('SidebarFacadeService', () => {
 
   describe('Search Behavior', () => {
     beforeEach(() => {
-      mockNavigationFacade.searchMenuItems.and.returnValue([
+      mockNavigationFacade.searchMenuItems.mockReturnValue([
         {
           label: 'Finance',
           icon: 'pi-wallet',
           route: '/finance',
-          children: [
-            { label: 'Invoices', route: '/finance/invoices' },
-          ],
+          children: [{ label: 'Invoices', route: '/finance/invoices' }],
         },
       ]);
     });
@@ -129,7 +128,9 @@ describe('SidebarFacadeService', () => {
       service.setSearchQuery('invoice');
 
       expect(service.searchQuery()).toBe('invoice');
-      expect(mockNavigationFacade.searchMenuItems).toHaveBeenCalledWith('invoice');
+      expect(mockNavigationFacade.searchMenuItems).toHaveBeenCalledWith(
+        'invoice',
+      );
     });
 
     it('should save previous open group when starting search', () => {
@@ -183,7 +184,9 @@ describe('SidebarFacadeService', () => {
       service['updateActiveRoute']('/finance/invoices');
 
       const itemsWithState = service.menuItemsWithActiveState();
-      const financeItem = itemsWithState.find((item) => item.label === 'Finance');
+      const financeItem = itemsWithState.find(
+        (item) => item.label === 'Finance',
+      );
 
       expect(financeItem?._hasActiveChild).toBe(true);
     });
@@ -192,7 +195,9 @@ describe('SidebarFacadeService', () => {
       service['updateActiveRoute']('/finance/invoices');
 
       const itemsWithState = service.menuItemsWithActiveState();
-      const financeItem = itemsWithState.find((item) => item.label === 'Finance');
+      const financeItem = itemsWithState.find(
+        (item) => item.label === 'Finance',
+      );
 
       expect(financeItem?._isActive).toBe(false);
       expect(financeItem?._hasActiveChild).toBe(true);
@@ -202,8 +207,12 @@ describe('SidebarFacadeService', () => {
       service['updateActiveRoute']('/finance/invoices');
 
       const itemsWithState = service.menuItemsWithActiveState();
-      const financeItem = itemsWithState.find((item) => item.label === 'Finance');
-      const invoiceChild = financeItem?.children?.find((child) => child.label === 'Invoices');
+      const financeItem = itemsWithState.find(
+        (item) => item.label === 'Finance',
+      );
+      const invoiceChild = financeItem?.children?.find(
+        (child) => child.label === 'Invoices',
+      );
 
       expect(invoiceChild?._isActive).toBe(true);
     });
