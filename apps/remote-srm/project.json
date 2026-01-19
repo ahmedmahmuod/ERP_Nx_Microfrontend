@@ -60,8 +60,8 @@
       "continuous": true,
       "executor": "@nx/angular:dev-server",
       "options": {
-        "port": 4204,
-        "publicHost": "http://localhost:4204"
+        "port": 4207,
+        "publicHost": "http://localhost:4207"
       },
       "configurations": {
         "production": {
@@ -73,6 +73,22 @@
       },
       "defaultConfiguration": "development",
       "dependsOn": ["shell:serve"]
+    },
+    "serve-mf": {
+      "executor": "@nx/angular:module-federation-dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "remoteSrm:build:production"
+        },
+        "development": {
+          "buildTarget": "remoteSrm:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4207,
+        "publicHost": "http://localhost:4207"
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -96,7 +112,7 @@
       "defaultConfiguration": "production",
       "options": {
         "buildTarget": "remoteSrm:build",
-        "port": 4204,
+        "port": 4207,
         "watch": false
       },
       "configurations": {

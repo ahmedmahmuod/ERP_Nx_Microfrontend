@@ -9,6 +9,7 @@
 
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { SidebarFacadeService } from './sidebar-facade.service';
 import { NavigationFacadeService } from '../../core/services/navigation-facade.service';
 import { signal } from '@angular/core';
@@ -49,7 +50,7 @@ describe('SidebarFacadeService', () => {
   beforeEach(() => {
     mockRouter = {
       navigate: vi.fn(),
-      events: signal(null).asReadonly(),
+      events: new Subject(),
       url: '/dashboard',
     };
 

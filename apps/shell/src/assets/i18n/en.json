@@ -1,0 +1,17 @@
+{
+  "header": {
+    "profile": "Profile",
+    "logout": "Logout",
+    "theme": "Theme",
+    "language": "Language",
+    "company": "Switch Company"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "common": {
+    "backToHome": "Back to Home"
+  }
+}

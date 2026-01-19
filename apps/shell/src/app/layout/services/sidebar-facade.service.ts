@@ -77,7 +77,11 @@ export class SidebarFacadeService {
   constructor() {
     // Track route changes to update active item
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      )
       .subscribe((event) => {
         this.updateActiveRoute(event.url);
       });
@@ -104,7 +108,10 @@ export class SidebarFacadeService {
       }
 
       // Find and expand group containing active route
-      const groupToExpand = this.findGroupContainingRoute(menuItems, activeRoute);
+      const groupToExpand = this.findGroupContainingRoute(
+        menuItems,
+        activeRoute,
+      );
       if (groupToExpand && groupToExpand !== this.openGroupId()) {
         this._state.update((state) => ({
           ...state,
@@ -119,7 +126,8 @@ export class SidebarFacadeService {
    */
   toggleGroup(groupLabel: string): void {
     this._state.update((state) => {
-      const newOpenGroupId = state.openGroupId === groupLabel ? null : groupLabel;
+      const newOpenGroupId =
+        state.openGroupId === groupLabel ? null : groupLabel;
       return {
         ...state,
         openGroupId: newOpenGroupId,
@@ -142,9 +150,10 @@ export class SidebarFacadeService {
   setSearchQuery(query: string): void {
     this._state.update((state) => {
       // If starting search, save current open group
-      const previousOpenGroupId = query.trim() && !state.searchQuery.trim()
-        ? state.openGroupId
-        : state.previousOpenGroupId;
+      const previousOpenGroupId =
+        query.trim() && !state.searchQuery.trim()
+          ? state.openGroupId
+          : state.previousOpenGroupId;
 
       // If searching, expand all matching groups
       const openGroupId = query.trim()
@@ -230,14 +239,17 @@ export class SidebarFacadeService {
   /**
    * Find group containing the active route
    */
-  private findGroupContainingRoute(items: NavItem[], route: string | null): string | null {
+  private findGroupContainingRoute(
+    items: NavItem[],
+    route: string | null,
+  ): string | null {
     if (!route) return null;
 
     for (const item of items) {
       if (item.children && item.children.length > 0) {
         // Check if any child matches the route
         const hasActiveChild = item.children.some((child) =>
-          this.isRouteActive(child.route, route)
+          this.isRouteActive(child.route, route),
         );
         if (hasActiveChild) {
           return item.label;
@@ -253,19 +265,25 @@ export class SidebarFacadeService {
    */
   private findFirstMatchingGroup(query: string): string | null {
     const filtered = this.navigationFacade.searchMenuItems(query);
-    const groupWithChildren = filtered.find((item) => item.children && item.children.length > 0);
+    const groupWithChildren = filtered.find(
+      (item) => item.children && item.children.length > 0,
+    );
     return groupWithChildren?.label || null;
   }
 
   /**
    * Compute active states for menu items (including parent highlighting)
    */
-  private computeActiveStates(items: NavItem[], activeRoute: string | null): NavItem[] {
+  private computeActiveStates(
+    items: NavItem[],
+    activeRoute: string | null,
+  ): NavItem[] {
     return items.map((item) => {
       const isActive = this.isRouteActive(item.route, activeRoute);
-      const hasActiveChild = item.children?.some((child) =>
-        this.isRouteActive(child.route, activeRoute)
-      ) || false;
+      const hasActiveChild =
+        item.children?.some((child) =>
+          this.isRouteActive(child.route, activeRoute),
+        ) || false;
 
       return {
         ...item,
@@ -285,16 +303,15 @@ export class SidebarFacadeService {
   /**
    * Check if a route is active
    */
-  private isRouteActive(itemRoute: string | undefined, activeRoute: string | null): boolean {
+  private isRouteActive(
+    itemRoute: string | undefined,
+    activeRoute: string | null,
+  ): boolean {
     if (!itemRoute || !activeRoute) return false;
 
-    // Exact match for root and dashboard
-    if (itemRoute === '/' || itemRoute === '/dashboard') {
-      return activeRoute === itemRoute || activeRoute === '/' || activeRoute === '/dashboard';
-    }
-
-    // Prefix match for other routes
-    return activeRoute.startsWith(itemRoute);
+    // Exact match for all routes to prevent parent activation on child route
+    // The UI handles parent expansion via _hasActiveChild
+    return activeRoute === itemRoute;
   }
 
   /**
@@ -303,9 +320,10 @@ export class SidebarFacadeService {
   isItemOrChildActive(item: NavItem): boolean {
     const activeRoute = this.activeItemRoute();
     const isActive = this.isRouteActive(item.route, activeRoute);
-    const hasActiveChild = item.children?.some((child) =>
-      this.isRouteActive(child.route, activeRoute)
-    ) || false;
+    const hasActiveChild =
+      item.children?.some((child) =>
+        this.isRouteActive(child.route, activeRoute),
+      ) || false;
 
     return isActive || hasActiveChild;
   }

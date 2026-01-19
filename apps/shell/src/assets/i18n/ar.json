@@ -1,0 +1,17 @@
+{
+  "header": {
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "theme": "المظهر",
+    "language": "اللغة",
+    "company": "تغيير الشركة"
+  },
+  "theme": {
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
+  },
+  "common": {
+    "backToHome": "العودة للرئيسية"
+  }
+}

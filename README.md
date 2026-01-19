@@ -48,7 +48,7 @@ npx nx serve shell
 npx nx run shell:serve-mf --devRemotes=remoteHr
 
 # Start Shell + all remotes
-npx nx run shell:serve-mf --devRemotes=remoteAuth,remoteFinance,remoteHr,remotePm,remoteSrm,remoteWarehouses
+npx nx run shell:serve-mf --devRemotes=remoteAuth,remoteFinance,remoteHr,remoteSrm,remotePm,remoteWarehouses
 ```
 
 ### Building for Production
