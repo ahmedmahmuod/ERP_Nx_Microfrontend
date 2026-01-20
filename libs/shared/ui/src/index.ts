@@ -17,5 +17,5 @@ export * from './lib/services/responsive.service';
 export * from './lib/services/accessibility.service';
 export * from './lib/services/toast.service';
 
-// Features
-export * from './lib/language-switch/language-switch';
+// NOTE: Components with PrimeNG dependencies are exported from primeng-components.ts
+// Import from '@erp/shared/ui/primeng-components' if you need them

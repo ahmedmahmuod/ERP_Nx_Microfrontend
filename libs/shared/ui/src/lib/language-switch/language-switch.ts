@@ -1,25 +1,71 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LanguageFacade } from '@erp/shared/util-state';
+import { ButtonModule } from 'primeng/button';
+import { PopoverModule } from 'primeng/popover';
+import { LanguageFacade, Language } from '@erp/shared/util-state';
 
 @Component({
   selector: 'lib-language-switch',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonModule, PopoverModule],
   template: `
+    <!-- Trigger Button -->
     <div
-      class="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 rounded-none w-full focus:outline-none"
-      (click)="toggleLanguage()"
-      (keyup.enter)="toggleLanguage()"
+      #langTrigger
+      class="flex items-center px-4 py-3 cursor-pointer hover:bg-[var(--color-bg-hover)] transition-colors duration-150 rounded-none w-full focus:outline-none"
+      [class.rounded-lg]="!isNested()"
+      [class.border]="!isNested()"
+      [class.border-[var(--color-border-primary)]]="!isNested()"
+      [class.bg-[var(--color-bg-primary)]]="!isNested()"
+      (click)="op.toggle($event)"
+      (keyup.enter)="op.toggle($event)"
       role="button"
       tabindex="0"
     >
-      <span class="mr-3 text-lg">{{ displayFlag() }}</span>
-      <span class="font-medium text-gray-700 dark:text-gray-300">{{
-        displayLabel()
+      <span class="mr-3 text-lg">{{ activeLangFlag() }}</span>
+      <span class="font-medium text-[var(--color-text-primary)]">{{
+        activeLangLabel()
       }}</span>
-      <i class="pi pi-sync ml-auto text-xs text-gray-400 opacity-50"></i>
+      <i
+        [class]="
+          isNested()
+            ? 'pi pi-chevron-right ml-auto text-[10px] text-[var(--color-text-tertiary)]'
+            : 'pi pi-chevron-down ml-auto text-xs text-[var(--color-text-tertiary)]'
+        "
+      ></i>
     </div>
+
+    <!-- Language Selection Popover -->
+    <p-popover
+      #op
+      styleClass="language-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]"
+    >
+      <div class="flex flex-col w-48 bg-[var(--color-bg-primary)] py-1">
+        @for (lang of availableLanguages(); track lang.code) {
+          <button
+            pButton
+            (click)="selectLanguage(lang.code); op.hide()"
+            class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors"
+            [class.active-lang]="lang.code === activeLanguage()"
+          >
+            <span class="mr-3 text-lg">{{ lang.flag }}</span>
+            <span
+              class="font-medium text-[var(--color-text-primary)]"
+              [class.text-[var(--accent-primary)]]="
+                lang.code === activeLanguage()
+              "
+            >
+              {{ lang.label }}
+            </span>
+            @if (lang.code === activeLanguage()) {
+              <i
+                class="pi pi-check ml-auto text-[var(--accent-primary)] text-xs"
+              ></i>
+            }
+          </button>
+        }
+      </div>
+    </p-popover>
   `,
   styles: [
     `
@@ -36,14 +82,31 @@ import { LanguageFacade } from '@erp/shared/util-state';
 export class LanguageSwitchComponent {
   private languageFacade = inject(LanguageFacade);
 
-  displayFlag = () =>
-    this.languageFacade.activeLanguage() === 'ar' ? '🇺🇸' : '🇪🇬';
-  displayLabel = () =>
-    this.languageFacade.activeLanguage() === 'ar' ? 'English' : 'العربية';
+  /**
+   * If true, it behaves as a menu item (no border, chevron-right).
+   * If false, it behaves as a standalone dropdown (border, chevron-down).
+   */
+  isNested = input<boolean>(true);
 
-  toggleLanguage() {
-    const nextLang =
-      this.languageFacade.activeLanguage() === 'ar' ? 'en' : 'ar';
-    this.languageFacade.setLanguage(nextLang);
+  activeLanguage = this.languageFacade.activeLanguage;
+  availableLanguages = this.languageFacade.availableLanguages;
+
+  activeLangFlag = computed(() => {
+    const active = this.activeLanguage();
+    return (
+      this.availableLanguages().find((l) => l.code === active)?.flag || '🌐'
+    );
+  });
+
+  activeLangLabel = computed(() => {
+    const active = this.activeLanguage();
+    return (
+      this.availableLanguages().find((l) => l.code === active)?.label ||
+      'Language'
+    );
+  });
+
+  selectLanguage(lang: Language) {
+    this.languageFacade.setLanguage(lang);
   }
 }

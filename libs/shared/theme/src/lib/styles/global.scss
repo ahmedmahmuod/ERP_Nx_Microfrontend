@@ -48,9 +48,12 @@
 
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
 
@@ -91,7 +94,9 @@
   --z-tooltip: 1070;
 
   /* Font Family */
-  --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base:
+    'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    sans-serif;
   --font-family-mono: 'JetBrains Mono', Menlo, Monaco, 'Courier New', monospace;
 
   /* Sidebar Colors - Light Mode */
@@ -104,7 +109,11 @@
   --nav-item-color: #6b7280;
   --nav-item-hover-bg: #f3f4f6;
   --nav-item-hover-color: #111827;
-  --nav-item-active-bg: linear-gradient(90deg, rgba(59, 130, 246, 0.15) 0%, rgba(37, 99, 235, 0.1) 100%);
+  --nav-item-active-bg: linear-gradient(
+    90deg,
+    rgba(59, 130, 246, 0.15) 0%,
+    rgba(37, 99, 235, 0.1) 100%
+  );
   --nav-item-active-color: #2563eb;
   --nav-item-active-border: #3b82f6;
   --nav-item-active-icon: #3b82f6;
@@ -150,9 +159,12 @@
 
   /* Enhanced Shadows for Dark Mode */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
 
   /* Sidebar Colors - Dark Mode (Improved: better visibility) */
   --sidebar-bg: linear-gradient(180deg, #252525 0%, #1e1e1e 100%);
@@ -164,7 +176,11 @@
   --nav-item-color: #b0b0b0;
   --nav-item-hover-bg: #2f2f2f;
   --nav-item-hover-color: #e5e5e5;
-  --nav-item-active-bg: linear-gradient(90deg, rgba(96, 165, 250, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+  --nav-item-active-bg: linear-gradient(
+    90deg,
+    rgba(96, 165, 250, 0.15) 0%,
+    rgba(59, 130, 246, 0.1) 100%
+  );
   --nav-item-active-color: #60a5fa;
   --nav-item-active-border: #60a5fa;
   --nav-item-active-icon: #60a5fa;
@@ -190,10 +206,17 @@
 
 /* Base Styles - Clean Flat Design (NO GRADIENTS) */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
   background-color: #fafafa;
   color: #1a1a1a;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;
@@ -710,4 +733,30 @@ body {
 
 .dark .action-btn.secondary:hover {
   background-color: #2f2f2f;
+}
+
+/* PrimeNG Popover Overrides */
+.p-popover {
+  border: 1px solid var(--color-border-primary) !important;
+  background-color: var(--color-bg-primary) !important;
+  box-shadow: var(--shadow-xl) !important;
+  padding: 0 !important;
+  overflow: hidden;
+
+  .p-popover-content {
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Remove default PrimeNG arrow border if it exists */
+  &::before,
+  &::after {
+    border-color: transparent !important;
+    display: none !important;
+  }
+}
+
+.dark .p-popover {
+  border-color: var(--color-border-primary) !important;
+  background-color: var(--color-bg-primary) !important;
 }

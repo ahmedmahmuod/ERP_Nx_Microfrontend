@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { InputTextModule } from 'primeng/inputtext';
 import { CompanyFacade } from '@erp/shared/util-state';
-import { LanguageSwitchComponent } from '@erp/shared/ui';
+import { LanguageSwitchComponent } from '@erp/shared/ui/primeng-components';
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -22,7 +22,7 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
   ],
   template: `
     <div 
-      class="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 focus:outline-none" 
+      class="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-[var(--color-bg-hover)] transition-colors duration-150 focus:outline-none" 
       (click)="$any(op).toggle($event)"
       (keyup.enter)="$any(op).toggle($event)"
       role="button"
@@ -43,44 +43,44 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
     </div>
 
     <!-- Main Profile Overlay -->
-    <p-popover #op styleClass="profile-overlay shadow-xl p-0 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-      <div class="flex flex-col w-72 bg-white dark:bg-[#1e1e1e]">
+    <p-popover #op styleClass="profile-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
+      <div class="flex flex-col w-72 bg-[var(--color-bg-primary)]">
         
         <!-- User Section -->
-        <div class="flex items-center gap-3 p-4 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border-primary)]">
           <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" size="large"></p-avatar>
           <div class="flex flex-col">
-            <span class="font-bold text-gray-900 dark:text-gray-100">Admin User</span>
-            <span class="text-xs text-gray-500">admin@assemble.com</span>
+            <span class="font-bold text-[var(--color-text-primary)]">Admin User</span>
+            <span class="text-xs text-[var(--color-text-secondary)]">admin@assemble.com</span>
           </div>
         </div>
 
         <!-- Menu Items -->
         <div class="flex flex-col py-2">
           
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
             <i class="pi pi-user mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-gray-700 dark:text-gray-300">User Profile</span>
+            <span class="font-medium text-[var(--color-text-primary)]">User Profile</span>
           </button>
 
-          <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
             <i class="pi pi-building mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-gray-700 dark:text-gray-300">Switch Company</span>
+            <span class="font-medium text-[var(--color-text-primary)]">Switch Company</span>
             <i class="pi pi-chevron-right ml-auto text-[10px] text-gray-400"></i>
           </button>
 
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
             <i class="pi pi-question-circle mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-gray-700 dark:text-gray-300">Supports</span>
+            <span class="font-medium text-[var(--color-text-primary)]">Supports</span>
           </button>
 
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
             <i class="pi pi-lock mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-gray-700 dark:text-gray-300">Change Password</span>
+            <span class="font-medium text-[var(--color-text-primary)]">Change Password</span>
           </button>
 
           <!-- Language Section -->
-          <lib-language-switch></lib-language-switch>
+          <lib-language-switch [isNested]="true"></lib-language-switch>
 
           <div class="border-t border-gray-100 dark:border-gray-800 my-1"></div>
 
@@ -95,13 +95,13 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
     </p-popover>
 
     <!-- Company Switch Overlay -->
-    <p-popover #companyOp styleClass="company-overlay shadow-xl p-0 overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
-      <div class="flex flex-col w-80 bg-white dark:bg-[#1e1e1e]">
-        <div class="p-4 border-b border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
-          <span class="font-bold block mb-3 text-gray-700 dark:text-gray-300">Switch Company</span>
+    <p-popover #companyOp styleClass="company-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
+      <div class="flex flex-col w-80 bg-[var(--color-bg-primary)]">
+        <div class="p-4 border-b border-[var(--color-border-primary)] bg-[var(--color-bg-secondary)]">
+          <span class="font-bold block mb-3 text-[var(--color-text-primary)]">Switch Company</span>
           <div class="relative w-full">
-            <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            <input type="text" pInputText placeholder="Search company..." class="w-full pl-9 py-2 text-sm border-gray-200 dark:border-gray-700 dark:bg-gray-900" [(ngModel)]="searchQuery" />
+            <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]"></i>
+            <input type="text" pInputText placeholder="Search company..." class="w-full pl-9 py-2 text-sm border-[var(--color-border-primary)] dark:bg-[var(--color-bg-tertiary)]" [(ngModel)]="searchQuery" />
           </div>
         </div>
         
@@ -110,12 +110,12 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
             <button 
               pButton 
               (click)="selectCompany(company.id); companyOp.hide(); op.hide()"
-              class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors"
               [style.background-color]="company.id === activeCompany()?.id ? 'rgb(from var(--accent-primary) r g b / 0.1)' : ''"
             >
               <div class="flex flex-col items-start">
-                <span class="font-medium" [style.color]="company.id === activeCompany()?.id ? 'var(--accent-primary)' : ''">{{ company.name }}</span>
-                <span class="text-[10px] text-gray-400 uppercase tracking-wider">{{ company.id }}</span>
+                <span class="font-medium text-[var(--color-text-primary)]" [style.color]="company.id === activeCompany()?.id ? 'var(--accent-primary)' : ''">{{ company.name }}</span>
+                <span class="text-[10px] text-[var(--color-text-tertiary)] uppercase tracking-wider">{{ company.id }}</span>
               </div>
               @if (company.id === activeCompany()?.id) {
                 <i class="pi pi-check ml-auto text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
@@ -130,8 +130,8 @@ import { LanguageSwitchComponent } from '@erp/shared/ui';
     `
       :host ::ng-deep {
         .p-popover {
-          @apply p-0 overflow-hidden border-none bg-transparent;
-          box-shadow: none;
+          /* Rely on global overrides in global.scss */
+          @apply p-0 overflow-hidden;
         }
         .p-popover-content {
           @apply p-0;

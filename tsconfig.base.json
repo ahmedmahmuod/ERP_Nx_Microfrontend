@@ -33,6 +33,9 @@
       "@erp/shared/ui": [
         "libs/shared/ui/src/index.ts"
       ],
+      "@erp/shared/ui/primeng-components": [
+        "libs/shared/ui/src/primeng-components.ts"
+      ],
       "@erp/shared/utils": [
         "libs/shared/utils/src/index.ts"
       ],
