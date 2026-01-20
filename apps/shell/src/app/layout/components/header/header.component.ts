@@ -46,7 +46,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
             aria-label="Back to Home"
           >
             <i
-              class="pi pi-arrow-left transition-transform group-hover:-translate-x-1"
+              class="pi pi-arrow-left transition-transform group-hover:rtl:translate-x-1 group-hover:ltr:-translate-x-1"
             ></i>
             <span class="hidden sm:inline font-medium text-sm"
               >Back to Home</span
@@ -86,13 +86,13 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
         >
           <i class="pi pi-bell text-lg"></i>
           <span
-            class="absolute top-1 right-1 flex items-center justify-center min-w-[1.25rem] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-white dark:border-[#1e1e1e]"
+            class="absolute top-1 inset-inline-end-1 flex items-center justify-center min-w-[1.25rem] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-white dark:border-[#1e1e1e]"
             >3</span
           >
         </button>
 
         <!-- User Menu -->
-        <div class="ml-1 sm:ml-2">
+        <div class="ms-1 sm:ms-2">
           <app-profile-dropdown></app-profile-dropdown>
         </div>
       </div>

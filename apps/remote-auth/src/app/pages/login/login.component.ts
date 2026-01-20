@@ -13,7 +13,12 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { InputComponent, ButtonComponent, CardComponent } from '@erp/shared/ui';
+import {
+  InputComponent,
+  ButtonComponent,
+  CardComponent,
+  StandaloneLanguageSwitchComponent,
+} from '@erp/shared/ui';
 import { ToastService } from '@erp/shared/utils';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 import {
@@ -33,9 +38,15 @@ import {
     InputComponent,
     ButtonComponent,
     CardComponent,
+    StandaloneLanguageSwitchComponent,
   ],
   template: `
-    <div class="login-container">
+    <div class="login-container relative">
+      <!-- Language Switcher -->
+      <div class="absolute top-4 inset-inline-end-4 z-10">
+        <lib-standalone-language-switch></lib-standalone-language-switch>
+      </div>
+
       <div class="login-card-wrapper">
         <erp-card elevation="lg">
           <div card-body>

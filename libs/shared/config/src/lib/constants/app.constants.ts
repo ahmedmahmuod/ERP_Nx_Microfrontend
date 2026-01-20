@@ -25,7 +25,7 @@ export const PORTS = {
   REMOTE_FINANCE: 4202,
   REMOTE_HR: 4203,
   REMOTE_SUPPLY: 4204, // Deprecated
-  REMOTE_SRM: 4204, // Reusing port 4204
+  REMOTE_SRM: 4207,
   REMOTE_PM: 4205,
   REMOTE_WAREHOUSES: 4206,
 } as const;

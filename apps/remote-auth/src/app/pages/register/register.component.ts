@@ -15,7 +15,12 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { InputComponent, ButtonComponent, CardComponent } from '@erp/shared/ui';
+import {
+  InputComponent,
+  ButtonComponent,
+  CardComponent,
+  StandaloneLanguageSwitchComponent,
+} from '@erp/shared/ui';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 
 @Component({
@@ -27,9 +32,15 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
     InputComponent,
     ButtonComponent,
     CardComponent,
+    StandaloneLanguageSwitchComponent,
   ],
   template: `
-    <div class="register-container">
+    <div class="register-container relative">
+      <!-- Language Switcher -->
+      <div class="absolute top-4 inset-inline-end-4 z-10">
+        <lib-standalone-language-switch></lib-standalone-language-switch>
+      </div>
+
       <div class="register-card-wrapper">
         <erp-card elevation="lg">
           <div card-body>

@@ -22,15 +22,15 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
       role="button"
       tabindex="0"
     >
-      <span class="mr-3 text-lg">{{ activeLangFlag() }}</span>
+      <span class="me-3 text-lg">{{ activeLangFlag() }}</span>
       <span class="font-medium text-[var(--color-text-primary)]">{{
         activeLangLabel()
       }}</span>
       <i
         [class]="
           isNested()
-            ? 'pi pi-chevron-right ml-auto text-[10px] text-[var(--color-text-tertiary)]'
-            : 'pi pi-chevron-down ml-auto text-xs text-[var(--color-text-tertiary)]'
+            ? 'pi pi-chevron-right ms-auto text-[10px] text-[var(--color-text-tertiary)]'
+            : 'pi pi-chevron-down ms-auto text-xs text-[var(--color-text-tertiary)]'
         "
       ></i>
     </div>
@@ -48,7 +48,7 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
             class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors"
             [class.active-lang]="lang.code === activeLanguage()"
           >
-            <span class="mr-3 text-lg">{{ lang.flag }}</span>
+            <span class="me-3 text-lg">{{ lang.flag }}</span>
             <span
               class="font-medium text-[var(--color-text-primary)]"
               [class.text-[var(--accent-primary)]]="
@@ -59,7 +59,7 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
             </span>
             @if (lang.code === activeLanguage()) {
               <i
-                class="pi pi-check ml-auto text-[var(--accent-primary)] text-xs"
+                class="pi pi-check ms-auto text-[var(--accent-primary)] text-xs"
               ></i>
             }
           </button>
@@ -75,6 +75,11 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
       .active-lang {
         background-color: rgb(from var(--accent-primary) r g b / 0.1);
         color: var(--accent-primary);
+      }
+
+      /* Brighten flag emojis in dark mode for better visibility */
+      :host-context(.dark) .me-3.text-lg {
+        color: var(--color-text-primary);
       }
     `,
   ],

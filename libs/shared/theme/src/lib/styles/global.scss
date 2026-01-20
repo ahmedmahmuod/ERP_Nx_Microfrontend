@@ -760,3 +760,33 @@ body {
   border-color: var(--color-border-primary) !important;
   background-color: var(--color-bg-primary) !important;
 }
+
+/* RTL Support - Flip directional icons in Arabic mode */
+[dir='rtl'] {
+  .pi-chevron-right::before {
+    content: '\e901'; /* chevron-left */
+  }
+  
+  .pi-chevron-left::before {
+    content: '\e900'; /* chevron-right */
+  }
+  
+  .pi-arrow-right::before {
+    content: '\e933'; /* arrow-left */
+  }
+  
+  .pi-arrow-left::before {
+    content: '\e934'; /* arrow-right */
+  }
+  
+  /* Flip any chevron/arrow icons using transform */
+  .pi-chevron-right,
+  .pi-chevron-left,
+  .pi-arrow-right,
+  .pi-arrow-left,
+  .pi-angle-right,
+  .pi-angle-left {
+    transform: scaleX(-1);
+    display: inline-block;
+  }
+}
