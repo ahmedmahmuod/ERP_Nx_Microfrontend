@@ -1,0 +1,35 @@
+<div class="dashboard" *transloco="let t; read: 'shell'">
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">{{ t('dashboard.welcome') }}</h1>
+      <p class="dashboard-subtitle">{{ t('dashboard.subtitle') }}</p>
+    </div>
+  </div>
+
+  <div class="modules-grid">
+    @for (module of modules; track module.id) {
+      <div
+        class="module-card"
+        [class]="'module-card-' + module.color"
+        (click)="navigateToModule(module.route)"
+        role="button"
+        tabindex="0"
+        (keydown.enter)="navigateToModule(module.route)"
+        (keydown.space)="navigateToModule(module.route)"
+      >
+        <div class="module-icon">
+          <i [class]="'pi ' + module.icon"></i>
+        </div>
+        <h3 class="module-title">
+          {{ t('dashboard.modules.' + module.id + '.title') }}
+        </h3>
+        <p class="module-description">
+          {{ t('dashboard.modules.' + module.id + '.description') }}
+        </p>
+        <div class="module-arrow">
+          <i class="pi pi-arrow-right"></i>
+        </div>
+      </div>
+    }
+  </div>
+</div>
