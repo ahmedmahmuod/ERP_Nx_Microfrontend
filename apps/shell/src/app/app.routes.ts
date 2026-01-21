@@ -76,20 +76,6 @@ export const appRoutes: Route[] = [
             .catch(() => remoteFallbackRoutes),
       },
       {
-        path: 'design-system',
-        loadComponent: () =>
-          import('./design-system/design-system.component').then(
-            (m) => m.DesignSystemComponent,
-          ),
-      },
-      {
-        path: 'showcase',
-        loadComponent: () =>
-          import('./showcase/showcase.component').then(
-            (m) => m.ShowcaseComponent,
-          ),
-      },
-      {
         path: '**',
         redirectTo: 'dashboard',
       },

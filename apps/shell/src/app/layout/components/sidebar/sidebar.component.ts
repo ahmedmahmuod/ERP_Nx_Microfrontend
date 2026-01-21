@@ -196,7 +196,7 @@ import {
                           'pi nav-chevron ' +
                           (isGroupExpanded(item.label)
                             ? 'pi-chevron-down'
-                            : 'pi-chevron-right rtl:rotate-180')
+                            : 'pi-chevron-right')
                         "
                       ></i>
                     </button>
@@ -295,11 +295,7 @@ import {
         "
       >
         <i
-          [class]="
-            collapsed
-              ? 'pi pi-chevron-right rtl:rotate-180'
-              : 'pi pi-chevron-left rtl:rotate-180'
-          "
+          [class]="collapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"
         ></i>
       </button>
     </aside>

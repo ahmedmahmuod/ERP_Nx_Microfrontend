@@ -43,7 +43,7 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
               {{ t('dashboard.modules.' + module.id + '.description') }}
             </p>
             <div class="module-arrow">
-              <i class="pi pi-arrow-right rtl:rotate-180"></i>
+              <i class="pi pi-arrow-right"></i>
             </div>
           </div>
         }

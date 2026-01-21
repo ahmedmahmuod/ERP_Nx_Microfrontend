@@ -56,5 +56,9 @@
     "title": "Module Temporarily Unavailable",
     "message": "The requested module is currently unavailable. This may be because the service is not running in development mode.",
     "backToDashboard": "Go to Dashboard"
+  },
+  "footer": {
+    "copyright": "All rights reserved {{ year }} ©",
+    "version": "v1.0.0"
   }
 }

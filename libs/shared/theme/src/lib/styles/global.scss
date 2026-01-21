@@ -763,21 +763,9 @@ body {
 
 /* RTL Support - Flip directional icons in Arabic mode */
 [dir='rtl'] {
-  .pi-chevron-right::before {
-    content: '\e901'; /* chevron-left */
-  }
-  
-  .pi-chevron-left::before {
-    content: '\e900'; /* chevron-right */
-  }
-  
-  .pi-arrow-right::before {
-    content: '\e933'; /* arrow-left */
-  }
-  
-  .pi-arrow-left::before {
-    content: '\e934'; /* arrow-right */
-  }
+  /* We rely on transform: scaleX(-1) for mirroring below, 
+     so we don't need to manually switch content glyphs here 
+     to avoid double-flipping. */
   
   /* Flip any chevron/arrow icons using transform */
   .pi-chevron-right,
@@ -788,5 +776,10 @@ body {
   .pi-angle-left {
     transform: scaleX(-1);
     display: inline-block;
+  }
+
+  /* Escape hatch to prevent automatic RTL mirroring */
+  .no-rtl-flip {
+    transform: none !important;
   }
 }

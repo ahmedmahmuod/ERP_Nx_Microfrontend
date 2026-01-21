@@ -14,9 +14,17 @@ import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { loadRemoteModule } from '@nx/angular/mf';
-import { NavigationManifest, NavigationState, NavItem } from '@erp/shared/models';
+import {
+  NavigationManifest,
+  NavigationState,
+  NavItem,
+} from '@erp/shared/models';
 import { applyAccentToken } from '@erp/shared/theme';
-import { REMOTE_REGISTRY, getRemoteConfig, isRegisteredRemote } from '../config/remote-registry.config';
+import {
+  REMOTE_REGISTRY,
+  getRemoteConfig,
+  isRegisteredRemote,
+} from '../config/remote-registry.config';
 
 /**
  * Shell's default navigation manifest
@@ -31,16 +39,6 @@ const SHELL_MANIFEST: NavigationManifest = {
       label: 'Dashboard',
       icon: 'pi-home',
       route: '/dashboard',
-    },
-    {
-      label: 'Design System',
-      icon: 'pi-palette',
-      route: '/design-system',
-    },
-    {
-      label: 'Showcase',
-      icon: 'pi-star',
-      route: '/showcase',
     },
   ],
   searchKeywords: ['dashboard', 'home', 'overview'],
@@ -79,9 +77,13 @@ export class NavigationFacadeService {
   readonly activeAppId = computed(() => this._state().activeAppId);
 
   // Derived UI signals
-  readonly sidebarTitle = computed(() => this.activeManifest()?.sidebarTitle || 'Menu');
+  readonly sidebarTitle = computed(
+    () => this.activeManifest()?.sidebarTitle || 'Menu',
+  );
   readonly menuItems = computed(() => this.activeManifest()?.menuItems || []);
-  readonly accentToken = computed(() => this.activeManifest()?.accentToken || 'shell');
+  readonly accentToken = computed(
+    () => this.activeManifest()?.accentToken || 'shell',
+  );
   readonly appIcon = computed(() => this.activeManifest()?.appIcon);
 
   constructor() {
@@ -185,7 +187,10 @@ export class NavigationFacadeService {
     try {
       // Dynamically load the manifest from the remote
       const startTime = performance.now();
-      const module = await loadRemoteModule(remoteConfig.remoteName, remoteConfig.manifestKey);
+      const module = await loadRemoteModule(
+        remoteConfig.remoteName,
+        remoteConfig.manifestKey,
+      );
       const loadTime = performance.now() - startTime;
 
       this.log('Module loaded successfully:', {
@@ -198,7 +203,9 @@ export class NavigationFacadeService {
 
       // Validate manifest
       if (!this.isValidManifest(manifest)) {
-        throw new Error(`Invalid manifest structure from ${appId}. Expected: { appId, appName, sidebarTitle, accentToken, menuItems[] }`);
+        throw new Error(
+          `Invalid manifest structure from ${appId}. Expected: { appId, appName, sidebarTitle, accentToken, menuItems[] }`,
+        );
       }
 
       this.log('Manifest validated successfully:', {
@@ -345,7 +352,11 @@ export class NavigationFacadeService {
   /**
    * Diagnostic logging
    */
-  private log(message: string, data?: unknown, level: 'info' | 'warn' | 'error' = 'info'): void {
+  private log(
+    message: string,
+    data?: unknown,
+    level: 'info' | 'warn' | 'error' = 'info',
+  ): void {
     if (!this.enableLogging) return;
 
     const prefix = '[NavigationFacade]';
@@ -366,7 +377,10 @@ export class NavigationFacadeService {
   /**
    * Error logging with full diagnostics
    */
-  private logError(message: string, diagnostics: Record<string, unknown>): void {
+  private logError(
+    message: string,
+    diagnostics: Record<string, unknown>,
+  ): void {
     console.error(`[NavigationFacade] ERROR: ${message}`);
     console.error('Diagnostics:', diagnostics);
     console.error('Remote Registry:', REMOTE_REGISTRY);
@@ -395,7 +409,7 @@ export class NavigationFacadeService {
       // Check if item matches
       const labelMatch = item.label.toLowerCase().includes(query);
       const keywordMatch = item.searchKeywords?.some((keyword) =>
-        keyword.toLowerCase().includes(query)
+        keyword.toLowerCase().includes(query),
       );
       const routeMatch = item.route?.toLowerCase().includes(query);
 
@@ -405,10 +419,16 @@ export class NavigationFacadeService {
         : [];
 
       // Include item if it matches or has matching children
-      if (labelMatch || keywordMatch || routeMatch || matchingChildren.length > 0) {
+      if (
+        labelMatch ||
+        keywordMatch ||
+        routeMatch ||
+        matchingChildren.length > 0
+      ) {
         results.push({
           ...item,
-          children: matchingChildren.length > 0 ? matchingChildren : item.children,
+          children:
+            matchingChildren.length > 0 ? matchingChildren : item.children,
         });
       }
     }

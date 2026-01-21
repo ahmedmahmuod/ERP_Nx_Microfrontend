@@ -46,9 +46,7 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             (click)="routeContext.navigateToHome()"
             [attr.aria-label]="t('header.backToHome')"
           >
-            <i
-              class="pi pi-arrow-left transition-transform group-hover:rtl:translate-x-1 group-hover:ltr:-translate-x-1"
-            ></i>
+            <i class="pi pi-arrow-left no-rtl-flip"></i>
             <span class="hidden sm:inline font-medium text-sm">{{
               t('header.backToHome')
             }}</span>
@@ -78,18 +76,6 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
           [attr.aria-label]="t('header.toggleTheme')"
         >
           <i class="pi pi-moon text-lg"></i>
-        </button>
-
-        <!-- Notifications -->
-        <button
-          class="flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
-          [attr.aria-label]="t('header.notifications')"
-        >
-          <i class="pi pi-bell text-lg"></i>
-          <span
-            class="absolute top-1 inset-inline-end-1 flex items-center justify-center min-w-[1.25rem] h-5 px-1 bg-red-500 text-white text-[10px] font-bold rounded-full border-2 border-white dark:border-[#1e1e1e]"
-            >3</span
-          >
         </button>
 
         <!-- User Menu -->

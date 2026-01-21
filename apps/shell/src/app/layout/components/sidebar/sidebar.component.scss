@@ -51,18 +51,25 @@
   @media (max-width: 1024px) {
     position: fixed;
     inset-block: 0;
-    inset-inline-start: 0;
     z-index: var(--z-modal);
     width: var(--sidebar-width);
-    transform: translateX(-100%);
-    transition: transform var(--transition-slow);
     background: var(--sidebar-header-bg) !important;
     box-shadow: var(--shadow-xl) !important;
+    transition: transform var(--transition-slow);
 
-    [dir='rtl'] & {
+    /* Default LTR Positioning */
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+
+    /* RTL Overrides using :host-context for Angular Scoped Styles */
+    :host-context([dir='rtl']) & {
+      left: auto !important;
+      right: 0 !important;
       transform: translateX(100%);
     }
 
+    /* Open state */
     &.mobile-open {
       transform: translateX(0) !important;
     }
@@ -400,7 +407,7 @@
     background: var(--nav-item-active-bg);
     color: var(--accent-primary, var(--nav-item-active-color));
     font-weight: 600;
-    border-left-color: var(--accent-primary, var(--nav-item-active-border));
+    border-inline-start-color: var(--accent-primary, var(--nav-item-active-border));
     transform: translateX(0);
     box-shadow: var(--shadow-sm);
 
@@ -445,7 +452,7 @@
   width: 100%;
   background: transparent;
   border: none;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
 
   /* Expanded state styling */
@@ -546,8 +553,8 @@
     font-weight: 600;
     color: var(--accent-primary, var(--nav-item-active-color));
     background: var(--nav-item-active-bg);
-    border-left: none;
-    padding-left: calc(0.5rem - 2px);
+    border-inline-start: none;
+    padding-inline-start: calc(0.5rem - 2px);
 
     .nav-subitem-bullet {
       background-color: var(--accent-primary, var(--color-primary));

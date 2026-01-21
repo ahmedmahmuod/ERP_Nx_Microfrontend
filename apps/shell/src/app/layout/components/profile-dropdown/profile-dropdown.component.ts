@@ -74,7 +74,7 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
               <i class="pi pi-building mr-3 rtl:ml-3 rtl:mr-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
               <span class="font-medium text-[var(--color-text-primary)]">{{ t('profile.switchCompany') }}</span>
-              <i class="pi pi-chevron-right ml-auto rtl:mr-auto rtl:ml-0 rtl:rotate-180 text-[10px] text-gray-400"></i>
+              <i class="pi pi-chevron-right ml-auto rtl:mr-auto rtl:ml-0 text-[10px] text-gray-400"></i>
             </button>
 
             <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
