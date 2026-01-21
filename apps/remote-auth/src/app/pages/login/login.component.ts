@@ -54,7 +54,7 @@ import {
     <ng-container *transloco="let t; read: 'auth'">
       <div class="login-container relative">
         <!-- Language Switcher -->
-        <div class="absolute top-4 inset-inline-end-4 z-10">
+        <div class="lang-switch-container">
           <lib-standalone-language-switch
             [isNested]="false"
           ></lib-standalone-language-switch>
@@ -153,6 +153,7 @@ import {
     `
       .login-container {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         min-height: 100vh;
@@ -162,6 +163,24 @@ import {
           rgb(59 130 246) 0%,
           rgb(147 51 234) 100%
         );
+        gap: 1rem;
+      }
+
+      .lang-switch-container {
+        position: absolute;
+        top: 1rem;
+        inset-inline-end: 1rem;
+        z-index: 10;
+      }
+
+      @media (max-height: 600px) or (max-width: 640px) {
+        .login-container {
+          padding-top: 5rem;
+          justify-content: flex-start;
+        }
+        .lang-switch-container {
+          top: 1.5rem;
+        }
       }
 
       :host-context(.dark) .login-container {
