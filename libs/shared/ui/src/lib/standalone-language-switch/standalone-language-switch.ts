@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, inject, computed, signal, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LanguageFacade, Language } from '@erp/shared/util-state';
 
@@ -13,31 +13,51 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="language-switcher-container">
+    <div class="language-switcher-container" [class.nested]="isNested()">
       <!-- Trigger Button -->
       <button
         type="button"
         class="language-trigger"
+        [class.nested-trigger]="isNested()"
         (click)="toggleDropdown()"
         (blur)="onBlur($event)"
       >
         <span class="flag">{{ activeLangFlag() }}</span>
         <span class="label">{{ activeLangLabel() }}</span>
-        <svg
-          class="chevron"
-          [class.open]="isOpen()"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="2"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-          />
-        </svg>
+
+        @if (isNested()) {
+          <svg
+            class="chevron nested-chevron"
+            [class.open]="isOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
+          </svg>
+        } @else {
+          <svg
+            class="chevron"
+            [class.open]="isOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        }
       </button>
 
       <!-- Dropdown Menu -->
@@ -79,6 +99,10 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
         display: inline-block;
       }
 
+      .language-switcher-container.nested {
+        width: 100%;
+      }
+
       .language-trigger {
         display: flex;
         align-items: center;
@@ -94,16 +118,24 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
         color: var(--color-text-primary, #111827);
       }
 
+      .language-trigger.nested-trigger {
+        width: 100%;
+        border: none;
+        background: transparent;
+        border-radius: 0;
+        padding: 0.75rem 1rem;
+      }
+
       .language-trigger:hover {
         background-color: var(--color-bg-hover, #f9fafb);
-        border-color: var(--color-border-hover, #d1d5db);
+      }
+
+      .language-trigger.nested-trigger:hover {
+        background-color: var(--color-bg-hover, #f3f4f6);
       }
 
       .language-trigger:focus {
         outline: none;
-        ring: 2px;
-        ring-color: var(--accent-primary, #3b82f6);
-        ring-opacity: 0.5;
       }
 
       .flag {
@@ -127,6 +159,11 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
 
       .chevron.open {
         transform: rotate(180deg);
+      }
+
+      .nested-chevron {
+        width: 0.75rem;
+        height: 0.75rem;
       }
 
       .language-dropdown {
@@ -214,9 +251,12 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
         color: var(--color-text-primary, #f3f4f6);
       }
 
+      :host-context(.dark) .language-trigger.nested-trigger {
+        background-color: transparent;
+      }
+
       :host-context(.dark) .language-trigger:hover {
         background-color: var(--color-bg-hover, #2d2d2d);
-        border-color: var(--color-border-hover, #4b5563);
       }
 
       :host-context(.dark) .language-dropdown {
@@ -235,19 +275,17 @@ import { LanguageFacade, Language } from '@erp/shared/util-state';
       :host-context(.dark) .language-option.active {
         background-color: rgba(96, 165, 250, 0.15);
       }
-
-      :host-context(.dark) .label {
-        color: inherit;
-      }
-
-      :host-context(.dark) .flag {
-        filter: brightness(1.2) contrast(1.1);
-      }
     `,
   ],
 })
 export class StandaloneLanguageSwitchComponent {
   private languageFacade = inject(LanguageFacade);
+
+  /**
+   * If true, it behaves as a menu item (no border, chevron-right).
+   * If false, it behaves as a standalone dropdown (border, chevron-down).
+   */
+  isNested = input<boolean>(true);
 
   activeLanguage = this.languageFacade.activeLanguage;
   availableLanguages = this.languageFacade.availableLanguages;

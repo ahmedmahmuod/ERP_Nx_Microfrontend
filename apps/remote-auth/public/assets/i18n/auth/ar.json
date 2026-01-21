@@ -1,0 +1,47 @@
+{
+  "login": {
+    "title": "تسجيل الدخول",
+    "subtitle": "أدخل بياناتك للوصول إلى حسابك",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جاري تسجيل الدخول...",
+    "noAccount": "ليس لديك حساب؟",
+    "signup": "إنشاء حساب"
+  },
+  "register": {
+    "title": "إنشاء حساب",
+    "subtitle": "سجل للحصول على حساب في منصة Assemble ERP",
+    "nameLabel": "الاسم الكامل",
+    "namePlaceholder": "جون دو",
+    "emailLabel": "البريد الإلكتروني",
+    "emailPlaceholder": "john.doe@company.com",
+    "passwordLabel": "كلمة المرور",
+    "passwordPlaceholder": "أنشئ كلمة مرور قوية",
+    "confirmPasswordLabel": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "terms": {
+      "agree": "أوافق على",
+      "tos": "شروط الخدمة",
+      "and": "و",
+      "privacy": "سياسة الخصوصية"
+    },
+    "createAccount": "إنشاء الحساب",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "signIn": "تسجيل الدخول"
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "email": "يرجى إدخال بريد إلكتروني صالح",
+    "minlength": "يجب ألا يقل عن {requiredLength} أحرف",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "acceptTerms": "يجب الموافقة على الشروط والأحكام",
+    "invalidEmailPassword": "فشل تسجيل الدخول. البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "fillRequired": "يرجى ملء جميع الحقول المطلوبة"
+  }
+}

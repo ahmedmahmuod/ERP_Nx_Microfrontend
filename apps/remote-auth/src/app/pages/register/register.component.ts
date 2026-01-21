@@ -1,10 +1,3 @@
-/**
- * Register Component
- *
- * Professional enterprise registration page.
- * Smart component - uses AuthFacadeService.
- */
-
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -22,6 +15,13 @@ import {
   StandaloneLanguageSwitchComponent,
 } from '@erp/shared/ui';
 import { AuthFacadeService } from '../../services/auth-facade.service';
+import {
+  TranslocoDirective,
+  TranslocoService,
+  TRANSLOCO_SCOPE,
+} from '@jsverse/transloco';
+import { ValidationMessageResolver } from '@erp/shared/util-i18n';
+import { BRAND } from '@erp/shared/config';
 
 @Component({
   selector: 'app-register',
@@ -33,123 +33,144 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
     ButtonComponent,
     CardComponent,
     StandaloneLanguageSwitchComponent,
+    TranslocoDirective,
+  ],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'auth',
+    },
   ],
   template: `
-    <div class="register-container relative">
-      <!-- Language Switcher -->
-      <div class="absolute top-4 inset-inline-end-4 z-10">
-        <lib-standalone-language-switch></lib-standalone-language-switch>
-      </div>
+    <ng-container *transloco="let t; read: 'auth'">
+      <div class="register-container relative">
+        <!-- Language Switcher -->
+        <div class="absolute top-4 inset-inline-end-4 z-10">
+          <lib-standalone-language-switch
+            [isNested]="false"
+          ></lib-standalone-language-switch>
+        </div>
 
-      <div class="register-card-wrapper">
-        <erp-card elevation="lg">
-          <div card-body>
-            <!-- Header -->
-            <div class="register-header">
-              <div class="brand">
-                <i class="pi pi-building brand-icon"></i>
-                <h1 class="brand-title">Assemble ERP</h1>
-              </div>
-              <h2 class="register-title">Create Account</h2>
-              <p class="register-subtitle">
-                Sign up to get started with Assemble ERP
-              </p>
-            </div>
-
-            <!-- Register Form -->
-            <form
-              [formGroup]="registerForm"
-              (ngSubmit)="onSubmit()"
-              class="register-form"
-            >
-              <erp-input
-                type="text"
-                label="Full Name"
-                placeholder="John Doe"
-                formControlName="name"
-                [required]="true"
-                [invalid]="isFieldInvalid('name')"
-                [errorText]="getFieldError('name')"
-              >
-              </erp-input>
-
-              <erp-input
-                type="email"
-                label="Email Address"
-                placeholder="john.doe@company.com"
-                formControlName="email"
-                [required]="true"
-                [invalid]="isFieldInvalid('email')"
-                [errorText]="getFieldError('email')"
-              >
-              </erp-input>
-
-              <erp-input
-                type="password"
-                label="Password"
-                placeholder="Create a strong password"
-                formControlName="password"
-                [required]="true"
-                [invalid]="isFieldInvalid('password')"
-                [errorText]="getFieldError('password')"
-                helperText="Minimum 8 characters"
-              >
-              </erp-input>
-
-              <erp-input
-                type="password"
-                label="Confirm Password"
-                placeholder="Re-enter your password"
-                formControlName="confirmPassword"
-                [required]="true"
-                [invalid]="isFieldInvalid('confirmPassword')"
-                [errorText]="getFieldError('confirmPassword')"
-              >
-              </erp-input>
-
-              <div class="terms-checkbox">
-                <label class="checkbox-label">
-                  <input
-                    type="checkbox"
-                    formControlName="acceptTerms"
-                    class="checkbox"
-                  />
-                  <span
-                    >I agree to the
-                    <a href="#" class="terms-link">Terms of Service</a> and
-                    <a href="#" class="terms-link">Privacy Policy</a></span
-                  >
-                </label>
-                @if (isFieldInvalid('acceptTerms')) {
-                  <span class="field-error">{{
-                    getFieldError('acceptTerms')
-                  }}</span>
-                }
+        <div class="register-card-wrapper">
+          <erp-card elevation="lg">
+            <div card-body>
+              <!-- Header -->
+              <div class="register-header">
+                <div class="brand">
+                  <i class="pi pi-building brand-icon"></i>
+                  <h1 class="brand-title">{{ brandName }}</h1>
+                </div>
+                <h2 class="register-title">{{ t('register.title') }}</h2>
+                <p class="register-subtitle">
+                  {{ t('register.subtitle') }}
+                </p>
               </div>
 
-              <erp-button
-                type="submit"
-                variant="primary"
-                size="lg"
-                [fullWidth]="true"
-                [loading]="authFacade.isLoading()"
-                [disabled]="registerForm.invalid || authFacade.isLoading()"
+              <!-- Register Form -->
+              <form
+                [formGroup]="registerForm"
+                (ngSubmit)="onSubmit()"
+                class="register-form"
               >
-                Create Account
-              </erp-button>
-            </form>
+                <erp-input
+                  type="text"
+                  [label]="t('register.nameLabel')"
+                  [placeholder]="t('register.namePlaceholder')"
+                  formControlName="name"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('name')"
+                  [errorText]="getFieldError('name')"
+                >
+                </erp-input>
 
-            <!-- Footer -->
-            <div class="register-footer">
-              <p class="signin-text">
-                Already have an account?
-                <a routerLink="/auth/login" class="signin-link">Sign in</a>
-              </p>
+                <erp-input
+                  type="email"
+                  [label]="t('register.emailLabel')"
+                  [placeholder]="t('register.emailPlaceholder')"
+                  formControlName="email"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('email')"
+                  [errorText]="getFieldError('email')"
+                >
+                </erp-input>
+
+                <erp-input
+                  type="password"
+                  [label]="t('register.passwordLabel')"
+                  [placeholder]="t('register.passwordPlaceholder')"
+                  formControlName="password"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('password')"
+                  [errorText]="getFieldError('password')"
+                >
+                </erp-input>
+
+                <erp-input
+                  type="password"
+                  [label]="t('register.confirmPasswordLabel')"
+                  [placeholder]="t('register.confirmPasswordPlaceholder')"
+                  formControlName="confirmPassword"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('confirmPassword')"
+                  [errorText]="getFieldError('confirmPassword')"
+                >
+                </erp-input>
+
+                <div class="terms-checkbox">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      formControlName="acceptTerms"
+                      class="checkbox"
+                    />
+                    <span>
+                      {{ t('register.terms.agree') }}
+                      <a href="#" class="terms-link">{{
+                        t('register.terms.tos')
+                      }}</a>
+                      {{ t('register.terms.and') }}
+                      <a href="#" class="terms-link">{{
+                        t('register.terms.privacy')
+                      }}</a>
+                    </span>
+                  </label>
+                  @if (isFieldInvalid('acceptTerms')) {
+                    <span class="field-error">{{
+                      getFieldError('acceptTerms')
+                    }}</span>
+                  }
+                </div>
+
+                <erp-button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  [fullWidth]="true"
+                  [loading]="authFacade.isLoading()"
+                  [disabled]="registerForm.invalid || authFacade.isLoading()"
+                >
+                  {{
+                    authFacade.isLoading()
+                      ? t('register.creatingAccount')
+                      : t('register.createAccount')
+                  }}
+                </erp-button>
+              </form>
+
+              <!-- Footer -->
+              <div class="register-footer">
+                <p class="signin-text">
+                  {{ t('register.alreadyHaveAccount') }}
+                  <a routerLink="/auth/login" class="signin-link">{{
+                    t('register.signIn')
+                  }}</a>
+                </p>
+              </div>
             </div>
-          </div>
-        </erp-card>
+          </erp-card>
+        </div>
       </div>
-    </div>
+    </ng-container>
   `,
   styles: [
     `
@@ -226,28 +247,6 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
 
       :host-context(.dark) .register-subtitle {
         color: rgb(156 163 175);
-      }
-
-      .error-message {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
-        background-color: rgb(254 242 242);
-        border: 1px solid rgb(254 226 226);
-        border-radius: 0.5rem;
-        color: rgb(153 27 27);
-        margin-bottom: 1.5rem;
-      }
-
-      :host-context(.dark) .error-message {
-        background-color: rgb(127 29 29);
-        border-color: rgb(153 27 27);
-        color: rgb(254 202 202);
-      }
-
-      .error-icon {
-        font-size: 1.25rem;
       }
 
       .register-form {
@@ -341,7 +340,10 @@ import { AuthFacadeService } from '../../services/auth-facade.service';
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly validationResolver = inject(ValidationMessageResolver);
   readonly authFacade = inject(AuthFacadeService);
+
+  readonly brandName = BRAND.NAME;
 
   readonly registerForm: FormGroup = this.fb.group(
     {
@@ -400,13 +402,6 @@ export class RegisterComponent {
     const field = this.registerForm.get(fieldName);
     if (!field || !field.errors || !field.touched) return '';
 
-    if (field.errors['required']) return 'This field is required';
-    if (field.errors['requiredTrue']) return 'You must accept the terms';
-    if (field.errors['email']) return 'Please enter a valid email';
-    if (field.errors['minlength'])
-      return `Minimum ${field.errors['minlength'].requiredLength} characters required`;
-    if (field.errors['passwordMismatch']) return 'Passwords do not match';
-
-    return '';
+    return this.validationResolver.resolve(field.errors);
   }
 }

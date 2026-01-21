@@ -1,11 +1,9 @@
-/**
- * Login Component
- *
- * Professional enterprise login page.
- * Smart component - uses AuthFacadeService.
- */
-
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  signal,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   FormBuilder,
@@ -22,10 +20,15 @@ import {
 import { ToastService } from '@erp/shared/utils';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 import {
+  TranslocoDirective,
+  TranslocoService,
+  TRANSLOCO_SCOPE,
+} from '@jsverse/transloco';
+import { ValidationMessageResolver } from '@erp/shared/util-i18n';
+import {
   BRAND,
   DEMO_CREDENTIALS,
   LENGTH_CONSTRAINTS,
-  AUTH_ROUTES,
   DEFAULT_REDIRECTS,
 } from '@erp/shared/config';
 
@@ -39,93 +42,112 @@ import {
     ButtonComponent,
     CardComponent,
     StandaloneLanguageSwitchComponent,
+    TranslocoDirective,
+  ],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'auth',
+    },
   ],
   template: `
-    <div class="login-container relative">
-      <!-- Language Switcher -->
-      <div class="absolute top-4 inset-inline-end-4 z-10">
-        <lib-standalone-language-switch></lib-standalone-language-switch>
-      </div>
+    <ng-container *transloco="let t; read: 'auth'">
+      <div class="login-container relative">
+        <!-- Language Switcher -->
+        <div class="absolute top-4 inset-inline-end-4 z-10">
+          <lib-standalone-language-switch
+            [isNested]="false"
+          ></lib-standalone-language-switch>
+        </div>
 
-      <div class="login-card-wrapper">
-        <erp-card elevation="lg">
-          <div card-body>
-            <!-- Header -->
-            <div class="login-header">
-              <div class="brand">
-                <i class="pi pi-building brand-icon"></i>
-                <h1 class="brand-title">{{ brandName }}</h1>
-              </div>
-              <h2 class="login-title">Sign In</h2>
-              <p class="login-subtitle">
-                Enter your credentials to access your account
-              </p>
-            </div>
-
-            <!-- Login Form -->
-            <form
-              [formGroup]="loginForm"
-              (ngSubmit)="onSubmit()"
-              class="login-form"
-            >
-              <erp-input
-                type="email"
-                label="Email Address"
-                [placeholder]="demoEmail"
-                formControlName="email"
-                [required]="true"
-                [invalid]="isFieldInvalid('email')"
-                [errorText]="getFieldError('email')"
-              >
-              </erp-input>
-
-              <erp-input
-                type="password"
-                label="Password"
-                placeholder="Enter your password"
-                formControlName="password"
-                [required]="true"
-                [invalid]="isFieldInvalid('password')"
-                [errorText]="getFieldError('password')"
-              >
-              </erp-input>
-
-              <div class="form-options">
-                <label class="checkbox-label">
-                  <input
-                    type="checkbox"
-                    formControlName="rememberMe"
-                    class="checkbox"
-                  />
-                  <span>Remember me</span>
-                </label>
-
-                <a href="#" class="forgot-link">Forgot password?</a>
+        <div class="login-card-wrapper">
+          <erp-card elevation="lg">
+            <div card-body>
+              <!-- Header -->
+              <div class="login-header">
+                <div class="brand">
+                  <i class="pi pi-building brand-icon"></i>
+                  <h1 class="brand-title">{{ brandName }}</h1>
+                </div>
+                <h2 class="login-title">{{ t('login.title') }}</h2>
+                <p class="login-subtitle">
+                  {{ t('login.subtitle') }}
+                </p>
               </div>
 
-              <erp-button
-                type="submit"
-                variant="primary"
-                size="lg"
-                [fullWidth]="true"
-                [loading]="authFacade.isLoading()"
-                [disabled]="loginForm.invalid || authFacade.isLoading()"
+              <!-- Login Form -->
+              <form
+                [formGroup]="loginForm"
+                (ngSubmit)="onSubmit()"
+                class="login-form"
               >
-                Sign In
-              </erp-button>
-            </form>
+                <erp-input
+                  type="email"
+                  [label]="t('login.emailLabel')"
+                  [placeholder]="t('login.emailPlaceholder')"
+                  formControlName="email"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('email')"
+                  [errorText]="getFieldError('email')"
+                >
+                </erp-input>
 
-            <!-- Footer -->
-            <div class="login-footer">
-              <p class="signup-text">
-                Don't have an account?
-                <a routerLink="/auth/register" class="signup-link">Sign up</a>
-              </p>
+                <erp-input
+                  type="password"
+                  [label]="t('login.passwordLabel')"
+                  [placeholder]="t('login.passwordPlaceholder')"
+                  formControlName="password"
+                  [required]="true"
+                  [invalid]="isFieldInvalid('password')"
+                  [errorText]="getFieldError('password')"
+                >
+                </erp-input>
+
+                <div class="form-options">
+                  <label class="checkbox-label">
+                    <input
+                      type="checkbox"
+                      formControlName="rememberMe"
+                      class="checkbox"
+                    />
+                    <span>{{ t('login.rememberMe') }}</span>
+                  </label>
+
+                  <a href="#" class="forgot-link">{{
+                    t('login.forgotPassword')
+                  }}</a>
+                </div>
+
+                <erp-button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  [fullWidth]="true"
+                  [loading]="authFacade.isLoading()"
+                  [disabled]="loginForm.invalid || authFacade.isLoading()"
+                >
+                  {{
+                    authFacade.isLoading()
+                      ? t('login.signingIn')
+                      : t('login.signIn')
+                  }}
+                </erp-button>
+              </form>
+
+              <!-- Footer -->
+              <div class="login-footer">
+                <p class="signup-text">
+                  {{ t('login.noAccount') }}
+                  <a routerLink="/auth/register" class="signup-link">{{
+                    t('login.signup')
+                  }}</a>
+                </p>
+              </div>
             </div>
-          </div>
-        </erp-card>
+          </erp-card>
+        </div>
       </div>
-    </div>
+    </ng-container>
   `,
   styles: [
     `
@@ -205,52 +227,6 @@ import {
         color: rgb(156 163 175);
       }
 
-      .test-account-info {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
-        background-color: #eff6ff;
-        border: 1px solid #dbeafe;
-        border-radius: 0.5rem;
-        color: #1e40af;
-        margin-bottom: 1.5rem;
-        font-size: 0.875rem;
-      }
-
-      .test-account-info i {
-        font-size: 1.25rem;
-        flex-shrink: 0;
-      }
-
-      :host-context(.dark) .test-account-info {
-        background-color: #1e3a8a;
-        border-color: #1e40af;
-        color: #bfdbfe;
-      }
-
-      .error-message {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 1rem;
-        background-color: rgb(254 242 242);
-        border: 1px solid rgb(254 226 226);
-        border-radius: 0.5rem;
-        color: rgb(153 27 27);
-        margin-bottom: 1.5rem;
-      }
-
-      :host-context(.dark) .error-message {
-        background-color: rgb(127 29 29);
-        border-color: rgb(153 27 27);
-        color: rgb(254 202 202);
-      }
-
-      .error-icon {
-        font-size: 1.25rem;
-      }
-
       .login-form {
         display: flex;
         flex-direction: column;
@@ -326,42 +302,6 @@ import {
       :host-context(.dark) .signup-link {
         color: rgb(96 165 250);
       }
-
-      .demo-credentials {
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background-color: rgb(239 246 255);
-        border-radius: 0.5rem;
-        text-align: center;
-      }
-
-      :host-context(.dark) .demo-credentials {
-        background-color: rgb(30 58 138);
-      }
-
-      .demo-title {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: rgb(30 64 175);
-        margin: 0 0 0.5rem 0;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      :host-context(.dark) .demo-title {
-        color: rgb(147 197 253);
-      }
-
-      .demo-text {
-        font-size: 0.75rem;
-        color: rgb(30 64 175);
-        margin: 0.25rem 0;
-        font-family: monospace;
-      }
-
-      :host-context(.dark) .demo-text {
-        color: rgb(191 219 254);
-      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -370,11 +310,12 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly transloco = inject(TranslocoService);
+  private readonly validationResolver = inject(ValidationMessageResolver);
   readonly authFacade = inject(AuthFacadeService);
 
   // Centralized branding constants
   readonly brandName = BRAND.NAME;
-  readonly demoEmail = DEMO_CREDENTIALS.EMAIL;
 
   // Default test account credentials for easy testing
   readonly loginForm: FormGroup = this.fb.group({
@@ -391,7 +332,9 @@ export class LoginComponent {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) {
-      this.toast.warning('Please fill in all required fields');
+      this.toast.warning(
+        this.transloco.translate('auth.validation.fillRequired'),
+      );
       return;
     }
 
@@ -399,7 +342,11 @@ export class LoginComponent {
       await this.authFacade.login(this.loginForm.value);
 
       // Show success toast
-      this.toast.success(`Login successful! Welcome to ${BRAND.NAME}`);
+      this.toast.success(
+        this.transloco.translate('auth.validation.loginSuccess', {
+          brand: BRAND.NAME,
+        }) || `Login successful! Welcome to ${BRAND.NAME}`,
+      );
 
       // Redirect to dashboard after short delay
       setTimeout(() => {
@@ -407,7 +354,9 @@ export class LoginComponent {
         window.location.href = DEFAULT_REDIRECTS.AFTER_LOGIN;
       }, 800);
     } catch (error) {
-      this.toast.error('Login failed. Invalid email or password.');
+      this.toast.error(
+        this.transloco.translate('auth.validation.invalidEmailPassword'),
+      );
     }
   }
 
@@ -420,11 +369,6 @@ export class LoginComponent {
     const field = this.loginForm.get(fieldName);
     if (!field || !field.errors || !field.touched) return '';
 
-    if (field.errors['required']) return 'This field is required';
-    if (field.errors['email']) return 'Please enter a valid email';
-    if (field.errors['minlength'])
-      return `Minimum ${field.errors['minlength'].requiredLength} characters required`;
-
-    return '';
+    return this.validationResolver.resolve(field.errors);
   }
 }

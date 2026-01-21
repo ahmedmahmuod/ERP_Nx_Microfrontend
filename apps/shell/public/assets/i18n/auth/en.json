@@ -1,0 +1,47 @@
+{
+  "login": {
+    "title": "Sign In",
+    "subtitle": "Enter your credentials to access your account",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "noAccount": "Don't have an account?",
+    "signup": "Sign up"
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Sign up to get started with Assemble ERP",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "john.doe@company.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a strong password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "terms": {
+      "agree": "I agree to the",
+      "tos": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    },
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email",
+    "minlength": "Minimum {requiredLength} characters required",
+    "passwordMismatch": "Passwords do not match",
+    "acceptTerms": "You must accept the terms",
+    "invalidEmailPassword": "Login failed. Invalid email or password.",
+    "fillRequired": "Please fill in all required fields"
+  }
+}
