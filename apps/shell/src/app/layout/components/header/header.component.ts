@@ -1,16 +1,9 @@
-/**
- * Header Component
- *
- * Top navigation bar with branding, user menu, and theme toggle.
- * Dumb component - all state from LayoutService.
- */
-
 import {
   Component,
-  output,
-  input,
-  inject,
   ChangeDetectionStrategy,
+  inject,
+  input,
+  output,
   computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -18,13 +11,21 @@ import { LayoutService } from '../../services/layout.service';
 import { NavigationFacadeService } from '../../../core/services/navigation-facade.service';
 import { RouteContextService } from '../../../core/services/route-context.service';
 import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.component';
+import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ProfileDropdownComponent],
+  imports: [CommonModule, ProfileDropdownComponent, TranslocoDirective],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'shell',
+    },
+  ],
   template: `
     <header
+      *transloco="let t; read: 'shell'"
       class="flex items-center justify-between h-16 px-4 sm:px-6 sticky top-0 z-50 bg-white dark:bg-[#1e1e1e] border-b border-gray-100 dark:border-gray-800 transition-colors"
     >
       <!-- Left Section -->
@@ -33,7 +34,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
         <button
           class="lg:hidden flex items-center justify-center w-10 h-10 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           (click)="layoutService.toggleSidebar()"
-          aria-label="Toggle menu"
+          [attr.aria-label]="t('header.toggleMenu')"
         >
           <i class="pi pi-bars text-xl"></i>
         </button>
@@ -43,14 +44,14 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
           <button
             class="flex items-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all shadow-sm group"
             (click)="routeContext.navigateToHome()"
-            aria-label="Back to Home"
+            [attr.aria-label]="t('header.backToHome')"
           >
             <i
               class="pi pi-arrow-left transition-transform group-hover:rtl:translate-x-1 group-hover:ltr:-translate-x-1"
             ></i>
-            <span class="hidden sm:inline font-medium text-sm"
-              >Back to Home</span
-            >
+            <span class="hidden sm:inline font-medium text-sm">{{
+              t('header.backToHome')
+            }}</span>
           </button>
         }
 
@@ -62,7 +63,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
           } @else {
             <span
               class="text-[var(--accent-primary)] font-bold text-xl tracking-tight"
-              >Assemble ERP</span
+              >{{ t('header.appTitle') }}</span
             >
           }
         </h1>
@@ -74,7 +75,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
         <button
           class="hidden sm:flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           (click)="layoutService.toggleTheme()"
-          aria-label="Toggle theme"
+          [attr.aria-label]="t('header.toggleTheme')"
         >
           <i class="pi pi-moon text-lg"></i>
         </button>
@@ -82,7 +83,7 @@ import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.c
         <!-- Notifications -->
         <button
           class="flex items-center justify-center w-9 h-9 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors relative"
-          aria-label="Notifications"
+          [attr.aria-label]="t('header.notifications')"
         >
           <i class="pi pi-bell text-lg"></i>
           <span

@@ -7,7 +7,7 @@ import { PopoverModule } from 'primeng/popover';
 import { InputTextModule } from 'primeng/inputtext';
 import { CompanyFacade } from '@erp/shared/util-state';
 import { LanguageSwitchComponent } from '@erp/shared/ui/primeng-components';
-
+import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 @Component({
   selector: 'app-profile-dropdown',
   standalone: true,
@@ -19,112 +19,121 @@ import { LanguageSwitchComponent } from '@erp/shared/ui/primeng-components';
     PopoverModule,
     InputTextModule,
     LanguageSwitchComponent,
+    TranslocoDirective,
+  ],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'shell',
+    },
   ],
   template: `
-    <div 
-      class="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-[var(--color-bg-hover)] transition-colors duration-150 focus:outline-none" 
-      (click)="$any(op).toggle($event)"
-      (keyup.enter)="$any(op).toggle($event)"
-      role="button"
-      tabindex="0"
-    >
-      <div class="text-right flex flex-col">
-        <span class="font-bold text-sm text-gray-900 dark:text-gray-100 leading-none">Admin</span>
-        <span class="text-[10px] text-gray-500 leading-none mt-1">administrator</span>
-      </div>
-      <p-avatar
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-        shape="circle"
-        size="normal"
-        class="border border-gray-200 dark:border-gray-700"
+    <ng-container *transloco="let t; read: 'shell'">
+      <div 
+        class="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer hover:bg-[var(--color-bg-hover)] transition-colors duration-150 focus:outline-none" 
+        (click)="$any(op).toggle($event)"
+        (keyup.enter)="$any(op).toggle($event)"
+        role="button"
+        tabindex="0"
       >
-      </p-avatar>
-      <i class="pi pi-chevron-down text-[10px] text-gray-400 ml-1"></i>
-    </div>
-
-    <!-- Main Profile Overlay -->
-    <p-popover #op styleClass="profile-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
-      <div class="flex flex-col w-72 bg-[var(--color-bg-primary)]">
-        
-        <!-- User Section -->
-        <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border-primary)]">
-          <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" size="large"></p-avatar>
-          <div class="flex flex-col">
-            <span class="font-bold text-[var(--color-text-primary)]">Admin User</span>
-            <span class="text-xs text-[var(--color-text-secondary)]">admin@assemble.com</span>
-          </div>
+        <div class="text-right flex flex-col">
+          <span class="font-bold text-sm text-gray-900 dark:text-gray-100 leading-none">{{ t('profile.admin') }}</span>
+          <span class="text-[10px] text-gray-500 leading-none mt-1">{{ t('profile.administrator') }}</span>
         </div>
+        <p-avatar
+          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+          shape="circle"
+          size="normal"
+          class="border border-gray-200 dark:border-gray-700"
+        >
+        </p-avatar>
+        <i class="pi pi-chevron-down text-[10px] text-gray-400 ml-1"></i>
+      </div>
 
-        <!-- Menu Items -->
-        <div class="flex flex-col py-2">
+      <!-- Main Profile Overlay -->
+      <p-popover #op styleClass="profile-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
+        <div class="flex flex-col w-72 bg-[var(--color-bg-primary)]">
           
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
-            <i class="pi pi-user mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-[var(--color-text-primary)]">User Profile</span>
-          </button>
+          <!-- User Section -->
+          <div class="flex items-center gap-3 p-4 border-b border-[var(--color-border-primary)]">
+            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" size="large"></p-avatar>
+            <div class="flex flex-col">
+              <span class="font-bold text-[var(--color-text-primary)]">Admin User</span>
+              <span class="text-xs text-[var(--color-text-secondary)]">admin@assemble.com</span>
+            </div>
+          </div>
 
-          <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
-            <i class="pi pi-building mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-[var(--color-text-primary)]">Switch Company</span>
-            <i class="pi pi-chevron-right ml-auto text-[10px] text-gray-400"></i>
-          </button>
+          <!-- Menu Items -->
+          <div class="flex flex-col py-2">
+            
+            <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
+              <i class="pi pi-user mr-3 rtl:ml-3 rtl:mr-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
+              <span class="font-medium text-[var(--color-text-primary)]">{{ t('profile.userProfile') }}</span>
+            </button>
 
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
-            <i class="pi pi-question-circle mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-[var(--color-text-primary)]">Supports</span>
-          </button>
+            <button pButton (click)="$any(companyOp).toggle($event, $any(op).el.nativeElement)" class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
+              <i class="pi pi-building mr-3 rtl:ml-3 rtl:mr-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
+              <span class="font-medium text-[var(--color-text-primary)]">{{ t('profile.switchCompany') }}</span>
+              <i class="pi pi-chevron-right ml-auto rtl:mr-auto rtl:ml-0 rtl:rotate-180 text-[10px] text-gray-400"></i>
+            </button>
 
-          <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
-            <i class="pi pi-lock mr-3 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-            <span class="font-medium text-[var(--color-text-primary)]">Change Password</span>
-          </button>
+            <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
+              <i class="pi pi-question-circle mr-3 rtl:ml-3 rtl:mr-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
+              <span class="font-medium text-[var(--color-text-primary)]">{{ t('profile.support') }}</span>
+            </button>
 
-          <!-- Language Section -->
-          <lib-language-switch [isNested]="true"></lib-language-switch>
+            <button pButton class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors">
+              <i class="pi pi-lock mr-3 rtl:ml-3 rtl:mr-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
+              <span class="font-medium text-[var(--color-text-primary)]">{{ t('profile.changePassword') }}</span>
+            </button>
 
-          <div class="border-t border-gray-100 dark:border-gray-800 my-1"></div>
+            <!-- Language Section -->
+            <lib-language-switch [isNested]="true"></lib-language-switch>
 
-          <!-- Logout -->
-          <button pButton class="p-button-text p-button-danger justify-start w-full px-4 py-3 rounded-none hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
-            <i class="pi pi-sign-out mr-3 text-red-500"></i>
-            <span class="font-bold text-red-500">Sign Out</span>
-          </button>
+            <div class="border-t border-gray-100 dark:border-gray-800 my-1"></div>
 
-        </div>
-      </div>
-    </p-popover>
+            <!-- Logout -->
+            <button pButton class="p-button-text p-button-danger justify-start w-full px-4 py-3 rounded-none hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+              <i class="pi pi-sign-out mr-3 rtl:ml-3 rtl:mr-0 text-red-500"></i>
+              <span class="font-bold text-red-500">{{ t('profile.signOut') }}</span>
+            </button>
 
-    <!-- Company Switch Overlay -->
-    <p-popover #companyOp styleClass="company-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
-      <div class="flex flex-col w-80 bg-[var(--color-bg-primary)]">
-        <div class="p-4 border-b border-[var(--color-border-primary)] bg-[var(--color-bg-secondary)]">
-          <span class="font-bold block mb-3 text-[var(--color-text-primary)]">Switch Company</span>
-          <div class="relative w-full">
-            <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]"></i>
-            <input type="text" pInputText placeholder="Search company..." class="w-full pl-9 py-2 text-sm border-[var(--color-border-primary)] dark:bg-[var(--color-bg-tertiary)]" [(ngModel)]="searchQuery" />
           </div>
         </div>
-        
-        <div class="flex flex-col max-h-60 overflow-auto py-1">
-          @for (company of filteredCompanies(); track company.id) {
-            <button 
-              pButton 
-              (click)="selectCompany(company.id); companyOp.hide(); op.hide()"
-              class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors"
-              [style.background-color]="company.id === activeCompany()?.id ? 'rgb(from var(--accent-primary) r g b / 0.1)' : ''"
-            >
-              <div class="flex flex-col items-start">
-                <span class="font-medium text-[var(--color-text-primary)]" [style.color]="company.id === activeCompany()?.id ? 'var(--accent-primary)' : ''">{{ company.name }}</span>
-                <span class="text-[10px] text-[var(--color-text-tertiary)] uppercase tracking-wider">{{ company.id }}</span>
-              </div>
-              @if (company.id === activeCompany()?.id) {
-                <i class="pi pi-check ml-auto text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
-              }
-            </button>
-          }
+      </p-popover>
+
+      <!-- Company Switch Overlay -->
+      <p-popover #companyOp styleClass="company-overlay shadow-xl overflow-hidden rounded-xl border border-[var(--color-border-primary)]">
+        <div class="flex flex-col w-80 bg-[var(--color-bg-primary)]">
+          <div class="p-4 border-b border-[var(--color-border-primary)] bg-[var(--color-bg-secondary)]">
+            <span class="font-bold block mb-3 text-[var(--color-text-primary)]">{{ t('profile.switchCompany') }}</span>
+            <div class="relative w-full">
+              <i class="pi pi-search absolute left-3 rtl:right-3 rtl:left-auto top-1/2 -translate-y-1/2 text-[var(--color-text-tertiary)]"></i>
+              <input type="text" pInputText [placeholder]="t('profile.searchCompany')" class="w-full pl-9 rtl:pr-9 rtl:pl-2 py-2 text-sm border-[var(--color-border-primary)] dark:bg-[var(--color-bg-tertiary)]" [(ngModel)]="searchQuery" />
+            </div>
+          </div>
+          
+          <div class="flex flex-col max-h-60 overflow-auto py-1">
+            @for (company of filteredCompanies(); track company.id) {
+              <button 
+                pButton 
+                (click)="selectCompany(company.id); companyOp.hide(); op.hide()"
+                class="p-button-text p-button-plain justify-start w-full px-4 py-3 rounded-none hover:bg-[var(--color-bg-hover)] transition-colors"
+                [style.background-color]="company.id === activeCompany()?.id ? 'rgb(from var(--accent-primary) r g b / 0.1)' : ''"
+              >
+                <div class="flex flex-col items-start rtl:items-end">
+                  <span class="font-medium text-[var(--color-text-primary)]" [style.color]="company.id === activeCompany()?.id ? 'var(--accent-primary)' : ''">{{ company.name }}</span>
+                  <span class="text-[10px] text-[var(--color-text-tertiary)] uppercase tracking-wider">{{ company.id }}</span>
+                </div>
+                @if (company.id === activeCompany()?.id) {
+                  <i class="pi pi-check ml-auto rtl:mr-auto rtl:ml-0 text-[var(--accent-primary)] dark:text-[var(--accent-light)]"></i>
+                }
+              </button>
+            }
+          </div>
         </div>
-      </div>
-    </p-popover>
+      </p-popover>
+    </ng-container>
   `,
   styles: [
     `

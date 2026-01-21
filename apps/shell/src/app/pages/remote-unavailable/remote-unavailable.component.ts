@@ -1,13 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-remote-unavailable',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoDirective],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'shell',
+    },
+  ],
   template: `
-    <div class="remote-unavailable-container">
+    <div class="remote-unavailable-container" *transloco="let t; read: 'shell'">
       <div class="remote-unavailable-content">
         <div class="icon-container">
           <svg
@@ -24,13 +31,12 @@ import { Router } from '@angular/router';
             />
           </svg>
         </div>
-        <h1>Module Temporarily Unavailable</h1>
+        <h1>{{ t('remoteUnavailable.title') }}</h1>
         <p>
-          The requested module is currently unavailable. This may be because the
-          service is not running in development mode.
+          {{ t('remoteUnavailable.message') }}
         </p>
         <button (click)="goToDashboard()" class="btn-primary">
-          Go to Dashboard
+          {{ t('remoteUnavailable.backToDashboard') }}
         </button>
       </div>
     </div>

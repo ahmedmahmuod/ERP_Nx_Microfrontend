@@ -1,0 +1,60 @@
+{
+  "header": {
+    "backToHome": "العودة للرئيسية",
+    "appTitle": "أسيمبل ERP",
+    "toggleMenu": "فتح القائمة",
+    "toggleTheme": "تغيير المظهر",
+    "notifications": "التنبيهات"
+  },
+  "sidebar": {
+    "searchPlaceholder": "بحث في القائمة...",
+    "searchAriaLabel": "بحث في قائمة {{title}}",
+    "clearSearch": "مسح البحث",
+    "noResults": "لم يتم العثور على نتائج",
+    "loading": "جاري تحميل القائمة...",
+    "retry": "إعادة المحاولة",
+    "expand": "توسيع القائمة الجانبية",
+    "collapse": "طي القائمة الجانبية"
+  },
+  "profile": {
+    "admin": "مسؤول",
+    "administrator": "العضو المنتدب",
+    "userProfile": "ملف المستخدم",
+    "switchCompany": "تبديل الشركة",
+    "support": "الدعم",
+    "changePassword": "تغيير كلمة المرور",
+    "signOut": "تسجيل الخروج",
+    "searchCompany": "بحث عن شركة..."
+  },
+  "dashboard": {
+    "welcome": "مرحباً بك مجدداً!",
+    "subtitle": "اختر وحدة للبدء",
+    "modules": {
+      "hr": {
+        "title": "الموارد البشرية والرواتب",
+        "description": "إدارة الموظفين والرواتب وعمليات الموارد البشرية"
+      },
+      "finance": {
+        "title": "المالية",
+        "description": "تتبع المالية والفواتير والمحاسبة"
+      },
+      "srm": {
+        "title": "إدارة علاقات الموردين",
+        "description": "إدارة علاقات الموردين والمشتريات"
+      },
+      "pm": {
+        "title": "إدارة المشاريع",
+        "description": "تخطيط وتتبع وتسليم المشاريع"
+      },
+      "warehouses": {
+        "title": "المستودعات",
+        "description": "إدارة المخزون والعمليات المستودعية"
+      }
+    }
+  },
+  "remoteUnavailable": {
+    "title": "الوحدة غير متوفرة حالياً",
+    "message": "الوحدة المطلوبة غير متوفرة حالياً. قد يكون ذلك بسبب عدم تشغيل الخدمة في وضع التطوير.",
+    "backToDashboard": "الذهاب للوحة التحكم"
+  }
+}

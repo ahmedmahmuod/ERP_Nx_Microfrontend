@@ -1,0 +1,60 @@
+{
+  "header": {
+    "backToHome": "Back to Home",
+    "appTitle": "Assemble ERP",
+    "toggleMenu": "Toggle menu",
+    "toggleTheme": "Toggle theme",
+    "notifications": "Notifications"
+  },
+  "sidebar": {
+    "searchPlaceholder": "Search menu...",
+    "searchAriaLabel": "Search {{title}} menu",
+    "clearSearch": "Clear search",
+    "noResults": "No results found",
+    "loading": "Loading menu...",
+    "retry": "Retry",
+    "expand": "Expand sidebar",
+    "collapse": "Collapse sidebar"
+  },
+  "profile": {
+    "admin": "Admin",
+    "administrator": "administrator",
+    "userProfile": "User Profile",
+    "switchCompany": "Switch Company",
+    "support": "Supports",
+    "changePassword": "Change Password",
+    "signOut": "Sign Out",
+    "searchCompany": "Search company..."
+  },
+  "dashboard": {
+    "welcome": "Welcome Back!",
+    "subtitle": "Select a module to get started",
+    "modules": {
+      "hr": {
+        "title": "HR & Payroll",
+        "description": "Manage employees, payroll, and HR operations"
+      },
+      "finance": {
+        "title": "Finance",
+        "description": "Track finances, invoices, and accounting"
+      },
+      "srm": {
+        "title": "SRM",
+        "description": "Supplier relationship and procurement management"
+      },
+      "pm": {
+        "title": "Project Management",
+        "description": "Plan, track, and deliver projects"
+      },
+      "warehouses": {
+        "title": "Warehouses",
+        "description": "Manage inventory, stock, and warehouse operations"
+      }
+    }
+  },
+  "remoteUnavailable": {
+    "title": "Module Temporarily Unavailable",
+    "message": "The requested module is currently unavailable. This may be because the service is not running in development mode.",
+    "backToDashboard": "Go to Dashboard"
+  }
+}

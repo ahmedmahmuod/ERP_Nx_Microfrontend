@@ -1,14 +1,3 @@
-/**
- * Sidebar Component - Enterprise Edition
- *
- * Modern, dynamic sidebar with:
- * - Single-expand accordion behavior
- * - Module-branded active states (accent token integration)
- * - Enhanced nested route visual differentiation
- * - Full accessibility (WCAG AA)
- * - Clean architecture (presentational component + SidebarFacade)
- */
-
 import {
   Component,
   ChangeDetectionStrategy,
@@ -25,11 +14,29 @@ import { FormsModule } from '@angular/forms';
 import { BRAND } from '@erp/shared/config';
 import { NavigationFacadeService } from '../../../core/services/navigation-facade.service';
 import { SidebarFacadeService } from '../../services/sidebar-facade.service';
+import {
+  TranslocoDirective,
+  TranslocoPipe,
+  TRANSLOCO_SCOPE,
+} from '@jsverse/transloco';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, FormsModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterLinkActive,
+    FormsModule,
+    TranslocoDirective,
+    TranslocoPipe,
+  ],
+  providers: [
+    {
+      provide: TRANSLOCO_SCOPE,
+      useValue: 'shell',
+    },
+  ],
   template: `
     <!-- Mobile Backdrop -->
     @if (mobileOpen) {
@@ -39,11 +46,12 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
         (keydown.escape)="handleMobileClose()"
         role="button"
         tabindex="0"
-        aria-label="Close sidebar"
+        [attr.aria-label]="'shell.sidebar.collapse' | transloco"
       ></div>
     }
 
     <aside
+      *transloco="let t; read: 'shell'"
       class="sidebar"
       [class.collapsed]="collapsed"
       [class.mobile-open]="mobileOpen"
@@ -83,7 +91,7 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
           <button
             (click)="handleMobileClose()"
             class="mobile-close-btn"
-            aria-label="Close menu"
+            [attr.aria-label]="t('sidebar.collapse')"
           >
             <i class="pi pi-times"></i>
           </button>
@@ -98,25 +106,32 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
             <input
               type="text"
               class="search-input"
-              placeholder="Search menu..."
+              [placeholder]="t('sidebar.searchPlaceholder')"
               [value]="sidebarFacade.searchQuery()"
               (input)="onSearchInput($event)"
-              [attr.aria-label]="'Search ' + navigationFacade.sidebarTitle() + ' menu'"
+              [attr.aria-label]="
+                t('sidebar.searchAriaLabel', {
+                  title: navigationFacade.sidebarTitle(),
+                })
+              "
             />
             @if (sidebarFacade.searchQuery()) {
               <button
                 class="search-clear"
                 (click)="clearSearch()"
-                aria-label="Clear search"
+                [attr.aria-label]="t('sidebar.clearSearch')"
               >
                 <i class="pi pi-times"></i>
               </button>
             }
           </div>
-          @if (sidebarFacade.searchQuery() && sidebarFacade.filteredMenuItems().length === 0) {
+          @if (
+            sidebarFacade.searchQuery() &&
+            sidebarFacade.filteredMenuItems().length === 0
+          ) {
             <div class="search-no-results">
               <i class="pi pi-info-circle"></i>
-              <span>No results found</span>
+              <span>{{ t('sidebar.noResults') }}</span>
             </div>
           }
         </div>
@@ -130,23 +145,29 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
         @if (navigationFacade.loading()) {
           <div class="nav-loading">
             <i class="pi pi-spin pi-spinner"></i>
-            <span>Loading menu...</span>
+            <span>{{ t('sidebar.loading') }}</span>
           </div>
         } @else if (navigationFacade.error()) {
           <div class="nav-error">
             <i class="pi pi-exclamation-triangle"></i>
             <span>{{ navigationFacade.error() }}</span>
             <button class="retry-btn" (click)="retryLoadManifest()">
-              <i class="pi pi-refresh"></i> Retry
+              <i class="pi pi-refresh"></i> {{ t('sidebar.retry') }}
             </button>
           </div>
         } @else {
           <ul class="nav-list" role="menu">
-            @for (item of menuItemsWithState(); track item.route || item.label) {
+            @for (
+              item of menuItemsWithState();
+              track item.route || item.label
+            ) {
               <li role="none">
                 @if (item.children && item.children.length > 0 && !collapsed) {
                   <!-- Parent Group with Children -->
-                  <div class="nav-group" [class.has-active-child]="item._hasActiveChild">
+                  <div
+                    class="nav-group"
+                    [class.has-active-child]="item._hasActiveChild"
+                  >
                     <button
                       class="nav-item nav-group-header"
                       [class.expanded]="isGroupExpanded(item.label)"
@@ -158,16 +179,24 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
                       @if (item.icon) {
                         <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
                       }
-                      <span class="nav-label" [title]="item.label">{{ item.label }}</span>
+                      <span class="nav-label" [title]="item.label">{{
+                        item.label
+                      }}</span>
                       @if (item.badge) {
-                        <span [class]="'badge ' + (item.badgeClass || 'badge-primary')">
+                        <span
+                          [class]="
+                            'badge ' + (item.badgeClass || 'badge-primary')
+                          "
+                        >
                           {{ item.badge }}
                         </span>
                       }
                       <i
                         [class]="
                           'pi nav-chevron ' +
-                          (isGroupExpanded(item.label) ? 'pi-chevron-down' : 'pi-chevron-right')
+                          (isGroupExpanded(item.label)
+                            ? 'pi-chevron-down'
+                            : 'pi-chevron-right rtl:rotate-180')
                         "
                       ></i>
                     </button>
@@ -178,7 +207,10 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
                       [class.expanded]="isGroupExpanded(item.label)"
                     >
                       <ul class="nav-sublist" role="menu">
-                        @for (child of item.children; track child.route || child.label) {
+                        @for (
+                          child of item.children;
+                          track child.route || child.label
+                        ) {
                           <li role="none">
                             <a
                               [routerLink]="child.route || []"
@@ -190,11 +222,20 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
                               role="menuitem"
                             >
                               @if (child.icon) {
-                                <i [class]="'pi ' + child.icon + ' nav-icon'"></i>
+                                <i
+                                  [class]="'pi ' + child.icon + ' nav-icon'"
+                                ></i>
                               }
-                              <span class="nav-label" [title]="child.label">{{ child.label }}</span>
+                              <span class="nav-label" [title]="child.label">{{
+                                child.label
+                              }}</span>
                               @if (child.badge) {
-                                <span [class]="'badge ' + (child.badgeClass || 'badge-primary')">
+                                <span
+                                  [class]="
+                                    'badge ' +
+                                    (child.badgeClass || 'badge-primary')
+                                  "
+                                >
                                   {{ child.badge }}
                                 </span>
                               }
@@ -209,7 +250,9 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
                   <a
                     [routerLink]="item.route || []"
                     routerLinkActive="active"
-                    [routerLinkActiveOptions]="{ exact: item.route === '/' || item.route === '/dashboard' }"
+                    [routerLinkActiveOptions]="{
+                      exact: item.route === '/' || item.route === '/dashboard',
+                    }"
                     (click)="onNavItemClick()"
                     class="nav-item"
                     [class.collapsed-item]="collapsed"
@@ -222,10 +265,16 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
                       <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
                     }
                     @if (!collapsed) {
-                      <span class="nav-label" [title]="item.label">{{ item.label }}</span>
+                      <span class="nav-label" [title]="item.label">{{
+                        item.label
+                      }}</span>
                     }
                     @if (!collapsed && item.badge) {
-                      <span [class]="'badge ' + (item.badgeClass || 'badge-primary')">
+                      <span
+                        [class]="
+                          'badge ' + (item.badgeClass || 'badge-primary')
+                        "
+                      >
                         {{ item.badge }}
                       </span>
                     }
@@ -241,9 +290,17 @@ import { SidebarFacadeService } from '../../services/sidebar-facade.service';
       <button
         (click)="toggleCollapse()"
         class="collapse-toggle-btn"
-        [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        [attr.aria-label]="
+          collapsed ? t('sidebar.expand') : t('sidebar.collapse')
+        "
       >
-        <i [class]="collapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"></i>
+        <i
+          [class]="
+            collapsed
+              ? 'pi pi-chevron-right rtl:rotate-180'
+              : 'pi pi-chevron-left rtl:rotate-180'
+          "
+        ></i>
       </button>
     </aside>
   `,
