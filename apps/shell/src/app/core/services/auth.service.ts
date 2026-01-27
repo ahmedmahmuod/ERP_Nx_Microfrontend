@@ -1,11 +1,12 @@
 /**
  * Auth Service
- * 
+ *
  * Manages authentication state and operations.
  */
 
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { CompanyFacade } from '@erp/shared/util-state';
 
 export interface User {
   id: string;
@@ -15,28 +16,29 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly router = inject(Router);
+  private readonly companyFacade = inject(CompanyFacade);
   private readonly STORAGE_KEY = 'erp-auth-token';
   private readonly USER_KEY = 'erp-user';
-  
+
   // Auth state
   private readonly isAuthenticatedSignal = signal<boolean>(this.checkAuth());
   private readonly currentUserSignal = signal<User | null>(this.loadUser());
-  
+
   // Public readonly signals
   readonly isAuthenticated = this.isAuthenticatedSignal.asReadonly();
   readonly currentUser = this.currentUserSignal.asReadonly();
-  
+
   /**
    * Check if user is authenticated
    */
   private checkAuth(): boolean {
     return !!localStorage.getItem(this.STORAGE_KEY);
   }
-  
+
   /**
    * Load user from storage
    */
@@ -51,7 +53,7 @@ export class AuthService {
     }
     return null;
   }
-  
+
   /**
    * Login (mock implementation)
    */
@@ -62,36 +64,40 @@ export class AuthService {
         id: '1',
         name: 'Ahmed Mahmoud',
         email: email,
-        role: 'admin'
+        role: 'admin',
       };
-      
+
       const mockToken = 'mock-jwt-token-' + Date.now();
-      
+
       localStorage.setItem(this.STORAGE_KEY, mockToken);
       localStorage.setItem(this.USER_KEY, JSON.stringify(mockUser));
-      
+
       this.isAuthenticatedSignal.set(true);
       this.currentUserSignal.set(mockUser);
-      
+
       return true;
     }
-    
+
     return false;
   }
-  
+
   /**
    * Logout
    */
   logout(): void {
+    // Clear company state
+    this.companyFacade.clearCompany();
+
+    // Clear auth state
     localStorage.removeItem(this.STORAGE_KEY);
     localStorage.removeItem(this.USER_KEY);
-    
+
     this.isAuthenticatedSignal.set(false);
     this.currentUserSignal.set(null);
-    
+
     this.router.navigate(['/auth/login']);
   }
-  
+
   /**
    * Get auth token
    */

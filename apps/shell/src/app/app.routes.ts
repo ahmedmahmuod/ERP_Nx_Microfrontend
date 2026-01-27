@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 import { loadRemoteModule } from '@nx/angular/mf';
 import { LayoutComponent } from './layout/layout.component';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
+import { companyGuard } from './core/guards/company.guard';
 import { RemoteUnavailableComponent } from './pages/remote-unavailable/remote-unavailable.component';
 
 // Fallback routes for when remotes are unavailable
@@ -33,15 +34,19 @@ export const appRoutes: Route[] = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+      // Dashboard (requires both auth AND company)
       {
         path: 'dashboard',
+        canActivate: [companyGuard],
         loadComponent: () =>
           import('./pages/dashboard/dashboard.component').then(
             (m) => m.DashboardComponent,
           ),
       },
+      // All modules require company selection
       {
         path: 'finance',
+        canActivate: [companyGuard],
         loadChildren: () =>
           loadRemoteModule('remoteFinance', './Routes')
             .then((m) => m.remoteRoutes)
@@ -49,6 +54,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'hr',
+        canActivate: [companyGuard],
         loadChildren: () =>
           loadRemoteModule('remoteHr', './Routes')
             .then((m) => m.remoteRoutes)
@@ -56,6 +62,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'srm',
+        canActivate: [companyGuard],
         loadChildren: () =>
           loadRemoteModule('remoteSrm', './Routes')
             .then((m) => m.remoteRoutes)
@@ -63,6 +70,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'pm',
+        canActivate: [companyGuard],
         loadChildren: () =>
           loadRemoteModule('remotePm', './Routes')
             .then((m) => m.remoteRoutes)
@@ -70,6 +78,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'warehouses',
+        canActivate: [companyGuard],
         loadChildren: () =>
           loadRemoteModule('remoteWarehouses', './Routes')
             .then((m) => m.remoteRoutes)
