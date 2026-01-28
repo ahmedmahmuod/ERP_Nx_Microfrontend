@@ -43,5 +43,16 @@
     "acceptTerms": "يجب الموافقة على الشروط والأحكام",
     "invalidEmailPassword": "فشل تسجيل الدخول. البريد الإلكتروني أو كلمة المرور غير صحيحة.",
     "fillRequired": "يرجى ملء جميع الحقول المطلوبة"
+  },
+  "selectCompany": {
+    "title": "اختر الشركة",
+    "subtitle": "اختر شركة للمتابعة",
+    "searchPlaceholder": "البحث عن الشركات...",
+    "clearSearch": "مسح البحث",
+    "selectButton": "اختيار",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "loading": "جاري تحميل الشركات...",
+    "noCompanies": "لا توجد شركات متاحة",
+    "noResults": "لا توجد شركات تطابق بحثك"
   }
 }

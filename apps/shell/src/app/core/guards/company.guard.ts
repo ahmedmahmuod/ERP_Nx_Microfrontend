@@ -8,6 +8,7 @@
 import { inject } from '@angular/core';
 import { Router, type CanActivateFn } from '@angular/router';
 import { CompanyFacade } from '@erp/shared/util-state';
+import { AUTH_ROUTES } from '@erp/shared/config';
 
 export const companyGuard: CanActivateFn = () => {
   const companyFacade = inject(CompanyFacade);
@@ -18,6 +19,6 @@ export const companyGuard: CanActivateFn = () => {
     return true;
   }
 
-  // No company selected - redirect to company selection
-  return router.createUrlTree(['/select-company']);
+  // No company selected - redirect to company selection in Auth remote
+  return router.createUrlTree([AUTH_ROUTES.SELECT_COMPANY]);
 };

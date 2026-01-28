@@ -57,17 +57,6 @@
     "message": "The requested module is currently unavailable. This may be because the service is not running in development mode.",
     "backToDashboard": "Go to Dashboard"
   },
-  "selectCompany": {
-    "title": "Select Company",
-    "subtitle": "Choose a company to continue",
-    "searchPlaceholder": "Search companies...",
-    "clearSearch": "Clear search",
-    "selectButton": "Select",
-    "backToLogin": "Back to Login",
-    "loading": "Loading companies...",
-    "noCompanies": "No companies available",
-    "noResults": "No companies match your search"
-  },
   "footer": {
     "copyright": "All rights reserved {{ year }} ©",
     "version": "v1.0.0"
