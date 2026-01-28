@@ -77,6 +77,9 @@
       ],
       "@erp/shared/util-i18n": [
         "libs/shared/util-i18n/src/index.ts"
+      ],
+      "@erp/remote-auth/*": [
+        "apps/remote-auth/*"
       ]
     },
     "strict": true,

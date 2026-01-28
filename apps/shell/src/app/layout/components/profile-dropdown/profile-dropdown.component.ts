@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { InputTextModule } from 'primeng/inputtext';
 import { CompanyFacade } from '@erp/shared/util-state';
+import { AuthFacadeService } from '@erp/remote-auth/src/app/services/auth-facade.service';
 import { LanguageSwitchComponent } from '@erp/shared/ui/primeng-components';
 import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 @Component({
@@ -93,7 +94,11 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             <div class="border-t border-gray-100 dark:border-gray-800 my-1"></div>
 
             <!-- Logout -->
-            <button pButton class="p-button-text p-button-danger justify-start w-full px-4 py-3 rounded-none hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors">
+            <button 
+              pButton 
+              (click)="signOut()" 
+              class="p-button-text p-button-danger justify-start w-full px-4 py-3 rounded-none hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors"
+            >
               <i class="pi pi-sign-out mr-3 rtl:ml-3 rtl:mr-0 text-red-500"></i>
               <span class="font-bold text-red-500">{{ t('profile.signOut') }}</span>
             </button>
@@ -151,6 +156,7 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 })
 export class ProfileDropdownComponent {
   private companyFacade = inject(CompanyFacade);
+  private authFacade = inject(AuthFacadeService);
 
   searchQuery = '';
 
@@ -164,5 +170,20 @@ export class ProfileDropdownComponent {
 
   selectCompany(id: string) {
     this.companyFacade.setCompany(id);
+  }
+
+  /**
+   * Sign out user
+   * Clears auth state, company selection, and redirects to login
+   */
+  signOut(): void {
+    // Clear auth state
+    this.authFacade.logout();
+
+    // Clear selected company
+    this.companyFacade.clearCompany();
+
+    // Redirect to login page (cross-microfrontend navigation)
+    window.location.href = '/auth/login';
   }
 }
