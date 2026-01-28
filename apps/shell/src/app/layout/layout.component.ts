@@ -8,7 +8,7 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ResponsiveService } from '@erp/shared/ui';
-import { ToastModule } from 'primeng/toast';
+import { ToastNotificationComponent } from '@erp/shared/ui/primeng-components';
 import { LayoutService } from './services/layout.service';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -22,11 +22,11 @@ import { FooterComponent } from './components/footer/footer.component';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    ToastModule,
+    ToastNotificationComponent,
   ],
   template: `
     <!-- Toast Notifications -->
-    <p-toast position="top-center" />
+    <lib-toast-notification position="bottom-right" />
 
     <div class="layout-container">
       <!-- Header -->

@@ -17,7 +17,7 @@ import {
   CardComponent,
   StandaloneLanguageSwitchComponent,
 } from '@erp/shared/ui';
-import { ToastService } from '@erp/shared/utils';
+import { ToastNotificationService } from '@erp/shared/ui/primeng-components';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 import {
   TranslocoDirective,
@@ -328,7 +328,7 @@ import {
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
-  private readonly toast = inject(ToastService);
+  private readonly toastService = inject(ToastNotificationService);
   private readonly transloco = inject(TranslocoService);
   private readonly validationResolver = inject(ValidationMessageResolver);
   readonly authFacade = inject(AuthFacadeService);
@@ -351,7 +351,8 @@ export class LoginComponent {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.invalid) {
-      this.toast.warning(
+      this.toastService.warning(
+        'Validation Error',
         this.transloco.translate('auth.validation.fillRequired'),
       );
       return;
@@ -361,20 +362,23 @@ export class LoginComponent {
       await this.authFacade.login(this.loginForm.value);
 
       // Show success toast
-      this.toast.success(
+      this.toastService.success(
+        'Login Successful!',
         this.transloco.translate('auth.validation.loginSuccess', {
           brand: BRAND.NAME,
-        }) || `Login successful! Welcome to ${BRAND.NAME}`,
+        }) || `Welcome to ${BRAND.NAME}`,
       );
 
       // Redirect to dashboard after short delay
       setTimeout(() => {
         // Use window.location for cross-microfrontend navigation
         window.location.href = DEFAULT_REDIRECTS.AFTER_LOGIN;
-      }, 800);
+      }, 1000);
     } catch (error) {
-      this.toast.error(
-        this.transloco.translate('auth.validation.invalidEmailPassword'),
+      this.toastService.error(
+        'Login Failed',
+        this.transloco.translate('auth.validation.invalidEmailPassword') ||
+          'Invalid email or password. Please try again.',
       );
     }
   }

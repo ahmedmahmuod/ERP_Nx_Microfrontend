@@ -5,3 +5,5 @@
  */
 
 export * from './lib/language-switch/language-switch';
+export * from './lib/toast-notification/toast-notification';
+export * from './lib/services/toast-notification.service';

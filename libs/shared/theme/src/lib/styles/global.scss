@@ -783,3 +783,31 @@ body {
     transform: none !important;
   }
 }
+
+/* PrimeNG Toast Global Overrides */
+.p-toast {
+  z-index: var(--z-tooltip);
+  
+  .p-toast-message {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-border-primary);
+    backdrop-filter: blur(8px);
+    
+    .p-toast-message-content {
+      padding: 0;
+      border: none;
+    }
+    
+    .p-toast-message-icon,
+    .p-toast-icon-close {
+      display: none;
+    }
+  }
+}
+
+.dark .p-toast {
+  .p-toast-message {
+    border-color: var(--color-border-primary);
+  }
+}

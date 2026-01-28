@@ -1,0 +1,296 @@
+/**
+ * Custom Toast Notification Styles
+ * Based on the ERP Design System
+ */
+
+/* Toast Container Positioning */
+:host ::ng-deep .p-toast {
+  z-index: var(--z-tooltip);
+  opacity: 1;
+}
+
+/* Toast Message Base Styles - Smaller and More Compact */
+:host ::ng-deep .p-toast-message {
+  margin: 0 0 0.75rem 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border-primary);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  min-width: 280px;
+  max-width: 350px;
+  
+  /* Remove default PrimeNG padding and force close button to end */
+  .p-toast-message-content {
+    padding: 0px 10px;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  /* Style the built-in close button */
+  .p-toast-icon-close {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-sm);
+    margin: 0.25rem;
+    
+    .p-toast-icon-close-icon {
+      font-size: 0.75rem;
+    }
+    
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
+.dark :host ::ng-deep .p-toast-message .p-toast-icon-close:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Success Toast */
+:host ::ng-deep .p-toast-message-success {
+  background-color: #ecfdf5;
+  border-color: #6ee7b7;
+  
+  --toast-title-color: #065f46;
+  --toast-message-color: #047857;
+  --toast-close-color: #059669;
+  
+  i.pi-check-circle {
+    color: #10b981;
+  }
+  
+  .p-toast-icon-close {
+    color: #059669;
+  }
+}
+
+.dark :host ::ng-deep .p-toast-message-success {
+  background-color: rgba(6, 95, 70, 0.15);
+  border-color: #059669;
+  backdrop-filter: blur(12px);
+  
+  --toast-title-color: #6ee7b7;
+  --toast-message-color: #a7f3d0;
+  --toast-close-color: #6ee7b7;
+  
+  i.pi-check-circle {
+    color: #34d399;
+  }
+  
+  .p-toast-icon-close {
+    color: #6ee7b7;
+  }
+}
+
+/* Info Toast */
+:host ::ng-deep .p-toast-message-info {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  
+  --toast-title-color: #1e40af;
+  --toast-message-color: #1d4ed8;
+  --toast-close-color: #2563eb;
+  
+  i.pi-info-circle {
+    color: #3b82f6;
+  }
+  
+  .p-toast-icon-close {
+    color: #2563eb;
+  }
+}
+
+.dark :host ::ng-deep .p-toast-message-info {
+  background-color: rgba(30, 64, 175, 0.15);
+  border-color: #3b82f6;
+  backdrop-filter: blur(12px);
+  
+  --toast-title-color: #93c5fd;
+  --toast-message-color: #bfdbfe;
+  --toast-close-color: #93c5fd;
+  
+  i.pi-info-circle {
+    color: #60a5fa;
+  }
+  
+  .p-toast-icon-close {
+    color: #93c5fd;
+  }
+}
+
+/* Warning Toast */
+:host ::ng-deep .p-toast-message-warn {
+  background-color: #fffbeb;
+  border-color: #fcd34d;
+  
+  --toast-title-color: #92400e;
+  --toast-message-color: #b45309;
+  --toast-close-color: #d97706;
+  
+  i.pi-exclamation-triangle {
+    color: #f59e0b;
+  }
+  
+  .p-toast-icon-close {
+    color: #d97706;
+  }
+}
+
+.dark :host ::ng-deep .p-toast-message-warn {
+  background-color: rgba(146, 64, 14, 0.15);
+  border-color: #f59e0b;
+  backdrop-filter: blur(12px);
+  
+  --toast-title-color: #fcd34d;
+  --toast-message-color: #fde68a;
+  --toast-close-color: #fcd34d;
+  
+  i.pi-exclamation-triangle {
+    color: #fbbf24;
+  }
+  
+  .p-toast-icon-close {
+    color: #fcd34d;
+  }
+}
+
+/* Error Toast */
+:host ::ng-deep .p-toast-message-error {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  
+  --toast-title-color: #991b1b;
+  --toast-message-color: #b91c1c;
+  --toast-close-color: #dc2626;
+  
+  i.pi-times-circle {
+    color: #ef4444;
+  }
+  
+  .p-toast-icon-close {
+    color: #dc2626;
+  }
+}
+
+.dark :host ::ng-deep .p-toast-message-error {
+  background-color: rgba(153, 27, 27, 0.15);
+  border-color: #ef4444;
+  backdrop-filter: blur(12px);
+  
+  --toast-title-color: #fca5a5;
+  --toast-message-color: #fecaca;
+  --toast-close-color: #fca5a5;
+  
+  i.pi-times-circle {
+    color: #f87171;
+  }
+  
+  .p-toast-icon-close {
+    color: #fca5a5;
+  }
+}
+
+/* Toast Footer with Close Button */
+:host ::ng-deep .toast-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dark :host ::ng-deep .toast-footer {
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
+:host ::ng-deep .close-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--toast-close-color);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  
+  i {
+    font-size: 0.625rem;
+  }
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.dark :host ::ng-deep .close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* RTL Support - Position toasts on left for Arabic */
+[dir='rtl'] :host ::ng-deep .p-toast.p-toast-bottom-right {
+  right: auto !important;
+  left: 1.25rem !important;
+}
+
+[dir='rtl'] :host ::ng-deep .p-toast.p-toast-top-right {
+  right: auto !important;
+  left: 1.25rem !important;
+}
+
+/* Responsive Design - Mobile Optimized */
+@media (max-width: 640px) {
+  :host ::ng-deep .p-toast {
+    width: calc(100% - 2rem);
+    left: 1rem !important;
+    right: 1rem !important;
+  }
+  
+  :host ::ng-deep .p-toast-message {
+    min-width: auto;
+    max-width: none;
+    margin: 0 0 0.5rem 0;
+  }
+  
+  /* Ensure RTL works on mobile too */
+  [dir='rtl'] :host ::ng-deep .p-toast {
+    left: 1rem !important;
+    right: 1rem !important;
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 641px) and (max-width: 1024px) {
+  :host ::ng-deep .p-toast-message {
+    min-width: 260px;
+    max-width: 320px;
+  }
+}
+
+/* Hover Effects */
+:host ::ng-deep .p-toast-message:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+  transition: all var(--transition-base);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  :host ::ng-deep .p-toast-message:hover {
+    transform: none;
+  }
+  
+  :host ::ng-deep .close-btn:active {
+    transform: none;
+  }
+}
