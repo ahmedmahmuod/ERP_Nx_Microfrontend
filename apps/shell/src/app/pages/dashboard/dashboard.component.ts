@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
+import { UserFacade } from '@erp/shared/util-state';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,10 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 })
 export class DashboardComponent {
   private readonly router = inject(Router);
+  private readonly userFacade = inject(UserFacade);
+
+  // Expose user first name for template
+  readonly userName = this.userFacade.userFirstName;
 
   readonly modules = [
     {
@@ -27,7 +32,11 @@ export class DashboardComponent {
       description: 'Manage employees, payroll, and HR operations',
       icon: 'pi-users',
       route: '/hr',
-      color: 'amber',
+      color: {
+        name: 'amber',
+        light: { text: 'rgb(245 158 11)', bg: 'rgb(254 243 199)' },
+        dark: { text: 'rgb(245 158 11)', bg: 'rgb(120 53 15)' },
+      },
     },
     {
       id: 'finance',
@@ -35,7 +44,11 @@ export class DashboardComponent {
       description: 'Track finances, invoices, and accounting',
       icon: 'pi-wallet',
       route: '/finance',
-      color: 'emerald',
+      color: {
+        name: 'emerald',
+        light: { text: 'rgb(16 185 129)', bg: 'rgb(209 250 229)' },
+        dark: { text: 'rgb(16 185 129)', bg: 'rgb(6 78 59)' },
+      },
     },
     {
       id: 'srm',
@@ -43,7 +56,11 @@ export class DashboardComponent {
       description: 'Supplier relationship and procurement management',
       icon: 'pi-building',
       route: '/srm',
-      color: 'violet',
+      color: {
+        name: 'violet',
+        light: { text: 'rgb(124 58 237)', bg: 'rgb(245 243 255)' },
+        dark: { text: 'rgb(124 58 237)', bg: 'rgb(76 29 149)' },
+      },
     },
     {
       id: 'pm',
@@ -51,7 +68,11 @@ export class DashboardComponent {
       description: 'Plan, track, and deliver projects',
       icon: 'pi-sitemap',
       route: '/pm',
-      color: 'pink',
+      color: {
+        name: 'pink',
+        light: { text: 'rgb(236 72 153)', bg: 'rgb(252 231 243)' },
+        dark: { text: 'rgb(236 72 153)', bg: 'rgb(157 23 77)' },
+      },
     },
     {
       id: 'warehouses',
@@ -59,7 +80,11 @@ export class DashboardComponent {
       description: 'Manage inventory, stock, and warehouse operations',
       icon: 'pi-box',
       route: '/warehouses',
-      color: 'orange',
+      color: {
+        name: 'orange',
+        light: { text: 'rgb(234 88 12)', bg: 'rgb(255 237 213)' },
+        dark: { text: 'rgb(234 88 12)', bg: 'rgb(124 45 18)' },
+      },
     },
   ];
 

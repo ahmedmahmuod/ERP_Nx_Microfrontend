@@ -1,0 +1,97 @@
+<ng-container *transloco="let t">
+  <div class="login-container relative">
+    <!-- Language Switcher -->
+    <div class="lang-switch-container">
+      <lib-standalone-language-switch
+        [isNested]="false"
+      ></lib-standalone-language-switch>
+    </div>
+
+    <div class="login-card-wrapper">
+      <erp-card elevation="lg">
+        <div card-body>
+          <!-- Header -->
+          <div class="login-header">
+            <div class="brand">
+              <i class="pi pi-building brand-icon"></i>
+              <h1 class="brand-title">{{ brandName }}</h1>
+            </div>
+            <h2 class="login-title">{{ t('auth.login.title') }}</h2>
+            <p class="login-subtitle">
+              {{ t('auth.login.subtitle') }}
+            </p>
+          </div>
+
+          <!-- Login Form -->
+          <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onSubmit()"
+            class="login-form"
+          >
+            <erp-input
+              type="email"
+              [label]="t('auth.login.emailLabel')"
+              [placeholder]="t('auth.login.emailPlaceholder')"
+              formControlName="email"
+              [required]="true"
+              [invalid]="isFieldInvalid('email')"
+              [errorText]="getFieldError('email')"
+            >
+            </erp-input>
+
+            <erp-input
+              type="password"
+              [label]="t('auth.login.passwordLabel')"
+              [placeholder]="t('auth.login.passwordPlaceholder')"
+              formControlName="password"
+              [required]="true"
+              [invalid]="isFieldInvalid('password')"
+              [errorText]="getFieldError('password')"
+            >
+            </erp-input>
+
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  formControlName="rememberMe"
+                  class="checkbox"
+                />
+                <span>{{ t('auth.login.rememberMe') }}</span>
+              </label>
+
+              <a href="#" class="forgot-link">{{
+                t('auth.login.forgotPassword')
+              }}</a>
+            </div>
+
+            <erp-button
+              type="submit"
+              variant="primary"
+              size="lg"
+              [fullWidth]="true"
+              [loading]="authFacade.isLoading()"
+              [disabled]="loginForm.invalid || authFacade.isLoading()"
+            >
+              {{
+                authFacade.isLoading()
+                  ? t('auth.login.signingIn')
+                  : t('auth.login.signIn')
+              }}
+            </erp-button>
+          </form>
+
+          <!-- Footer -->
+          <div class="login-footer">
+            <p class="signup-text">
+              {{ t('auth.login.noAccount') }}
+              <a routerLink="/auth/register" class="signup-link">{{
+                t('auth.login.signup')
+              }}</a>
+            </p>
+          </div>
+        </div>
+      </erp-card>
+    </div>
+  </div>
+</ng-container>

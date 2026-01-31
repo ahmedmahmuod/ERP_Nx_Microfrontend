@@ -1,0 +1,129 @@
+<ng-container *transloco="let t">
+  <div class="register-container relative">
+    <!-- Language Switcher -->
+    <div class="lang-switch-container">
+      <lib-standalone-language-switch
+        [isNested]="false"
+      ></lib-standalone-language-switch>
+    </div>
+
+    <div class="register-card-wrapper">
+      <erp-card elevation="lg">
+        <div card-body>
+          <!-- Header -->
+          <div class="register-header">
+            <div class="brand">
+              <i class="pi pi-building brand-icon"></i>
+              <h1 class="brand-title">{{ brandName }}</h1>
+            </div>
+            <h2 class="register-title">{{ t('register.title') }}</h2>
+            <p class="register-subtitle">
+              {{ t('register.subtitle') }}
+            </p>
+          </div>
+
+          <!-- Register Form -->
+          <form
+            [formGroup]="registerForm"
+            (ngSubmit)="onSubmit()"
+            class="register-form"
+          >
+            <erp-input
+              type="text"
+              [label]="t('register.nameLabel')"
+              [placeholder]="t('register.namePlaceholder')"
+              formControlName="name"
+              [required]="true"
+              [invalid]="isFieldInvalid('name')"
+              [errorText]="getFieldError('name')"
+            >
+            </erp-input>
+
+            <erp-input
+              type="email"
+              [label]="t('register.emailLabel')"
+              [placeholder]="t('register.emailPlaceholder')"
+              formControlName="email"
+              [required]="true"
+              [invalid]="isFieldInvalid('email')"
+              [errorText]="getFieldError('email')"
+            >
+            </erp-input>
+
+            <erp-input
+              type="password"
+              [label]="t('register.passwordLabel')"
+              [placeholder]="t('register.passwordPlaceholder')"
+              formControlName="password"
+              [required]="true"
+              [invalid]="isFieldInvalid('password')"
+              [errorText]="getFieldError('password')"
+            >
+            </erp-input>
+
+            <erp-input
+              type="password"
+              [label]="t('register.confirmPasswordLabel')"
+              [placeholder]="t('register.confirmPasswordPlaceholder')"
+              formControlName="confirmPassword"
+              [required]="true"
+              [invalid]="isFieldInvalid('confirmPassword')"
+              [errorText]="getFieldError('confirmPassword')"
+            >
+            </erp-input>
+
+            <div class="terms-checkbox">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  formControlName="acceptTerms"
+                  class="checkbox"
+                />
+                <span>
+                  {{ t('register.terms.agree') }}
+                  <a href="#" class="terms-link">{{
+                    t('register.terms.tos')
+                  }}</a>
+                  {{ t('register.terms.and') }}
+                  <a href="#" class="terms-link">{{
+                    t('register.terms.privacy')
+                  }}</a>
+                </span>
+              </label>
+              @if (isFieldInvalid('acceptTerms')) {
+                <span class="field-error">{{
+                  getFieldError('acceptTerms')
+                }}</span>
+              }
+            </div>
+
+            <erp-button
+              type="submit"
+              variant="primary"
+              size="lg"
+              [fullWidth]="true"
+              [loading]="authFacade.isLoading()"
+              [disabled]="registerForm.invalid || authFacade.isLoading()"
+            >
+              {{
+                authFacade.isLoading()
+                  ? t('register.creatingAccount')
+                  : t('register.createAccount')
+              }}
+            </erp-button>
+          </form>
+
+          <!-- Footer -->
+          <div class="register-footer">
+            <p class="signin-text">
+              {{ t('register.alreadyHaveAccount') }}
+              <a routerLink="/auth/login" class="signin-link">{{
+                t('register.signIn')
+              }}</a>
+            </p>
+          </div>
+        </div>
+      </erp-card>
+    </div>
+  </div>
+</ng-container>

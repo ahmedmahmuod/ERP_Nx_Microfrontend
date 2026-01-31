@@ -2,8 +2,12 @@
   "name": "@erp/shared/models",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/core": "^21.0.0"
+    "@angular/core": "~21.0.0",
+    "@angular/compiler": "~21.0.0",
+    "@analogjs/vitest-angular": "~2.1.2",
+    "vite": "^7.0.0",
+    "@analogjs/vite-plugin-angular": "~2.1.2",
+    "@nx/vite": "22.3.3"
   },
   "sideEffects": false
 }

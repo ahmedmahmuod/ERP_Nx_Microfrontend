@@ -3,75 +3,26 @@
  *
  * Manages company selection state and operations.
  * API-ready: mock data can be replaced with HTTP calls without UI changes.
+ * Uses Company domain model from @erp/shared/models
  */
 
 import { Injectable, signal, effect } from '@angular/core';
-
-export interface Company {
-  id: string;
-  name: string;
-  logo?: string;
-  description?: string;
-  status: 'active' | 'inactive';
-}
+import { Company } from '@erp/shared/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyFacade {
   private readonly STORAGE_KEY = 'erp-active-company';
-
-  // Mock Companies - ready to be replaced with API data
-  private readonly MOCK_COMPANIES: Company[] = [
-    {
-      id: '1',
-      name: 'Acme Corporation',
-      logo: 'pi-building',
-      description: 'Global manufacturing and distribution',
-      status: 'active',
-    },
-    {
-      id: '2',
-      name: 'TechStart Solutions',
-      logo: 'pi-desktop',
-      description: 'Software development and IT services',
-      status: 'active',
-    },
-    {
-      id: '3',
-      name: 'Green Energy Co.',
-      logo: 'pi-bolt',
-      description: 'Renewable energy and sustainability',
-      status: 'active',
-    },
-    {
-      id: '4',
-      name: 'MediCare Plus',
-      logo: 'pi-heart-fill',
-      description: 'Healthcare and medical services',
-      status: 'active',
-    },
-    {
-      id: '5',
-      name: 'Global Logistics Ltd.',
-      logo: 'pi-truck',
-      description: 'Supply chain and transportation',
-      status: 'active',
-    },
-    {
-      id: '6',
-      name: 'FinServe Group',
-      logo: 'pi-money-bill',
-      description: 'Financial services and consulting',
-      status: 'active',
-    },
-  ];
+  private readonly COMPANIES_STORAGE_KEY = 'erp-companies-list';
 
   // State
   private readonly _activeCompany = signal<Company | null>(
-    this.loadFromStorage(),
+    this.loadActiveCompanyFromStorage(),
   );
-  private readonly _companies = signal<Company[]>(this.MOCK_COMPANIES);
+  private readonly _companies = signal<Company[]>(
+    this.loadCompaniesFromStorage()
+  );
   private readonly _isLoading = signal<boolean>(false);
 
   // Public readonly selectors
@@ -80,11 +31,19 @@ export class CompanyFacade {
   readonly isLoading = this._isLoading.asReadonly();
 
   constructor() {
-    // Persistence effect
+    // Persistence effect for active company
     effect(() => {
       const company = this._activeCompany();
       if (company) {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(company));
+      }
+    });
+
+    // Persistence effect for companies list
+    effect(() => {
+      const companies = this._companies();
+      if (companies.length > 0) {
+        localStorage.setItem(this.COMPANIES_STORAGE_KEY, JSON.stringify(companies));
       }
     });
   }
@@ -108,33 +67,56 @@ export class CompanyFacade {
   }
 
   /**
-   * Load companies (mock for now, API-ready)
+   * Load companies - deprecated, companies come from login response
+   * @deprecated Use setCompanies() instead. Companies are set by AuthFacade after login.
    */
   loadCompanies(): void {
-    this._isLoading.set(true);
-
-    // Simulate API call delay
-    setTimeout(() => {
-      this._companies.set(this.MOCK_COMPANIES);
-      this._isLoading.set(false);
-    }, 300);
+    // No-op: companies are set via setCompanies() from AuthFacade after login
+    // This method is kept for backward compatibility but does nothing
   }
 
   /**
-   * Load company from localStorage if exists
+   * Set companies from API response or domain models
    */
-  private loadFromStorage(): Company | null {
+  setCompanies(companies: Company[]): void {
+    this._companies.set(companies);
+  }
+
+  /**
+   * Load active company from localStorage if exists
+   */
+  private loadActiveCompanyFromStorage(): Company | null {
     const saved = localStorage.getItem(this.STORAGE_KEY);
     if (saved) {
       try {
-        const company = JSON.parse(saved);
-        // Verify it still exists in list (avoid stale data)
-        const found = this.MOCK_COMPANIES.find((c) => c.id === company.id);
-        return found || null;
+        return JSON.parse(saved);
       } catch {
         return null;
       }
     }
     return null;
+  }
+
+  /**
+   * Load companies list from localStorage if exists
+   */
+  private loadCompaniesFromStorage(): Company[] {
+    const saved = localStorage.getItem(this.COMPANIES_STORAGE_KEY);
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  /**
+   * Clear companies list (used on logout)
+   */
+  clearCompanies(): void {
+    this._companies.set([]);
+    localStorage.removeItem(this.COMPANIES_STORAGE_KEY);
   }
 }

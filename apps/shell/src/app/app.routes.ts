@@ -4,6 +4,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { companyGuard } from './core/guards/company.guard';
 import { RemoteUnavailableComponent } from './pages/remote-unavailable/remote-unavailable.component';
+import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
 
 // Fallback routes for when remotes are unavailable
 const remoteFallbackRoutes: Route[] = [
@@ -42,6 +43,11 @@ export const appRoutes: Route[] = [
           import('./pages/dashboard/dashboard.component').then(
             (m) => m.DashboardComponent,
           ),
+      },
+      // Access Denied page
+      {
+        path: 'access-denied',
+        component: AccessDeniedComponent,
       },
       // All modules require company selection
       {

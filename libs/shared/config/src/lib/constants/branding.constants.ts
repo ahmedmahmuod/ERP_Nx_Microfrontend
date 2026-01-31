@@ -44,8 +44,8 @@ export const SOCIAL_MEDIA = {
  * For development and testing purposes
  */
 export const DEMO_CREDENTIALS = {
-  EMAIL: 'admin@assemble.com',
-  PASSWORD: 'admin123',
+  EMAIL: 'admin@admin.com',
+  PASSWORD: '1234567',
   DISPLAY_ON_LOGIN: true, // Set to false in production
 } as const;
 

@@ -27,7 +27,7 @@
     "searchCompany": "Search company..."
   },
   "dashboard": {
-    "welcome": "Welcome Back!",
+    "welcome": "Welcome Back, {{name}}!",
     "subtitle": "Select a module to get started",
     "modules": {
       "hr": {

@@ -21,8 +21,8 @@ export interface NavItem {
   /** Nested child menu items for hierarchical navigation */
   children?: NavItem[];
 
-  /** Required permissions to view this item (single or multiple) */
-  requiredPermissions?: string | string[];
+  /** Required page permission to view this item */
+  requiredPage?: string;
 
   /** Optional badge text (e.g., 'New', '5') */
   badge?: string;

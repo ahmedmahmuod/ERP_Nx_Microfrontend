@@ -1,18 +1,18 @@
 .dashboard {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: var(--spacing-xl);
 }
 
 .dashboard-header {
-  margin-bottom: 3rem;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .dashboard-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-text-primary);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--spacing-sm) 0;
 }
 
 .dashboard-subtitle {
@@ -24,7 +24,7 @@
 .modules-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: var(--spacing-lg);
 }
 
 @media (min-width: 640px) {
@@ -41,12 +41,12 @@
 
 .module-card {
   position: relative;
-  padding: 2rem 1.5rem;
+  padding: var(--spacing-xl) var(--spacing-lg);
   background-color: var(--color-bg-primary);
   border: 1px solid var(--color-border-primary);
   border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
@@ -68,9 +68,9 @@
   justify-content: center;
   width: 3.5rem;
   height: 3.5rem;
-  border-radius: 0.75rem;
-  margin-bottom: 1.5rem;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-base);
 }
 
 .module-icon i {
@@ -82,13 +82,13 @@
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--spacing-sm) 0;
 }
 
 .module-description {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
-  margin: 0 0 1rem 0;
+  margin: 0 0 var(--spacing-md) 0;
   line-height: 1.5;
 }
 
@@ -98,7 +98,7 @@
   justify-content: flex-end;
   opacity: 0;
   transform: translateX(-10px);
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
 }
 
 .module-card:hover .module-arrow {
@@ -111,63 +111,22 @@
   color: currentColor;
 }
 
-/* Color Variants */
-.module-card-amber {
-  color: #f59e0b;
+/* Dynamic Color System - Single Source of Truth */
+.module-card {
+  /* Use CSS custom properties set via inline styles from component */
+  color: var(--module-color-light);
 }
 
-.module-card-amber .module-icon {
-  background-color: #fef3c7;
+.module-card .module-icon {
+  background-color: var(--module-bg-light);
 }
 
-:host-context(.dark) .module-card-amber .module-icon {
-  background-color: #78350f;
+/* Dark mode support */
+:host-context(.dark) .module-card {
+  color: var(--module-color-dark);
 }
 
-.module-card-emerald {
-  color: #10b981;
+:host-context(.dark) .module-card .module-icon {
+  background-color: var(--module-bg-dark);
 }
 
-.module-card-emerald .module-icon {
-  background-color: #d1fae5;
-}
-
-:host-context(.dark) .module-card-emerald .module-icon {
-  background-color: #064e3b;
-}
-
-.module-card-violet {
-  color: #8b5cf6;
-}
-
-.module-card-violet .module-icon {
-  background-color: #f5f3ff;
-}
-
-:host-context(.dark) .module-card-violet .module-icon {
-  background-color: #5b21b6;
-}
-
-.module-card-pink {
-  color: #ec4899;
-}
-
-.module-card-pink .module-icon {
-  background-color: #fce7f3;
-}
-
-:host-context(.dark) .module-card-pink .module-icon {
-  background-color: #831843;
-}
-
-.module-card-orange {
-  color: #f97316;
-}
-
-.module-card-orange .module-icon {
-  background-color: #ffedd5;
-}
-
-:host-context(.dark) .module-card-orange .module-icon {
-  background-color: #7c2d12;
-}

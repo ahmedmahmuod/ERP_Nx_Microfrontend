@@ -8,7 +8,6 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ResponsiveService } from '@erp/shared/ui';
-import { ToastNotificationComponent } from '@erp/shared/ui/primeng-components';
 import { LayoutService } from './services/layout.service';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -22,12 +21,8 @@ import { FooterComponent } from './components/footer/footer.component';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    ToastNotificationComponent,
   ],
   template: `
-    <!-- Toast Notifications -->
-    <lib-toast-notification position="bottom-right" />
-
     <div class="layout-container">
       <!-- Header -->
       <app-header (menuToggle)="layoutService.toggleSidebar()"> </app-header>

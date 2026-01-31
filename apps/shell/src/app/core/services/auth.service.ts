@@ -2,11 +2,13 @@
  * Auth Service
  *
  * Manages authentication state and operations.
+ * Uses TokenStorage abstraction for consistent token management across Shell and remotes.
  */
 
 import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CompanyFacade } from '@erp/shared/util-state';
+import { TokenStorage, TOKEN_STORAGE } from '@erp/shared/data-access';
 
 export interface User {
   id: string;
@@ -21,22 +23,21 @@ export interface User {
 export class AuthService {
   private readonly router = inject(Router);
   private readonly companyFacade = inject(CompanyFacade);
-  private readonly STORAGE_KEY = 'erp-auth-token';
+  private readonly tokenStorage = inject(TOKEN_STORAGE);
   private readonly USER_KEY = 'erp-user';
 
-  // Auth state
-  private readonly isAuthenticatedSignal = signal<boolean>(this.checkAuth());
+  // Auth state - currentUser only (isAuthenticated is computed dynamically)
   private readonly currentUserSignal = signal<User | null>(this.loadUser());
 
   // Public readonly signals
-  readonly isAuthenticated = this.isAuthenticatedSignal.asReadonly();
   readonly currentUser = this.currentUserSignal.asReadonly();
 
   /**
-   * Check if user is authenticated
+   * Check if user is authenticated (always checks TokenStorage in real-time)
+   * This ensures authentication state is always current, even after login from remote apps
    */
-  private checkAuth(): boolean {
-    return !!localStorage.getItem(this.STORAGE_KEY);
+  isAuthenticated(): boolean {
+    return this.tokenStorage.hasTokens();
   }
 
   /**
@@ -69,10 +70,10 @@ export class AuthService {
 
       const mockToken = 'mock-jwt-token-' + Date.now();
 
-      localStorage.setItem(this.STORAGE_KEY, mockToken);
+      this.tokenStorage.setAccessToken(mockToken);
       localStorage.setItem(this.USER_KEY, JSON.stringify(mockUser));
 
-      this.isAuthenticatedSignal.set(true);
+      // Update current user signal
       this.currentUserSignal.set(mockUser);
 
       return true;
@@ -89,10 +90,10 @@ export class AuthService {
     this.companyFacade.clearCompany();
 
     // Clear auth state
-    localStorage.removeItem(this.STORAGE_KEY);
+    this.tokenStorage.clearTokens();
     localStorage.removeItem(this.USER_KEY);
 
-    this.isAuthenticatedSignal.set(false);
+    // Clear current user signal
     this.currentUserSignal.set(null);
 
     this.router.navigate(['/auth/login']);
@@ -102,6 +103,6 @@ export class AuthService {
    * Get auth token
    */
   getToken(): string | null {
-    return localStorage.getItem(this.STORAGE_KEY);
+    return this.tokenStorage.getAccessToken();
   }
 }

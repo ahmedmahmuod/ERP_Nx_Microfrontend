@@ -1,4 +1,4 @@
-<ng-container *transloco="let t; read: 'auth'">
+<ng-container *transloco="let t">
   <div class="select-company-container relative">
     <!-- Language Switcher -->
     <div class="lang-switch-container">
@@ -13,54 +13,74 @@
             <div class="brand">
               <i class="pi pi-building brand-icon"></i>
             </div>
-            <h1 class="title">{{ t('selectCompany.title') }}</h1>
-            <p class="subtitle">{{ t('selectCompany.subtitle') }}</p>
+            <h1 class="title">{{ t('auth.selectCompany.title') }}</h1>
+            <p class="subtitle">{{ t('auth.selectCompany.subtitle') }}</p>
           </div>
 
-          <!-- Selection Form -->
-          <form class="selection-form" (ngSubmit)="confirmSelection()">
-            <div class="field-container">
-              <p-select
-                [options]="companies()"
-                [(ngModel)]="selectedCompanyId"
-                name="company"
-                optionLabel="name"
-                optionValue="id"
-                [filter]="true"
-                [placeholder]="t('selectCompany.searchPlaceholder')"
-                appendTo="body"
-                [style]="{ width: '100%' }"
-                class="w-full"
+          <!-- Error State: No Companies -->
+          @if (hasNoCompanies()) {
+            <div class="error-state">
+              <i class="pi pi-exclamation-triangle error-icon"></i>
+              <h3 class="error-title">{{ t('auth.selectCompany.noCompaniesTitle') }}</h3>
+              <p class="error-message">{{ t('auth.selectCompany.noCompaniesMessage') }}</p>
+              <erp-button
+                type="button"
+                variant="primary"
+                size="lg"
+                [fullWidth]="true"
+                (click)="backToLogin()"
               >
-                <ng-template let-company pTemplate="item">
-                  <div class="company-option">
-                    <i
-                      class="pi"
-                      [ngClass]="company.logo || 'pi-building'"
-                    ></i>
-                    <span>{{ company.name }}</span>
-                  </div>
-                </ng-template>
-              </p-select>
+                <i class="pi pi-arrow-left"></i>
+                {{ t('auth.selectCompany.backToLogin') }}
+              </erp-button>
             </div>
+          } @else {
+            <!-- Selection Form -->
+            <form class="selection-form" (ngSubmit)="confirmSelection()">
+              <div class="field-container">
+                <p-select
+                  [options]="companies()"
+                  [(ngModel)]="selectedCompanyId"
+                  name="company"
+                  optionLabel="name"
+                  optionValue="id"
+                  [filter]="true"
+                  [placeholder]="t('auth.selectCompany.searchPlaceholder')"
+                  appendTo="body"
+                  [style]="{ width: '100%' }"
+                  class="w-full"
+                >
+                  <ng-template let-company pTemplate="item">
+                    <div class="company-option">
+                      <i
+                        class="pi"
+                        [ngClass]="company.logo || 'pi-building'"
+                      ></i>
+                      <span>{{ company.name }}</span>
+                    </div>
+                  </ng-template>
+                </p-select>
+              </div>
 
-            <erp-button
-              type="submit"
-              variant="primary"
-              size="lg"
-              [fullWidth]="true"
-              [disabled]="!selectedCompanyId()"
-            >
-              {{ t('selectCompany.selectButton') }}
-            </erp-button>
-          </form>
+              <erp-button
+                type="submit"
+                variant="primary"
+                size="lg"
+                [fullWidth]="true"
+                [disabled]="!selectedCompanyId() || isLoadingPermissions()"
+                [loading]="isLoadingPermissions()"
+              >
+                {{ isLoadingPermissions() ? 'Loading permissions...' : t('auth.selectCompany.selectButton') }}
+              </erp-button>
+            </form>
+          }
 
           <!-- Footer -->
           <div class="footer-actions">
             <p class="back-text">
               <a (click)="backToLogin()" class="back-link">
                 <i class="pi pi-arrow-left"></i>
-                {{ t('selectCompany.backToLogin') }}
+                {{ t('auth.selectCompany.backToLogin') }}
               </a>
             </p>
           </div>

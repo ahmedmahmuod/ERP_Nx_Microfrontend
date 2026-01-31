@@ -27,7 +27,7 @@
     "searchCompany": "بحث عن شركة..."
   },
   "dashboard": {
-    "welcome": "مرحباً بك مجدداً!",
+    "welcome": "مرحباً بك مجدداً، {{name}}!",
     "subtitle": "اختر وحدة للبدء",
     "modules": {
       "hr": {

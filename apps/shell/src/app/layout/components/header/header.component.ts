@@ -104,9 +104,4 @@ export class HeaderComponent {
     }
     return this.navigationFacade.activeManifest()?.appName || null;
   });
-
-  // Mock user data (replace with auth service)
-  readonly userName = 'Ahmed Mahmoud';
-  readonly userEmail = 'ahmed@company.com';
-  readonly userInitials = 'AM';
 }

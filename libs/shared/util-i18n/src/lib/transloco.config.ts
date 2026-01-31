@@ -8,26 +8,19 @@ import {
   Translation,
   TranslocoLoader,
   provideTransloco,
-  TRANSLOCO_SCOPE,
 } from '@jsverse/transloco';
 import { HttpClient } from '@angular/common/http';
 
+/**
+ * Single Source of Truth: All translations loaded from /assets/i18n/{lang}.json
+ * Micro-frontends load translations from the shell host application
+ */
 @Injectable({ providedIn: 'root' })
 export class TranslocoHttpLoader implements TranslocoLoader {
   private http = inject(HttpClient);
 
   getTranslation(lang: string) {
     return this.http.get<Translation>(`/assets/i18n/${lang}.json`);
-  }
-}
-
-// Scoped loader for 'auth' scope
-@Injectable({ providedIn: 'root' })
-export class AuthScopeLoader implements TranslocoLoader {
-  private http = inject(HttpClient);
-
-  getTranslation(lang: string) {
-    return this.http.get<Translation>(`/assets/i18n/auth/${lang}.json`);
   }
 }
 
@@ -42,10 +35,5 @@ export function provideTranslocoConfig(): EnvironmentProviders {
       },
       loader: TranslocoHttpLoader,
     }),
-    {
-      provide: TRANSLOCO_SCOPE,
-      useValue: { scope: 'auth', loader: AuthScopeLoader },
-      multi: true,
-    },
   ]);
 }

@@ -1,7 +1,9 @@
 <div class="dashboard" *transloco="let t; read: 'shell'">
   <div class="dashboard-header">
     <div>
-      <h1 class="dashboard-title">{{ t('dashboard.welcome') }}</h1>
+      <h1 class="dashboard-title">
+        {{ t('dashboard.welcome', { name: userName() }) }}
+      </h1>
       <p class="dashboard-subtitle">{{ t('dashboard.subtitle') }}</p>
     </div>
   </div>
@@ -10,7 +12,10 @@
     @for (module of modules; track module.id) {
       <div
         class="module-card"
-        [class]="'module-card-' + module.color"
+        [style.--module-color-light]="module.color.light.text"
+        [style.--module-bg-light]="module.color.light.bg"
+        [style.--module-color-dark]="module.color.dark.text"
+        [style.--module-bg-dark]="module.color.dark.bg"
         (click)="navigateToModule(module.route)"
         role="button"
         tabindex="0"

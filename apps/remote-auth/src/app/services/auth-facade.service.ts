@@ -1,11 +1,22 @@
 /**
  * Auth Facade Service
- * 
+ *
  * Facade pattern for authentication state and operations.
  * Isolates auth logic from UI components.
+ * Uses domain models from @erp/shared/models
  */
 
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import {
+  AuthApiService,
+  TokenStorage,
+  TOKEN_STORAGE,
+  ApiError,
+} from '@erp/shared/data-access';
+import { CompanyFacade, PermissionsFacade } from '@erp/shared/util-state';
+import { User, mapLoginResponseDtoToAuthSession } from '@erp/shared/models';
 
 export interface LoginCredentials {
   email: string;
@@ -20,16 +31,8 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
-export interface AuthUser {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  avatar?: string;
-}
-
 export interface AuthState {
-  user: AuthUser | null;
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -39,6 +42,12 @@ export interface AuthState {
   providedIn: 'root'
 })
 export class AuthFacadeService {
+  private readonly authApi = inject(AuthApiService);
+  private readonly tokenStorage = inject(TOKEN_STORAGE);
+  private readonly companyFacade = inject(CompanyFacade);
+  private readonly permissionsFacade = inject(PermissionsFacade);
+  private readonly router = inject(Router);
+
   /**
    * Auth state signal
    */
@@ -48,32 +57,32 @@ export class AuthFacadeService {
     isLoading: false,
     error: null
   });
-  
+
   /**
    * Public readonly state
    */
   readonly state = this._state.asReadonly();
-  
+
   /**
    * Computed: Current user
    */
   readonly currentUser = computed(() => this._state().user);
-  
+
   /**
    * Computed: Is authenticated
    */
   readonly isAuthenticated = computed(() => this._state().isAuthenticated);
-  
+
   /**
    * Computed: Is loading
    */
   readonly isLoading = computed(() => this._state().isLoading);
-  
+
   /**
    * Computed: Error message
    */
   readonly error = computed(() => this._state().error);
-  
+
   /**
    * Login with credentials
    */
@@ -83,45 +92,72 @@ export class AuthFacadeService {
       isLoading: true,
       error: null
     }));
-    
+
     try {
-      // Mock API call - replace with real implementation
-      await this.mockApiDelay(1000);
-      
-      // Validate credentials (mock) - accept both test accounts
-      if ((credentials.email === 'admin@erp.com' || credentials.email === 'admin@assemble.com') && credentials.password === 'admin123') {
-        const user: AuthUser = {
-          id: '1',
-          name: 'Admin User',
+      // Call real API
+      const response = await firstValueFrom(
+        this.authApi.login({
           email: credentials.email,
-          role: 'admin'
-        };
-        
-        this._state.update(state => ({
-          ...state,
-          user,
-          isAuthenticated: true,
-          isLoading: false,
-          error: null
-        }));
-        
-        // Store token (mock) - use same key as shell app
-        const mockToken = 'mock-jwt-token-' + Date.now();
-        localStorage.setItem('erp-auth-token', mockToken);
-        localStorage.setItem('erp-user', JSON.stringify(user));
-      } else {
-        throw new Error('Invalid email or password');
+          password: credentials.password,
+        })
+      );
+
+      // Check response status
+      if (!response.status) {
+        throw new Error(response.message || 'Login failed');
       }
-    } catch (error) {
+
+      // Map DTO to domain model using mapper
+      const authSession = mapLoginResponseDtoToAuthSession(response, credentials.email);
+
+      // Store access token only (backend sends only 1 token)
+      this.tokenStorage.setAccessToken(authSession.tokens.accessToken);
+
+      // Store user data
+      localStorage.setItem('erp-user', JSON.stringify(authSession.user));
+
+      // Update state
       this._state.update(state => ({
         ...state,
+        user: authSession.user,
+        isAuthenticated: true,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Login failed'
+        error: null
       }));
+
+      // Store company list in CompanyFacade (persisted to localStorage automatically)
+      this.companyFacade.setCompanies(authSession.companies);
+    } catch (error: unknown) {
+      // Handle ApiError
+      if (this.isApiError(error)) {
+        this._state.update(state => ({
+          ...state,
+          isLoading: false,
+          error: error.messageKey
+        }));
+      } else {
+        this._state.update(state => ({
+          ...state,
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Login failed'
+        }));
+      }
       throw error;
     }
   }
-  
+
+  /**
+   * Type guard for ApiError
+   */
+  private isApiError(error: unknown): error is ApiError {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'kind' in error &&
+      'messageKey' in error
+    );
+  }
+
   /**
    * Register new user
    */
@@ -131,23 +167,23 @@ export class AuthFacadeService {
       isLoading: true,
       error: null
     }));
-    
+
     try {
       // Validate passwords match
       if (data.password !== data.confirmPassword) {
         throw new Error('Passwords do not match');
       }
-      
+
       // Mock API call - replace with real implementation
       await this.mockApiDelay(1000);
-      
-      const user: AuthUser = {
+
+      const user: User = {
         id: Date.now().toString(),
         name: data.name,
         email: data.email,
         role: 'user'
       };
-      
+
       this._state.update(state => ({
         ...state,
         user,
@@ -155,10 +191,10 @@ export class AuthFacadeService {
         isLoading: false,
         error: null
       }));
-      
-      // Store token (mock) - use same key as shell app
+
+      // Store token (mock)
       const mockToken = 'mock-jwt-token-' + Date.now();
-      localStorage.setItem('erp-auth-token', mockToken);
+      this.tokenStorage.setAccessToken(mockToken);
       localStorage.setItem('erp-user', JSON.stringify(user));
     } catch (error) {
       this._state.update(state => ({
@@ -169,7 +205,7 @@ export class AuthFacadeService {
       throw error;
     }
   }
-  
+
   /**
    * Logout
    */
@@ -180,11 +216,21 @@ export class AuthFacadeService {
       isLoading: false,
       error: null
     });
-    
-    localStorage.removeItem('erp-auth-token');
+
+    // Clear tokens using TokenStorage
+    this.tokenStorage.clearTokens();
+
+    // Clear user data
     localStorage.removeItem('erp-user');
+
+    // Clear companies
+    this.companyFacade.clearCompanies();
+    this.companyFacade.clearCompany();
+
+    // Clear permissions
+    this.permissionsFacade.clearPermissions();
   }
-  
+
   /**
    * Clear error
    */
@@ -194,22 +240,22 @@ export class AuthFacadeService {
       error: null
     }));
   }
-  
+
   /**
    * Check if user is authenticated (on app init)
    */
   checkAuth(): void {
-    const token = localStorage.getItem('erp-auth-token');
-    
+    const token = this.tokenStorage.getAccessToken();
+
     if (token) {
       // Mock user restoration - replace with real API call
-      const user: AuthUser = {
+      const user: User = {
         id: '1',
         name: 'Admin User',
         email: 'admin@erp.com',
         role: 'admin'
       };
-      
+
       this._state.update(state => ({
         ...state,
         user,
@@ -217,7 +263,7 @@ export class AuthFacadeService {
       }));
     }
   }
-  
+
   /**
    * Mock API delay
    */

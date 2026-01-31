@@ -25,6 +25,8 @@ import {
   getRemoteConfig,
   isRegisteredRemote,
 } from '../config/remote-registry.config';
+import { PermissionsFacade } from '@erp/shared/util-state';
+import { ModuleKey, getModuleKeyByRoute } from '@erp/shared/config';
 
 /**
  * Shell's default navigation manifest
@@ -60,6 +62,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 })
 export class NavigationFacadeService {
   private readonly router = inject(Router);
+  private readonly permissionsFacade = inject(PermissionsFacade);
   private readonly enableLogging = true; // Set to false in production
 
   // Internal state signals
@@ -80,7 +83,20 @@ export class NavigationFacadeService {
   readonly sidebarTitle = computed(
     () => this.activeManifest()?.sidebarTitle || 'Menu',
   );
-  readonly menuItems = computed(() => this.activeManifest()?.menuItems || []);
+
+  // Menu items filtered by permissions
+  readonly menuItems = computed(() => {
+    const items = this.activeManifest()?.menuItems || [];
+    const activeModule = this.permissionsFacade.activeModuleKey();
+
+    if (!activeModule) {
+      // No active module, show all items (dashboard context)
+      return items;
+    }
+
+    return this.filterMenuItemsByPermissions(items, activeModule);
+  });
+
   readonly accentToken = computed(
     () => this.activeManifest()?.accentToken || 'shell',
   );
@@ -89,9 +105,10 @@ export class NavigationFacadeService {
   constructor() {
     // Listen to route changes and update active app context
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => {
         this.detectAndLoadManifest(event.url);
+        this.updateActiveModuleFromUrl(event.url);
       });
 
     // Apply accent token whenever it changes
@@ -102,6 +119,7 @@ export class NavigationFacadeService {
 
     // Initialize with current route
     this.detectAndLoadManifest(this.router.url);
+    this.updateActiveModuleFromUrl(this.router.url);
   }
 
   /**
@@ -434,5 +452,53 @@ export class NavigationFacadeService {
     }
 
     return results;
+  }
+
+  /**
+   * Update active module in PermissionsFacade based on URL
+   */
+  private updateActiveModuleFromUrl(url: string): void {
+    const moduleKey = getModuleKeyByRoute(url);
+    if (moduleKey) {
+      this.permissionsFacade.setActiveModule(moduleKey);
+
+      // Ensure permissions are loaded for this module
+      this.permissionsFacade.ensureModulePermissions(moduleKey).catch(error => {
+        this.logError('Failed to load permissions for module', {
+          moduleKey,
+          error: error instanceof Error ? error.message : String(error),
+        });
+      });
+    }
+  }
+
+  /**
+   * Filter menu items based on permissions
+   */
+  private filterMenuItemsByPermissions(items: NavItem[], moduleKey: ModuleKey): NavItem[] {
+    const filtered: NavItem[] = [];
+
+    for (const item of items) {
+      // Check if item has permission requirement
+      if (item.requiredPage) {
+        const hasPermission = this.permissionsFacade.hasPage(moduleKey, item.requiredPage);
+        if (!hasPermission) {
+          continue; // Skip this item
+        }
+      }
+
+      // Filter children recursively
+      const filteredChildren = item.children
+        ? this.filterMenuItemsByPermissions(item.children, moduleKey)
+        : undefined;
+
+      // Add item with filtered children
+      filtered.push({
+        ...item,
+        children: filteredChildren,
+      });
+    }
+
+    return filtered;
   }
 }
