@@ -4,17 +4,18 @@
 /* CSS Variables for Theme - Based on Design System Document */
 :root {
   /* Primary Colors */
+  /* Primary Colors - Sky Blue (#60a5fa) */
   --color-primary-50: #f0f9ff;
   --color-primary-100: #e0f2fe;
   --color-primary-200: #bae6fd;
   --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
-  --color-primary-950: #082f49;
+  --color-primary-400: #60a5fa; /* Main target color */
+  --color-primary-500: #3b82f6; 
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
 
   /* Accent Colors (Purple) */
   --color-accent-50: #fdf4ff;
@@ -44,7 +45,7 @@
   /* Border Colors - Light Mode */
   --color-border-primary: #e5e7eb;
   --color-border-secondary: #d1d5db;
-  --color-border-focus: #0ea5e9;
+  --color-border-focus: #60a5fa;
 
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -111,15 +112,15 @@
   --nav-item-hover-color: #111827;
   --nav-item-active-bg: linear-gradient(
     90deg,
-    rgba(59, 130, 246, 0.15) 0%,
-    rgba(37, 99, 235, 0.1) 100%
+    rgba(96, 165, 250, 0.15) 0%,
+    rgba(59, 130, 246, 0.1) 100%
   );
-  --nav-item-active-color: #2563eb;
-  --nav-item-active-border: #3b82f6;
-  --nav-item-active-icon: #3b82f6;
+  --nav-item-active-color: #3b82f6;
+  --nav-item-active-border: #60a5fa;
+  --nav-item-active-icon: #60a5fa;
 
   /* Logo Colors - Light Mode */
-  --logo-text-color: #5558a0;
+  --logo-text-color: #1e3a8a;
 
   /* Scrollbar Colors - Light Mode */
   --scrollbar-thumb: #d1d5db;
@@ -186,7 +187,7 @@
   --nav-item-active-icon: #60a5fa;
 
   /* Logo Colors - Dark Mode */
-  --logo-text-color: #9b9dd8;
+  --logo-text-color: #93c5fd;
 
   /* Scrollbar Colors - Dark Mode */
   --scrollbar-thumb: #4a4a4a;

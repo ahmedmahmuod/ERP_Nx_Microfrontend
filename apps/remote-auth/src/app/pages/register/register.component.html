@@ -13,12 +13,16 @@
           <!-- Header -->
           <div class="register-header">
             <div class="brand">
-              <i class="pi pi-building brand-icon"></i>
+              <img
+                [src]="BRAND.LOGO_PATH"
+                [alt]="brandName"
+                class="brand-logo"
+              />
               <h1 class="brand-title">{{ brandName }}</h1>
             </div>
-            <h2 class="register-title">{{ t('register.title') }}</h2>
+            <h2 class="register-title">{{ t('auth.register.title') }}</h2>
             <p class="register-subtitle">
-              {{ t('register.subtitle') }}
+              {{ t('auth.register.subtitle') }}
             </p>
           </div>
 
@@ -30,8 +34,8 @@
           >
             <erp-input
               type="text"
-              [label]="t('register.nameLabel')"
-              [placeholder]="t('register.namePlaceholder')"
+              [label]="t('auth.register.nameLabel')"
+              [placeholder]="t('auth.register.namePlaceholder')"
               formControlName="name"
               [required]="true"
               [invalid]="isFieldInvalid('name')"
@@ -41,8 +45,8 @@
 
             <erp-input
               type="email"
-              [label]="t('register.emailLabel')"
-              [placeholder]="t('register.emailPlaceholder')"
+              [label]="t('auth.register.emailLabel')"
+              [placeholder]="t('auth.register.emailPlaceholder')"
               formControlName="email"
               [required]="true"
               [invalid]="isFieldInvalid('email')"
@@ -52,8 +56,8 @@
 
             <erp-input
               type="password"
-              [label]="t('register.passwordLabel')"
-              [placeholder]="t('register.passwordPlaceholder')"
+              [label]="t('auth.register.passwordLabel')"
+              [placeholder]="t('auth.register.passwordPlaceholder')"
               formControlName="password"
               [required]="true"
               [invalid]="isFieldInvalid('password')"
@@ -63,8 +67,8 @@
 
             <erp-input
               type="password"
-              [label]="t('register.confirmPasswordLabel')"
-              [placeholder]="t('register.confirmPasswordPlaceholder')"
+              [label]="t('auth.register.confirmPasswordLabel')"
+              [placeholder]="t('auth.register.confirmPasswordPlaceholder')"
               formControlName="confirmPassword"
               [required]="true"
               [invalid]="isFieldInvalid('confirmPassword')"
@@ -80,13 +84,13 @@
                   class="checkbox"
                 />
                 <span>
-                  {{ t('register.terms.agree') }}
+                  {{ t('auth.register.terms.agree') }}
                   <a href="#" class="terms-link">{{
-                    t('register.terms.tos')
+                    t('auth.register.terms.tos')
                   }}</a>
-                  {{ t('register.terms.and') }}
+                  {{ t('auth.register.terms.and') }}
                   <a href="#" class="terms-link">{{
-                    t('register.terms.privacy')
+                    t('auth.register.terms.privacy')
                   }}</a>
                 </span>
               </label>
@@ -107,8 +111,8 @@
             >
               {{
                 authFacade.isLoading()
-                  ? t('register.creatingAccount')
-                  : t('register.createAccount')
+                  ? t('auth.register.creatingAccount')
+                  : t('auth.register.createAccount')
               }}
             </erp-button>
           </form>
@@ -116,9 +120,9 @@
           <!-- Footer -->
           <div class="register-footer">
             <p class="signin-text">
-              {{ t('register.alreadyHaveAccount') }}
+              {{ t('auth.register.alreadyHaveAccount') }}
               <a routerLink="/auth/login" class="signin-link">{{
-                t('register.signIn')
+                t('auth.register.signIn')
               }}</a>
             </p>
           </div>

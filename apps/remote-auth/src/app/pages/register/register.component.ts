@@ -15,10 +15,7 @@ import {
   StandaloneLanguageSwitchComponent,
 } from '@erp/shared/ui';
 import { AuthFacadeService } from '../../services/auth-facade.service';
-import {
-  TranslocoDirective,
-  TranslocoService,
-} from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { ValidationMessageResolver } from '@erp/shared/util-i18n';
 import { BRAND } from '@erp/shared/config';
 
@@ -44,6 +41,7 @@ export class RegisterComponent {
   private readonly validationResolver = inject(ValidationMessageResolver);
   readonly authFacade = inject(AuthFacadeService);
 
+  readonly BRAND = BRAND;
   readonly brandName = BRAND.NAME;
 
   readonly registerForm: FormGroup = this.fb.group(

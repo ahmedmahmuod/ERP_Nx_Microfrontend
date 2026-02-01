@@ -82,8 +82,10 @@ export class UserFacade {
   /**
    * Clear user data (used on logout)
    */
-  clearUser(): void {
-    this._user.set(null);
+  clearUser(clearSignal = true): void {
+    if (clearSignal) {
+      this._user.set(null);
+    }
     localStorage.removeItem(this.STORAGE_KEY);
   }
 

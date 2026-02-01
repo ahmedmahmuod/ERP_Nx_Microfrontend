@@ -4,7 +4,7 @@
  * Server-authoritative: permissions loaded from API on app entry
  */
 
-import { Injectable, inject, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { PermissionsApiService } from '@erp/shared/data-access';
 import {
@@ -26,6 +26,7 @@ export class PermissionsStore {
   private readonly permissionsSignal = signal<PermissionSet | null>(null);
   private readonly loadingSignal = signal(false);
   private readonly errorSignal = signal<string | null>(null);
+  private readonly currentModuleId = signal<number | null>(null);
 
   // Public readonly
   readonly permissions = this.permissionsSignal.asReadonly();
@@ -41,29 +42,45 @@ export class PermissionsStore {
   );
   readonly roleId = computed(() => this.permissions()?.roleId ?? 0);
 
+  constructor() {
+    // Auto-reload permissions when user or company changes
+    effect(() => {
+      const userId = this.userFacade.userId();
+      const companyId = this.companyFacade.activeCompany()?.id;
+      const moduleId = this.currentModuleId();
+
+      // If we have all required data and a module is set, reload permissions
+      // We don't force here because this triggers on state changes within the app
+      if (userId && companyId && moduleId) {
+        this.loadPermissions(moduleId);
+      }
+    });
+  }
+
   /**
    * Load permissions for a module
-   * Caches by (userId, companyId, moduleId) in sessionStorage
+   * @param moduleId - Module ID to load permissions for
+   * @param force - If true, bypasses session cache and calls API (used on app refresh)
    */
-  async loadPermissions(moduleId: number): Promise<void> {
+  async loadPermissions(moduleId: number, force = false): Promise<void> {
+    // Store the module ID for auto-reload effect
+    this.currentModuleId.set(moduleId);
+
     const companyId = this.companyFacade.activeCompany()?.id;
     const userId = this.userFacade.userId();
 
-    if (!companyId) {
-      this.errorSignal.set('No active company selected');
+    // Silently skip if user/company not available yet (e.g., not logged in)
+    if (!companyId || !userId) {
       return;
     }
 
-    if (!userId) {
-      this.errorSignal.set('No user ID available');
-      return;
-    }
-
-    // Check cache
-    const cached = this.getCachedPermissions(userId, companyId, moduleId);
-    if (cached) {
-      this.permissionsSignal.set(cached);
-      return;
+    // Check cache unless force requested
+    if (!force) {
+      const cached = this.getCachedPermissions(userId, companyId, moduleId);
+      if (cached) {
+        this.permissionsSignal.set(cached);
+        return;
+      }
     }
 
     this.loadingSignal.set(true);
@@ -73,7 +90,7 @@ export class PermissionsStore {
       const response = await firstValueFrom(
         this.apiService.getUserRoleInCompany({
           CompanyID: companyId,
-          UserID: parseInt(userId),
+          UserID: userId,
           ModuleID: moduleId,
         }),
       );

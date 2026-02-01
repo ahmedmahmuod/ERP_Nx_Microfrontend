@@ -43,7 +43,7 @@ export class MenuBuilder {
       if (!hasHome) {
         filtered.unshift({
           id: 'dashboard',
-          label: 'shell.nav.dashboard',
+          label: 'nav.dashboard',
           icon: 'pi-home',
           route: '/dashboard',
         });

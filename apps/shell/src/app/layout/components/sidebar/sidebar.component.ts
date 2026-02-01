@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { BRAND } from '@erp/shared/config';
 import { NavigationFacadeService } from '../../../core/services/navigation-facade.service';
 import { SidebarFacadeService } from '../../services/sidebar-facade.service';
+import { ShellTabsComponent } from '../shell-tabs/shell-tabs.component';
 import {
   TranslocoDirective,
   TranslocoPipe,
@@ -30,6 +31,7 @@ import {
     FormsModule,
     TranslocoDirective,
     TranslocoPipe,
+    ShellTabsComponent,
   ],
   providers: [
     {
@@ -138,51 +140,146 @@ import {
       }
 
       <!-- Navigation Menu -->
-      <nav
-        class="sidebar-nav"
-        [attr.aria-label]="navigationFacade.sidebarTitle() + ' navigation'"
-      >
-        @if (navigationFacade.loading()) {
-          <div class="nav-loading">
-            <i class="pi pi-spin pi-spinner"></i>
-            <span>{{ t('sidebar.loading') }}</span>
-          </div>
-        } @else if (navigationFacade.error()) {
-          <div class="nav-error">
-            <i class="pi pi-exclamation-triangle"></i>
-            <span>{{ navigationFacade.error() }}</span>
-            <button class="retry-btn" (click)="retryLoadManifest()">
-              <i class="pi pi-refresh"></i> {{ t('sidebar.retry') }}
-            </button>
-          </div>
-        } @else {
-          <ul class="nav-list" role="menu">
-            @for (
-              item of menuItemsWithState();
-              track item.route || item.label
-            ) {
-              <li role="none">
-                @if (item.children && item.children.length > 0 && !collapsed) {
-                  <!-- Parent Group with Children -->
-                  <div
-                    class="nav-group"
-                    [class.has-active-child]="item._hasActiveChild"
-                  >
-                    <button
-                      class="nav-item nav-group-header"
-                      [class.expanded]="isGroupExpanded(item.label)"
+      @if (navigationFacade.activeAppId() === 'shell') {
+        <div class="flex-1 overflow-hidden flex flex-col">
+          <app-shell-tabs [collapsed]="collapsed"></app-shell-tabs>
+        </div>
+      } @else {
+        <nav
+          class="sidebar-nav"
+          [attr.aria-label]="navigationFacade.sidebarTitle() + ' navigation'"
+        >
+          @if (navigationFacade.loading()) {
+            <div class="nav-loading">
+              <i class="pi pi-spin pi-spinner"></i>
+              <span>{{ t('sidebar.loading') }}</span>
+            </div>
+          } @else if (navigationFacade.error()) {
+            <div class="nav-error">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>{{ navigationFacade.error() }}</span>
+              <button class="retry-btn" (click)="retryLoadManifest()">
+                <i class="pi pi-refresh"></i> {{ t('sidebar.retry') }}
+              </button>
+            </div>
+          } @else {
+            <ul class="nav-list" role="menu">
+              @for (
+                item of menuItemsWithState();
+                track item.route || item.label
+              ) {
+                <li role="none">
+                  @if (
+                    item.children && item.children.length > 0 && !collapsed
+                  ) {
+                    <!-- Parent Group with Children -->
+                    <div
+                      class="nav-group"
                       [class.has-active-child]="item._hasActiveChild"
-                      (click)="toggleGroup(item.label)"
-                      [attr.aria-expanded]="isGroupExpanded(item.label)"
+                    >
+                      <button
+                        class="nav-item nav-group-header"
+                        [class.expanded]="isGroupExpanded(item.label)"
+                        [class.has-active-child]="item._hasActiveChild"
+                        (click)="toggleGroup(item.label)"
+                        [attr.aria-expanded]="isGroupExpanded(item.label)"
+                        role="menuitem"
+                      >
+                        @if (item.icon) {
+                          <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
+                        }
+                        <span class="nav-label" [title]="item.label">{{
+                          item.label
+                        }}</span>
+                        @if (item.badge) {
+                          <span
+                            [class]="
+                              'badge ' + (item.badgeClass || 'badge-primary')
+                            "
+                          >
+                            {{ item.badge }}
+                          </span>
+                        }
+                        <i
+                          [class]="
+                            'pi nav-chevron ' +
+                            (isGroupExpanded(item.label)
+                              ? 'pi-chevron-down'
+                              : 'pi-chevron-right')
+                          "
+                        ></i>
+                      </button>
+
+                      <!-- Nested Children with Animation -->
+                      <div
+                        class="nav-sublist-wrapper"
+                        [class.expanded]="isGroupExpanded(item.label)"
+                      >
+                        <ul class="nav-sublist" role="menu">
+                          @for (
+                            child of item.children;
+                            track child.route || child.label
+                          ) {
+                            <li role="none">
+                              <a
+                                [routerLink]="child.route || []"
+                                routerLinkActive="active"
+                                [routerLinkActiveOptions]="{ exact: false }"
+                                (click)="onNavItemClick()"
+                                class="nav-item nav-subitem"
+                                [class.active]="child._isActive"
+                                role="menuitem"
+                              >
+                                @if (child.icon) {
+                                  <i
+                                    [class]="'pi ' + child.icon + ' nav-icon'"
+                                  ></i>
+                                }
+                                <span class="nav-label" [title]="child.label">{{
+                                  child.label
+                                }}</span>
+                                @if (child.badge) {
+                                  <span
+                                    [class]="
+                                      'badge ' +
+                                      (child.badgeClass || 'badge-primary')
+                                    "
+                                  >
+                                    {{ child.badge }}
+                                  </span>
+                                }
+                              </a>
+                            </li>
+                          }
+                        </ul>
+                      </div>
+                    </div>
+                  } @else {
+                    <!-- Simple Leaf Item -->
+                    <a
+                      [routerLink]="item.route || []"
+                      routerLinkActive="active"
+                      [routerLinkActiveOptions]="{
+                        exact:
+                          item.route === '/' || item.route === '/dashboard',
+                      }"
+                      (click)="onNavItemClick()"
+                      class="nav-item"
+                      [class.collapsed-item]="collapsed"
+                      [class.active]="item._isActive"
+                      [attr.title]="collapsed ? item.label : null"
+                      [attr.aria-current]="item._isActive ? 'page' : null"
                       role="menuitem"
                     >
                       @if (item.icon) {
                         <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
                       }
-                      <span class="nav-label" [title]="item.label">{{
-                        item.label
-                      }}</span>
-                      @if (item.badge) {
+                      @if (!collapsed) {
+                        <span class="nav-label" [title]="item.label">{{
+                          item.label
+                        }}</span>
+                      }
+                      @if (!collapsed && item.badge) {
                         <span
                           [class]="
                             'badge ' + (item.badgeClass || 'badge-primary')
@@ -191,100 +288,14 @@ import {
                           {{ item.badge }}
                         </span>
                       }
-                      <i
-                        [class]="
-                          'pi nav-chevron ' +
-                          (isGroupExpanded(item.label)
-                            ? 'pi-chevron-down'
-                            : 'pi-chevron-right')
-                        "
-                      ></i>
-                    </button>
-
-                    <!-- Nested Children with Animation -->
-                    <div
-                      class="nav-sublist-wrapper"
-                      [class.expanded]="isGroupExpanded(item.label)"
-                    >
-                      <ul class="nav-sublist" role="menu">
-                        @for (
-                          child of item.children;
-                          track child.route || child.label
-                        ) {
-                          <li role="none">
-                            <a
-                              [routerLink]="child.route || []"
-                              routerLinkActive="active"
-                              [routerLinkActiveOptions]="{ exact: false }"
-                              (click)="onNavItemClick()"
-                              class="nav-item nav-subitem"
-                              [class.active]="child._isActive"
-                              role="menuitem"
-                            >
-                              @if (child.icon) {
-                                <i
-                                  [class]="'pi ' + child.icon + ' nav-icon'"
-                                ></i>
-                              }
-                              <span class="nav-label" [title]="child.label">{{
-                                child.label
-                              }}</span>
-                              @if (child.badge) {
-                                <span
-                                  [class]="
-                                    'badge ' +
-                                    (child.badgeClass || 'badge-primary')
-                                  "
-                                >
-                                  {{ child.badge }}
-                                </span>
-                              }
-                            </a>
-                          </li>
-                        }
-                      </ul>
-                    </div>
-                  </div>
-                } @else {
-                  <!-- Simple Leaf Item -->
-                  <a
-                    [routerLink]="item.route || []"
-                    routerLinkActive="active"
-                    [routerLinkActiveOptions]="{
-                      exact: item.route === '/' || item.route === '/dashboard',
-                    }"
-                    (click)="onNavItemClick()"
-                    class="nav-item"
-                    [class.collapsed-item]="collapsed"
-                    [class.active]="item._isActive"
-                    [attr.title]="collapsed ? item.label : null"
-                    [attr.aria-current]="item._isActive ? 'page' : null"
-                    role="menuitem"
-                  >
-                    @if (item.icon) {
-                      <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
-                    }
-                    @if (!collapsed) {
-                      <span class="nav-label" [title]="item.label">{{
-                        item.label
-                      }}</span>
-                    }
-                    @if (!collapsed && item.badge) {
-                      <span
-                        [class]="
-                          'badge ' + (item.badgeClass || 'badge-primary')
-                        "
-                      >
-                        {{ item.badge }}
-                      </span>
-                    }
-                  </a>
-                }
-              </li>
-            }
-          </ul>
-        }
-      </nav>
+                    </a>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </nav>
+      }
 
       <!-- Collapse Toggle Button (Desktop only) -->
       <button

@@ -276,16 +276,13 @@ export class ProfileDropdownComponent {
 
   /**
    * Sign out user
-   * Clears auth state, company selection, and redirects to login
+   * Clears auth state silently and redirects to login to avoid UI flickering
    */
   signOut(): void {
-    // Clear auth state
-    this.authFacade.logout();
+    // Clear auth state and storage but keep signals (to prevent flickering)
+    this.authFacade.logout(false);
 
-    // Clear selected company
-    this.companyFacade.clearCompany();
-
-    // Redirect to login page (cross-microfrontend navigation)
+    // Redirect to login page
     window.location.href = '/auth/login';
   }
 }

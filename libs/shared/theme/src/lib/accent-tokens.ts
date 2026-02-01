@@ -25,9 +25,9 @@ export interface AccentTokenConfig {
 export const ACCENT_TOKENS: Record<string, AccentTokenConfig> = {
   shell: {
     token: 'shell',
-    primary: '#47419B', // Brand Purple
-    light: '#5f57b3', // Lighter purple for hover
-    dark: '#3d3685', // Darker purple for active
+    primary: '#60a5fa', // Sky Blue
+    light: '#93c5fd', // Lighter blue for hover
+    dark: '#3b82f6', // Darker blue for active
     contrast: '#ffffff',
   },
   finance: {
@@ -74,9 +74,9 @@ export const ACCENT_TOKENS: Record<string, AccentTokenConfig> = {
   },
   auth: {
     token: 'auth',
-    primary: '#06b6d4', // Cyan
-    light: '#22d3ee',
-    dark: '#0891b2',
+    primary: '#60a5fa', // Sky Blue (Matching Shell)
+    light: '#93c5fd',
+    dark: '#3b82f6',
     contrast: '#ffffff',
   },
 };

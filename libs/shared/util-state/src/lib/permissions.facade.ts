@@ -125,7 +125,7 @@ export class PermissionsFacade {
     try {
       const request: UserRoleRequestDto = {
         CompanyID: state.currentCompanyId,
-        UserID: state.currentUserId,
+        UserID: state.currentUserId.toString(),
         ModuleID: getModuleId(moduleKey),
       };
 

@@ -28,6 +28,7 @@ import {
   CardComponent,
   StandaloneLanguageSwitchComponent,
 } from '@erp/shared/ui';
+import { BRAND } from '@erp/shared/config';
 
 @Component({
   selector: 'app-select-company',
@@ -53,6 +54,7 @@ export class SelectCompanyComponent implements OnInit {
   private readonly transloco = inject(TranslocoService);
 
   // Local state
+  readonly BRAND = BRAND;
   readonly selectedCompanyId = signal<string | null>(null);
 
   // Facade state

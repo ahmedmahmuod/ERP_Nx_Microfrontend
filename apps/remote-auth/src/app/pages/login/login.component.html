@@ -13,7 +13,11 @@
           <!-- Header -->
           <div class="login-header">
             <div class="brand">
-              <i class="pi pi-building brand-icon"></i>
+              <img
+                [src]="BRAND.LOGO_PATH"
+                [alt]="brandName"
+                class="brand-logo"
+              />
               <h1 class="brand-title">{{ brandName }}</h1>
             </div>
             <h2 class="login-title">{{ t('auth.login.title') }}</h2>

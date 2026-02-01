@@ -1,0 +1,79 @@
+<div class="shell-tabs-container" *transloco="let t; read: 'shell'">
+  <!-- Tab Navigation -->
+  <nav
+    class="tabs-nav"
+    [class.tabs-collapsed]="collapsed()"
+    role="tablist"
+    aria-label="Shell navigation tabs"
+  >
+    @for (tab of tabsService.tabs; track tab.id) {
+      <button
+        type="button"
+        role="tab"
+        class="tab-button"
+        [class.tab-active]="tabsService.activeTab() === tab.id"
+        [attr.aria-selected]="tabsService.activeTab() === tab.id"
+        [attr.aria-controls]="'tab-panel-' + tab.id"
+        [title]="collapsed() ? t(tab.label) : ''"
+        (click)="onTabClick(tab.id)"
+      >
+        <i [class]="'pi ' + tab.icon + ' tab-icon'"></i>
+        @if (!collapsed()) {
+          <span class="tab-label">{{ t(tab.label) }}</span>
+        }
+      </button>
+    }
+  </nav>
+
+  <!-- Tab Content (Menu Items) -->
+  <div
+    class="tab-content"
+    role="tabpanel"
+    [attr.id]="'tab-panel-' + tabsService.activeTab()"
+    [attr.aria-labelledby]="'tab-' + tabsService.activeTab()"
+  >
+    @if (menuService.loading()) {
+      <div class="menu-loading">
+        <i class="pi pi-spin pi-spinner"></i>
+        <span>{{ t('sidebar.loading') }}</span>
+      </div>
+    } @else if (menuService.error()) {
+      <div class="menu-error">
+        <i class="pi pi-exclamation-triangle"></i>
+        <span>{{ menuService.error() }}</span>
+      </div>
+    } @else {
+      <ul class="menu-list" role="menu">
+        @for (item of menuService.menuItems(); track item.id || item.route) {
+          <li role="none">
+            <a
+              [routerLink]="item.route || []"
+              routerLinkActive="menu-item-active"
+              [routerLinkActiveOptions]="{
+                exact: item.route === '/' || item.route === '/dashboard',
+              }"
+              class="menu-item"
+              [class.menu-collapsed]="collapsed()"
+              [title]="collapsed() ? t(item.label) : ''"
+              role="menuitem"
+            >
+              @if (item.icon) {
+                <i [class]="'pi ' + item.icon + ' menu-icon'"></i>
+              }
+              @if (!collapsed()) {
+                <span class="menu-label">{{ t(item.label) }}</span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+
+      @if (menuService.menuItems().length === 0) {
+        <div class="menu-empty">
+          <i class="pi pi-inbox"></i>
+          <span>{{ t('sidebar.noItems') }}</span>
+        </div>
+      }
+    }
+  </div>
+</div>

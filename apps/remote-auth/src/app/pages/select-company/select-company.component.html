@@ -13,7 +13,11 @@
           <!-- Header Section -->
           <div class="header">
             <div class="brand">
-              <i class="pi pi-building brand-icon"></i>
+              <img
+                [src]="BRAND.LOGO_PATH"
+                [alt]="BRAND.NAME"
+                class="brand-logo"
+              />
             </div>
             <h1 class="title">{{ t('auth.selectCompany.title') }}</h1>
             <p class="subtitle">{{ t('auth.selectCompany.subtitle') }}</p>

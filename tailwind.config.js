@@ -10,17 +10,17 @@ module.exports = {
       colors: {
         // Primary Brand Colors
         primary: {
-          50: '#f5f3ff',
-          100: '#ede9fe',
-          200: '#ddd6fe',
-          300: '#c4b5fd',
-          400: '#a78bfa',
-          500: '#47419B', // Main primary - Brand Purple
-          600: '#3d3685',
-          700: '#342c70',
-          800: '#2a235a',
-          900: '#211b45',
-          950: '#18132f',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          200: '#bae6fd',
+          300: '#7dd3fc',
+          400: '#60a5fa', // Main primary - Sky Blue
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          800: '#1e40af',
+          900: '#1e3a8a',
+          950: '#172554',
         },
         // Secondary/Accent Colors
         secondary: {

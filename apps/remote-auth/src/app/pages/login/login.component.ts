@@ -48,6 +48,7 @@ export class LoginComponent {
   readonly authFacade = inject(AuthFacadeService);
 
   // View data
+  readonly BRAND = BRAND;
   readonly brandName = BRAND.NAME;
 
   // Default test account credentials for easy testing

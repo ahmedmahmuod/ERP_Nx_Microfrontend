@@ -5,23 +5,24 @@
  * Smart component - manages state via LayoutService.
  */
 
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ResponsiveService } from '@erp/shared/ui';
 import { LayoutService } from './services/layout.service';
 import { HeaderComponent } from './components/header/header.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { SidebarFacadeService } from './services/sidebar-facade.service';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    HeaderComponent,
-    SidebarComponent,
-    FooterComponent,
-  ],
+  imports: [RouterOutlet, HeaderComponent, SidebarComponent, FooterComponent],
   template: `
     <div class="layout-container">
       <!-- Header -->
@@ -31,11 +32,11 @@ import { FooterComponent } from './components/footer/footer.component';
       <div class="layout-main">
         <!-- Sidebar -->
         <app-sidebar
-          [collapsed]="sidebarCollapsed"
+          [collapsed]="sidebarCollapsed()"
           [mobileOpen]="layoutService.mobileSidebarOpen()"
           (collapsedChange)="onCollapsedChange($event)"
           (mobileClose)="layoutService.closeMobileSidebar()"
-          [class.collapsed]="sidebarCollapsed"
+          [class.collapsed]="sidebarCollapsed()"
         >
         </app-sidebar>
 
@@ -120,13 +121,14 @@ import { FooterComponent } from './components/footer/footer.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutComponent {
+  readonly sidebarFacade = inject(SidebarFacadeService);
   readonly layoutService = inject(LayoutService);
   readonly responsiveService = inject(ResponsiveService);
 
-  sidebarCollapsed = false;
+  readonly sidebarCollapsed = computed(() => this.sidebarFacade.collapsed());
 
   onCollapsedChange(collapsed: boolean): void {
-    this.sidebarCollapsed = collapsed;
+    this.sidebarFacade.setCollapsed(collapsed);
   }
 
   handleNavItemClick(): void {

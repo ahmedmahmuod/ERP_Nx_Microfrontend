@@ -14,7 +14,27 @@
     "loading": "Loading menu...",
     "retry": "Retry",
     "expand": "Expand sidebar",
-    "collapse": "Collapse sidebar"
+    "collapse": "Collapse sidebar",
+    "noItems": "No menu items available"
+  },
+  "tabs": {
+    "main": "Main",
+    "payment": "Payment",
+    "needs": "Needs",
+    "docs": "Docs"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "allUsers": "All Users",
+    "companies": "Companies",
+    "roles": "Roles",
+    "vendors": "Vendors",
+    "groups": "Groups",
+    "autoCodes": "Auto Codes",
+    "locations": "Locations",
+    "companyStructure": "Company Structure",
+    "techSupport": "Technical Support",
+    "versionsReports": "Versions & Reports"
   },
   "profile": {
     "admin": "Admin",

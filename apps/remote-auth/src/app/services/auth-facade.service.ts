@@ -15,7 +15,11 @@ import {
   TOKEN_STORAGE,
   ApiError,
 } from '@erp/shared/data-access';
-import { CompanyFacade, PermissionsFacade } from '@erp/shared/util-state';
+import {
+  CompanyFacade,
+  UserFacade,
+  PermissionsFacade,
+} from '@erp/shared/util-state';
 import { User, mapLoginResponseDtoToAuthSession } from '@erp/shared/models';
 
 export interface LoginCredentials {
@@ -39,11 +43,12 @@ export interface AuthState {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthFacadeService {
   private readonly authApi = inject(AuthApiService);
   private readonly tokenStorage = inject(TOKEN_STORAGE);
+  private readonly userFacade = inject(UserFacade);
   private readonly companyFacade = inject(CompanyFacade);
   private readonly permissionsFacade = inject(PermissionsFacade);
   private readonly router = inject(Router);
@@ -55,7 +60,7 @@ export class AuthFacadeService {
     user: null,
     isAuthenticated: false,
     isLoading: false,
-    error: null
+    error: null,
   });
 
   /**
@@ -87,10 +92,10 @@ export class AuthFacadeService {
    * Login with credentials
    */
   async login(credentials: LoginCredentials): Promise<void> {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
       isLoading: true,
-      error: null
+      error: null,
     }));
 
     try {
@@ -99,7 +104,7 @@ export class AuthFacadeService {
         this.authApi.login({
           email: credentials.email,
           password: credentials.password,
-        })
+        }),
       );
 
       // Check response status
@@ -108,21 +113,24 @@ export class AuthFacadeService {
       }
 
       // Map DTO to domain model using mapper
-      const authSession = mapLoginResponseDtoToAuthSession(response, credentials.email);
+      const authSession = mapLoginResponseDtoToAuthSession(
+        response,
+        credentials.email,
+      );
 
       // Store access token only (backend sends only 1 token)
       this.tokenStorage.setAccessToken(authSession.tokens.accessToken);
 
-      // Store user data
-      localStorage.setItem('erp-user', JSON.stringify(authSession.user));
+      // Store user data in UserFacade (persisted to localStorage automatically)
+      this.userFacade.setUser(authSession.user);
 
-      // Update state
-      this._state.update(state => ({
+      // Update local state
+      this._state.update((state) => ({
         ...state,
         user: authSession.user,
         isAuthenticated: true,
         isLoading: false,
-        error: null
+        error: null,
       }));
 
       // Store company list in CompanyFacade (persisted to localStorage automatically)
@@ -130,16 +138,16 @@ export class AuthFacadeService {
     } catch (error: unknown) {
       // Handle ApiError
       if (this.isApiError(error)) {
-        this._state.update(state => ({
+        this._state.update((state) => ({
           ...state,
           isLoading: false,
-          error: error.messageKey
+          error: error.messageKey,
         }));
       } else {
-        this._state.update(state => ({
+        this._state.update((state) => ({
           ...state,
           isLoading: false,
-          error: error instanceof Error ? error.message : 'Login failed'
+          error: error instanceof Error ? error.message : 'Login failed',
         }));
       }
       throw error;
@@ -162,10 +170,10 @@ export class AuthFacadeService {
    * Register new user
    */
   async register(data: RegisterData): Promise<void> {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
       isLoading: true,
-      error: null
+      error: null,
     }));
 
     try {
@@ -181,26 +189,28 @@ export class AuthFacadeService {
         id: Date.now().toString(),
         name: data.name,
         email: data.email,
-        role: 'user'
+        role: 'user',
       };
 
-      this._state.update(state => ({
+      // Set user in UserFacade
+      this.userFacade.setUser(user);
+
+      this._state.update((state) => ({
         ...state,
         user,
         isAuthenticated: true,
         isLoading: false,
-        error: null
+        error: null,
       }));
 
       // Store token (mock)
       const mockToken = 'mock-jwt-token-' + Date.now();
       this.tokenStorage.setAccessToken(mockToken);
-      localStorage.setItem('erp-user', JSON.stringify(user));
     } catch (error) {
-      this._state.update(state => ({
+      this._state.update((state) => ({
         ...state,
         isLoading: false,
-        error: error instanceof Error ? error.message : 'Registration failed'
+        error: error instanceof Error ? error.message : 'Registration failed',
       }));
       throw error;
     }
@@ -208,24 +218,27 @@ export class AuthFacadeService {
 
   /**
    * Logout
+   * @param clearSignals - If true, clears reactive signals immediately. Set to false for a smoother transition before redirection.
    */
-  logout(): void {
-    this._state.set({
-      user: null,
-      isAuthenticated: false,
-      isLoading: false,
-      error: null
-    });
+  logout(clearSignals: boolean = true): void {
+    if (clearSignals) {
+      this._state.set({
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null,
+      });
+    }
 
     // Clear tokens using TokenStorage
     this.tokenStorage.clearTokens();
 
-    // Clear user data
-    localStorage.removeItem('erp-user');
+    // Clear user data via UserFacade (persistence)
+    this.userFacade.clearUser(clearSignals);
 
-    // Clear companies
-    this.companyFacade.clearCompanies();
-    this.companyFacade.clearCompany();
+    // Clear companies (persistence)
+    this.companyFacade.clearCompanies(clearSignals);
+    this.companyFacade.clearCompany(clearSignals);
 
     // Clear permissions
     this.permissionsFacade.clearPermissions();
@@ -235,9 +248,9 @@ export class AuthFacadeService {
    * Clear error
    */
   clearError(): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
-      error: null
+      error: null,
     }));
   }
 
@@ -253,13 +266,13 @@ export class AuthFacadeService {
         id: '1',
         name: 'Admin User',
         email: 'admin@erp.com',
-        role: 'admin'
+        role: 'admin',
       };
 
-      this._state.update(state => ({
+      this._state.update((state) => ({
         ...state,
         user,
-        isAuthenticated: true
+        isAuthenticated: true,
       }));
     }
   }
@@ -268,6 +281,6 @@ export class AuthFacadeService {
    * Mock API delay
    */
   private mockApiDelay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

@@ -21,7 +21,7 @@ export class CompanyFacade {
     this.loadActiveCompanyFromStorage(),
   );
   private readonly _companies = signal<Company[]>(
-    this.loadCompaniesFromStorage()
+    this.loadCompaniesFromStorage(),
   );
   private readonly _isLoading = signal<boolean>(false);
 
@@ -43,7 +43,10 @@ export class CompanyFacade {
     effect(() => {
       const companies = this._companies();
       if (companies.length > 0) {
-        localStorage.setItem(this.COMPANIES_STORAGE_KEY, JSON.stringify(companies));
+        localStorage.setItem(
+          this.COMPANIES_STORAGE_KEY,
+          JSON.stringify(companies),
+        );
       }
     });
   }
@@ -61,8 +64,10 @@ export class CompanyFacade {
   /**
    * Clear active company (used on logout)
    */
-  clearCompany(): void {
-    this._activeCompany.set(null);
+  clearCompany(clearSignal = true): void {
+    if (clearSignal) {
+      this._activeCompany.set(null);
+    }
     localStorage.removeItem(this.STORAGE_KEY);
   }
 
@@ -115,8 +120,10 @@ export class CompanyFacade {
   /**
    * Clear companies list (used on logout)
    */
-  clearCompanies(): void {
-    this._companies.set([]);
+  clearCompanies(clearSignal = true): void {
+    if (clearSignal) {
+      this._companies.set([]);
+    }
     localStorage.removeItem(this.COMPANIES_STORAGE_KEY);
   }
 }
