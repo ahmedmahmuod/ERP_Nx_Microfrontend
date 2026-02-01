@@ -5,7 +5,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { APP_URLS, HOSTS, PORTS, API_CONFIG } from '../constants/app.constants';
+import { APP_URLS, HOSTS, PORTS, API } from '../constants/app.constants';
 
 export type Environment = 'development' | 'staging' | 'production';
 
@@ -99,19 +99,23 @@ export class EnvironmentService {
     // Check hostname (browser-safe detection)
     if (typeof window !== 'undefined') {
       const hostname = window.location.hostname;
-      
+
       // Development detection
       if (hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
         return 'development';
       }
-      
+
       // Staging detection
       if (hostname.includes('staging') || hostname.includes('stg')) {
         return 'staging';
       }
-      
+
       // Production detection
-      if (hostname.includes('.com') || hostname.includes('.net') || hostname.includes('.org')) {
+      if (
+        hostname.includes('.com') ||
+        hostname.includes('.net') ||
+        hostname.includes('.org')
+      ) {
         return 'production';
       }
     }
@@ -124,8 +128,8 @@ export class EnvironmentService {
    * Get API base URL based on environment
    */
   getApiBaseUrl(): string {
-    // Use centralized API_CONFIG constant
-    return API_CONFIG.BASE_URL;
+    // Use centralized API constant
+    return API.BASE_URL;
   }
 
   /**

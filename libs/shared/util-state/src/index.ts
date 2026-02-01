@@ -1,6 +1,7 @@
 export * from './lib/language.facade';
 export * from './lib/company.facade';
 export * from './lib/permissions.facade';
+export * from './lib/permissions.store';
 export * from './lib/user.facade';
 
 // Re-export models for convenience

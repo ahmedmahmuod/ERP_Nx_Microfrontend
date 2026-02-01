@@ -11,8 +11,9 @@ import {
   PermissionSet,
   UserRoleRequestDto,
   mapUserRoleResponseToPermissionSet,
+  ModuleKey,
+  getModuleId,
 } from '@erp/shared/models';
-import { ModuleKey, getModuleId } from '@erp/shared/config';
 
 interface PermissionsState {
   permissionsByModule: Map<ModuleKey, PermissionSet>;
@@ -40,7 +41,9 @@ export class PermissionsFacade {
   });
 
   // Public selectors
-  readonly permissionsByModule = computed(() => this._state().permissionsByModule);
+  readonly permissionsByModule = computed(
+    () => this._state().permissionsByModule,
+  );
   readonly activeModuleKey = computed(() => this._state().activeModuleKey);
   readonly isLoading = computed(() => this._state().isLoading);
   readonly error = computed(() => this._state().error);
@@ -52,11 +55,42 @@ export class PermissionsFacade {
     return this._state().permissionsByModule.get(moduleKey) ?? null;
   });
 
+  constructor() {
+    this.restoreContext();
+  }
+
+  /**
+   * Restore context from localStorage on initialization
+   */
+  private restoreContext(): void {
+    const userStr = localStorage.getItem('erp-user');
+    const companyId = localStorage.getItem('erp-selected-company-id');
+
+    if (userStr && companyId) {
+      try {
+        const user = JSON.parse(userStr);
+        const userId = user.id ? parseInt(user.id) : null;
+        if (userId) {
+          this._state.update((state) => ({
+            ...state,
+            currentUserId: userId,
+            currentCompanyId: companyId,
+          }));
+        }
+      } catch (e) {
+        // Ignore parsing errors
+      }
+    }
+  }
+
   /**
    * Initialize permissions context with user and company
    */
   initializeContext(userId: number, companyId: string): void {
-    this._state.update(state => ({
+    // Persist to localStorage for page refreshes
+    localStorage.setItem('erp-selected-company-id', companyId);
+
+    this._state.update((state) => ({
       ...state,
       currentUserId: userId,
       currentCompanyId: companyId,
@@ -67,7 +101,7 @@ export class PermissionsFacade {
    * Set active module (typically from route context)
    */
   setActiveModule(moduleKey: ModuleKey): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
       activeModuleKey: moduleKey,
     }));
@@ -81,10 +115,12 @@ export class PermissionsFacade {
     const state = this._state();
 
     if (!state.currentUserId || !state.currentCompanyId) {
-      throw new Error('Permissions context not initialized. Call initializeContext first.');
+      throw new Error(
+        'Permissions context not initialized. Call initializeContext first.',
+      );
     }
 
-    this._state.update(s => ({ ...s, isLoading: true, error: null }));
+    this._state.update((s) => ({ ...s, isLoading: true, error: null }));
 
     try {
       const request: UserRoleRequestDto = {
@@ -94,22 +130,24 @@ export class PermissionsFacade {
       };
 
       const response = await firstValueFrom(
-        this.permissionsApi.getUserRoleInCompany(request)
+        this.permissionsApi.getUserRoleInCompany(request),
       );
 
       // Check for API-level exceptions
       if (response.IsThereException) {
-        throw new Error(response.ExceptionMessage || 'Failed to load permissions');
+        throw new Error(
+          response.ExceptionMessage || 'Failed to load permissions',
+        );
       }
 
       // Normalize and cache
       const permissionSet = mapUserRoleResponseToPermissionSet(
         response,
         state.currentCompanyId,
-        getModuleId(moduleKey)
+        getModuleId(moduleKey),
       );
 
-      this._state.update(s => {
+      this._state.update((s) => {
         const newMap = new Map(s.permissionsByModule);
         newMap.set(moduleKey, permissionSet);
         return {
@@ -120,8 +158,9 @@ export class PermissionsFacade {
         };
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to load permissions';
-      this._state.update(s => ({
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to load permissions';
+      this._state.update((s) => ({
         ...s,
         isLoading: false,
         error: errorMessage,
@@ -195,7 +234,7 @@ export class PermissionsFacade {
    * Clear permissions for company change (keeps user context)
    */
   clearPermissionsForCompanyChange(newCompanyId: string): void {
-    this._state.update(state => ({
+    this._state.update((state) => ({
       ...state,
       permissionsByModule: new Map(),
       currentCompanyId: newCompanyId,

@@ -54,7 +54,6 @@ export class SelectCompanyComponent implements OnInit {
 
   // Local state
   readonly selectedCompanyId = signal<string | null>(null);
-  readonly isLoadingPermissions = signal<boolean>(false);
 
   // Facade state
   readonly companies = this.companyFacade.companies;
@@ -70,7 +69,7 @@ export class SelectCompanyComponent implements OnInit {
 
   /**
    * Confirm and proceed
-   * Loads permissions for default module before navigation
+   * Initializes permissions context and navigates to dashboard
    */
   async confirmSelection(): Promise<void> {
     const id = this.selectedCompanyId();
@@ -95,20 +94,14 @@ export class SelectCompanyComponent implements OnInit {
         return;
       }
 
-      // Initialize permissions context
+      // Initialize permissions context (permissions will be loaded on-demand)
       this.permissionsFacade.initializeContext(userId, id);
-
-      // Load permissions for default module (HR)
-      this.isLoadingPermissions.set(true);
-      await this.permissionsFacade.loadModulePermissions('hr');
-      this.isLoadingPermissions.set(false);
 
       // Navigate to dashboard using Angular router (avoids page reload)
       await this.router.navigate(['/dashboard']);
     } catch (error) {
-      this.isLoadingPermissions.set(false);
       const errorMessage =
-        error instanceof Error ? error.message : 'Failed to load permissions';
+        error instanceof Error ? error.message : 'Failed to navigate';
       this.showError(errorMessage);
     }
   }

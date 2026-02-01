@@ -6,14 +6,16 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn, ActivatedRouteSnapshot } from '@angular/router';
 import { PermissionsFacade } from '@erp/shared/util-state';
-import { ModuleKey, getModuleKeyByRoute } from '@erp/shared/config';
+import { ModuleKey, getModuleKeyByRoute } from '@erp/shared/models';
 
 export interface PermissionGuardData {
   requiredPage?: string;
   moduleKey?: ModuleKey;
 }
 
-export const permissionGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
+export const permissionGuard: CanActivateFn = async (
+  route: ActivatedRouteSnapshot,
+) => {
   const permissionsFacade = inject(PermissionsFacade);
   const router = inject(Router);
 
@@ -28,7 +30,7 @@ export const permissionGuard: CanActivateFn = async (route: ActivatedRouteSnapsh
   // Determine module key from route data or URL
   let moduleKey = data.moduleKey;
   if (!moduleKey) {
-    const url = '/' + route.url.map(segment => segment.path).join('/');
+    const url = '/' + route.url.map((segment) => segment.path).join('/');
     moduleKey = getModuleKeyByRoute(url);
   }
 

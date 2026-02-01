@@ -46,9 +46,9 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             userFacade.userEmail()
           }}</span>
         </div>
-        @if (userFacade.user()?.avatar) {
+        @if (userFacade.userAvatarUrl()) {
           <p-avatar
-            [image]="userFacade.user()!.avatar"
+            [image]="userFacade.userAvatarUrl()!"
             shape="circle"
             size="normal"
             class="border border-gray-200 dark:border-gray-700"
@@ -77,9 +77,9 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
           <div
             class="flex items-center gap-3 p-4 border-b border-[var(--color-border-primary)]"
           >
-            @if (userFacade.user()?.avatar) {
+            @if (userFacade.userAvatarUrl()) {
               <p-avatar
-                [image]="userFacade.user()!.avatar"
+                [image]="userFacade.userAvatarUrl()!"
                 shape="circle"
                 size="large"
               ></p-avatar>
@@ -227,10 +227,6 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
                         : ''
                     "
                     >{{ company.name }}</span
-                  >
-                  <span
-                    class="text-[10px] text-[var(--color-text-tertiary)] uppercase tracking-wider"
-                    >{{ company.id }}</span
                   >
                 </div>
                 @if (company.id === activeCompany()?.id) {

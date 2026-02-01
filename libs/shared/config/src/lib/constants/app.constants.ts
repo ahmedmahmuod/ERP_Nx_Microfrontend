@@ -69,7 +69,7 @@ export const APP_URLS = {
 /**
  * API Configuration
  */
-export const API_CONFIG = {
+export const API = {
   BASE_URL: (globalThis as any).API_BASE_URL || 'http://localhost:3000/api',
   TIMEOUT: 30000, // 30 seconds
   RETRY_ATTEMPTS: 3,

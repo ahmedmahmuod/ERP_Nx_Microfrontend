@@ -33,7 +33,11 @@ export class ApiClient {
   /**
    * POST request
    */
-  post<T>(url: string, body?: unknown, options?: RequestOptions): Observable<T> {
+  post<T>(
+    url: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ): Observable<T> {
     return this.request<T>('POST', url, body, options);
   }
 
@@ -47,7 +51,11 @@ export class ApiClient {
   /**
    * PATCH request
    */
-  patch<T>(url: string, body?: unknown, options?: RequestOptions): Observable<T> {
+  patch<T>(
+    url: string,
+    body?: unknown,
+    options?: RequestOptions,
+  ): Observable<T> {
     return this.request<T>('PATCH', url, body, options);
   }
 
@@ -65,7 +73,7 @@ export class ApiClient {
     method: string,
     url: string,
     body?: unknown,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Observable<T> {
     let request$: Observable<T>;
 
@@ -86,7 +94,9 @@ export class ApiClient {
         request$ = this.http.delete<T>(url, options as object);
         break;
       default:
-        return throwError(() => new Error(`Unsupported HTTP method: ${method}`));
+        return throwError(
+          () => new Error(`Unsupported HTTP method: ${method}`),
+        );
     }
 
     return request$.pipe(
@@ -99,7 +109,7 @@ export class ApiClient {
 
         // Convert HTTP errors
         return throwError(() => createApiError(error));
-      })
+      }),
     );
   }
 
@@ -110,5 +120,24 @@ export class ApiClient {
     const baseUrl = this.config.baseUrls[service];
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
     return `${baseUrl}${cleanPath}`;
+  }
+
+  /**
+   * Build full URL for static assets (images, files, etc.)
+   * @param service - The service hosting the asset (e.g., 'shell')
+   * @param assetType - Type of asset (e.g., 'profilePictures')
+   * @param filename - The asset filename
+   * @returns Full URL to the asset
+   */
+  buildAssetUrl(
+    service: keyof typeof this.config.baseUrls,
+    assetType: keyof typeof this.config.assetPaths,
+    filename: string,
+  ): string {
+    const baseUrl = this.config.baseUrls[service];
+    const assetPath = this.config.assetPaths[assetType];
+    // Remove '/api' suffix from base URL for assets
+    const cleanBaseUrl = baseUrl.replace(/\/api$/, '');
+    return `${cleanBaseUrl}${assetPath}/${filename}`;
   }
 }

@@ -25,9 +25,9 @@ export interface AccentTokenConfig {
 export const ACCENT_TOKENS: Record<string, AccentTokenConfig> = {
   shell: {
     token: 'shell',
-    primary: '#6366f1', // Indigo
-    light: '#818cf8',
-    dark: '#4f46e5',
+    primary: '#47419B', // Brand Purple
+    light: '#5f57b3', // Lighter purple for hover
+    dark: '#3d3685', // Darker purple for active
     contrast: '#ffffff',
   },
   finance: {

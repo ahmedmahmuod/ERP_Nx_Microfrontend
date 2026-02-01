@@ -2,7 +2,9 @@
   <div class="select-company-container relative">
     <!-- Language Switcher -->
     <div class="lang-switch-container">
-      <lib-standalone-language-switch [isNested]="false"></lib-standalone-language-switch>
+      <lib-standalone-language-switch
+        [isNested]="false"
+      ></lib-standalone-language-switch>
     </div>
 
     <div class="selection-card-wrapper">
@@ -21,8 +23,12 @@
           @if (hasNoCompanies()) {
             <div class="error-state">
               <i class="pi pi-exclamation-triangle error-icon"></i>
-              <h3 class="error-title">{{ t('auth.selectCompany.noCompaniesTitle') }}</h3>
-              <p class="error-message">{{ t('auth.selectCompany.noCompaniesMessage') }}</p>
+              <h3 class="error-title">
+                {{ t('auth.selectCompany.noCompaniesTitle') }}
+              </h3>
+              <p class="error-message">
+                {{ t('auth.selectCompany.noCompaniesMessage') }}
+              </p>
               <erp-button
                 type="button"
                 variant="primary"
@@ -67,10 +73,9 @@
                 variant="primary"
                 size="lg"
                 [fullWidth]="true"
-                [disabled]="!selectedCompanyId() || isLoadingPermissions()"
-                [loading]="isLoadingPermissions()"
+                [disabled]="!selectedCompanyId()"
               >
-                {{ isLoadingPermissions() ? 'Loading permissions...' : t('auth.selectCompany.selectButton') }}
+                {{ t('auth.selectCompany.selectButton') }}
               </erp-button>
             </form>
           }

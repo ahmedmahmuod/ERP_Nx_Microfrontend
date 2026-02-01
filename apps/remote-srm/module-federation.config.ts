@@ -1,24 +1,43 @@
-import {
-  createRemoteConfig,
-  REMOTE_NAMES,
-  REMOTE_ENTRY_POINTS,
-  REMOTE_EXPOSES,
-  MF_COMMENTS,
-} from '@erp/shared/config';
-
 /**
  * Remote SRM Module Federation Configuration
- * Using centralized factory for consistency and DRY principle
+ *
+ * NOTE: This file CANNOT import from @erp/shared/config because module federation
+ * configs are loaded during Nx's JIT compilation phase, before workspace libraries
+ * are built. All configuration must be inlined.
  */
-const config = createRemoteConfig({
-  name: REMOTE_NAMES.SRM,
+const config = {
+  name: 'remoteSrm',
   exposes: {
-    [REMOTE_EXPOSES.ROUTES]: REMOTE_ENTRY_POINTS[REMOTE_NAMES.SRM],
-    [REMOTE_EXPOSES.MANIFEST]: 'apps/remote-srm/src/app/remote-entry/manifest.ts',
+    './Routes': 'apps/remote-srm/src/app/remote-entry/entry.routes.ts',
+    './Manifest': 'apps/remote-srm/src/app/remote-entry/manifest.ts',
   },
-});
+  shared: (libraryName: string, defaultConfig: any) => {
+    // Angular core packages MUST be singletons
+    if (libraryName.startsWith('@angular/')) {
+      return {
+        ...defaultConfig,
+        singleton: true,
+        strictVersion: false,
+        requiredVersion: 'auto',
+      };
+    }
+
+    // RxJS should also be singleton
+    if (libraryName === 'rxjs') {
+      return {
+        ...defaultConfig,
+        singleton: true,
+        strictVersion: false,
+        requiredVersion: 'auto',
+      };
+    }
+
+    return defaultConfig;
+  },
+};
 
 /**
- * ${MF_COMMENTS.NX_REQUIREMENT}
+ * Nx requires a default export of the config to allow correct resolution
+ * of the module federation graph.
  */
 export default config;

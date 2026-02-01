@@ -26,7 +26,7 @@ import {
   isRegisteredRemote,
 } from '../config/remote-registry.config';
 import { PermissionsFacade } from '@erp/shared/util-state';
-import { ModuleKey, getModuleKeyByRoute } from '@erp/shared/config';
+import { ModuleKey, getModuleKeyByRoute } from '@erp/shared/models';
 
 /**
  * Shell's default navigation manifest
@@ -63,7 +63,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 export class NavigationFacadeService {
   private readonly router = inject(Router);
   private readonly permissionsFacade = inject(PermissionsFacade);
-  private readonly enableLogging = true; // Set to false in production
+  private readonly enableLogging = false; // Set to false in production
 
   // Internal state signals
   private readonly _state = signal<NavigationState>({
@@ -105,7 +105,11 @@ export class NavigationFacadeService {
   constructor() {
     // Listen to route changes and update active app context
     this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      )
       .subscribe((event) => {
         this.detectAndLoadManifest(event.url);
         this.updateActiveModuleFromUrl(event.url);
@@ -399,6 +403,8 @@ export class NavigationFacadeService {
     message: string,
     diagnostics: Record<string, unknown>,
   ): void {
+    if (!this.enableLogging) return;
+
     console.error(`[NavigationFacade] ERROR: ${message}`);
     console.error('Diagnostics:', diagnostics);
     console.error('Remote Registry:', REMOTE_REGISTRY);
@@ -459,29 +465,40 @@ export class NavigationFacadeService {
    */
   private updateActiveModuleFromUrl(url: string): void {
     const moduleKey = getModuleKeyByRoute(url);
-    if (moduleKey) {
-      this.permissionsFacade.setActiveModule(moduleKey);
 
-      // Ensure permissions are loaded for this module
-      this.permissionsFacade.ensureModulePermissions(moduleKey).catch(error => {
-        this.logError('Failed to load permissions for module', {
-          moduleKey,
-          error: error instanceof Error ? error.message : String(error),
-        });
-      });
+    // Dashboard and shell routes don't have a module context
+    if (!moduleKey) {
+      this.log('No module context for route:', url);
+      return;
     }
+
+    this.permissionsFacade.setActiveModule(moduleKey);
+
+    // Ensure permissions are loaded for this module
+    this.permissionsFacade.ensureModulePermissions(moduleKey).catch((error) => {
+      this.logError('Failed to load permissions for module', {
+        moduleKey,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    });
   }
 
   /**
    * Filter menu items based on permissions
    */
-  private filterMenuItemsByPermissions(items: NavItem[], moduleKey: ModuleKey): NavItem[] {
+  private filterMenuItemsByPermissions(
+    items: NavItem[],
+    moduleKey: ModuleKey,
+  ): NavItem[] {
     const filtered: NavItem[] = [];
 
     for (const item of items) {
       // Check if item has permission requirement
       if (item.requiredPage) {
-        const hasPermission = this.permissionsFacade.hasPage(moduleKey, item.requiredPage);
+        const hasPermission = this.permissionsFacade.hasPage(
+          moduleKey,
+          item.requiredPage,
+        );
         if (!hasPermission) {
           continue; // Skip this item
         }

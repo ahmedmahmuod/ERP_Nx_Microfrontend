@@ -6,7 +6,8 @@
  * User data is stored in localStorage by AuthFacadeService during login.
  */
 
-import { Injectable, signal, effect, computed } from '@angular/core';
+import { Injectable, signal, effect, computed, inject } from '@angular/core';
+import { ApiClient } from '@erp/shared/data-access';
 
 export interface User {
   id: string;
@@ -21,6 +22,7 @@ export interface User {
 })
 export class UserFacade {
   private readonly STORAGE_KEY = 'erp-user';
+  private readonly apiClient = inject(ApiClient);
 
   // State
   private readonly _user = signal<User | null>(this.loadUserFromStorage());
@@ -45,6 +47,19 @@ export class UserFacade {
     const name = this._user()?.name;
     if (!name) return '';
     return name.trim().split(' ')[0];
+  });
+
+  readonly userId = computed(() => this._user()?.id ?? '');
+
+  /**
+   * Computed full avatar URL using API architecture
+   * Uses ApiClient to build proper asset URL following existing patterns
+   * Returns null if user has no avatar
+   */
+  readonly userAvatarUrl = computed(() => {
+    const avatar = this._user()?.avatar;
+    if (!avatar) return null;
+    return this.apiClient.buildAssetUrl('shell', 'profilePictures', avatar);
   });
 
   constructor() {

@@ -12,3 +12,4 @@ export * from './lib/constants/validation.constants';
 export * from './lib/constants/module-registry.constants';
 export * from './lib/factories/module-federation.factory';
 export * from './lib/services/environment.service';
+export * from './lib/navigation';

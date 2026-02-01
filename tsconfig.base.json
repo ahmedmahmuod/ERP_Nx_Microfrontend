@@ -52,6 +52,7 @@
         "apps/remote-warehouses/src/app/remote-entry/manifest.ts"
       ],
       "@erp/shared/util-state": ["libs/shared/util-state/src/index.ts"],
+      "@erp/shared/util-guards": ["libs/shared/util-guards/src/index.ts"],
       "@erp/shared/util-i18n": ["libs/shared/util-i18n/src/index.ts"],
       "@erp/remote-auth/*": ["apps/remote-auth/*"],
       "@erp/shared/data-access": ["libs/shared/data-access/src/index.ts"]

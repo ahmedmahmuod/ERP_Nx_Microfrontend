@@ -39,6 +39,13 @@ export interface ApiConfig {
     readonly maxAttempts: number;
     readonly delayMs: number;
   };
+
+  /**
+   * Asset paths for static resources (images, files, etc.)
+   */
+  readonly assetPaths: {
+    readonly profilePictures: string;
+  };
 }
 
 /**
@@ -60,6 +67,9 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
   retry: {
     maxAttempts: 3,
     delayMs: 1000,
+  },
+  assetPaths: {
+    profilePictures: '/Uploads/ProfilePictures',
   },
 };
 
