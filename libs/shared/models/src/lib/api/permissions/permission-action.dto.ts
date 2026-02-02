@@ -8,7 +8,10 @@ export interface PermissionActionDto {
   readonly ActionID?: number;
   readonly ActionName?: string;
   readonly ActionValue?: string;
+  readonly Type?: string; // Correct property from JSON
+  readonly type?: string; // camelCase from JSON
   readonly ModuleID?: number;
   readonly IsActive?: boolean;
+  readonly isActive?: boolean; // camelCase
   [key: string]: unknown;
 }

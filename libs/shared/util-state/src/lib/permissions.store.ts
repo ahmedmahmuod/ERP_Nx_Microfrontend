@@ -50,26 +50,22 @@ export class PermissionsStore {
       const moduleId = this.currentModuleId();
 
       // If we have all required data and a module is set, reload permissions
-      // We don't force here because this triggers on state changes within the app
       if (userId && companyId && moduleId) {
-        this.loadPermissions(moduleId);
+        this.loadPermissions(moduleId, true); // Force reload on context change
       }
     });
   }
 
   /**
    * Load permissions for a module
-   * @param moduleId - Module ID to load permissions for
-   * @param force - If true, bypasses session cache and calls API (used on app refresh)
    */
   async loadPermissions(moduleId: number, force = false): Promise<void> {
-    // Store the module ID for auto-reload effect
     this.currentModuleId.set(moduleId);
 
     const companyId = this.companyFacade.activeCompany()?.id;
     const userId = this.userFacade.userId();
 
-    // Silently skip if user/company not available yet (e.g., not logged in)
+    // Silently skip if user/company not available yet
     if (!companyId || !userId) {
       return;
     }
@@ -89,8 +85,8 @@ export class PermissionsStore {
     try {
       const response = await firstValueFrom(
         this.apiService.getUserRoleInCompany({
-          CompanyID: companyId,
-          UserID: userId,
+          CompanyID: String(companyId), // Ensure string
+          UserID: String(userId), // Ensure string
           ModuleID: moduleId,
         }),
       );
@@ -103,7 +99,7 @@ export class PermissionsStore {
 
       const permissionSet = mapUserRoleResponseToPermissionSet(
         response,
-        companyId,
+        String(companyId),
         moduleId,
       );
 
@@ -114,10 +110,10 @@ export class PermissionsStore {
         error instanceof Error ? error.message : 'Unknown error';
       this.errorSignal.set(errorMessage);
 
-      // Fallback: empty permission set (safe mode)
+      // Fallback: empty permission set
       this.permissionsSignal.set({
         roleId: 0,
-        companyId,
+        companyId: String(companyId),
         moduleId,
         allowedPages: new Set(),
         allowedActions: new Set(),
@@ -129,7 +125,6 @@ export class PermissionsStore {
 
   /**
    * Check if user can access a page
-   * @param pageKey - PageValue from backend (e.g., "Users", "Companies")
    */
   canAccessPage(pageKey: string): boolean {
     return this.allowedPages().has(pageKey);
@@ -137,7 +132,6 @@ export class PermissionsStore {
 
   /**
    * Check if user can perform an action
-   * @param actionKey - ActionValue from backend (e.g., "Create", "Edit", "Delete")
    */
   canDoAction(actionKey: string): boolean {
     return this.allowedActions().has(actionKey);

@@ -14,22 +14,53 @@ import { PermissionSet } from '../domain/permission-set.model';
 export function mapUserRoleResponseToPermissionSet(
   dto: UserRoleResponseDto,
   companyId: string,
-  moduleId: number
+  moduleId: number,
 ): PermissionSet {
-  // Extract page identifiers (prefer PageValue, fallback to PageID)
+  // Extract page identifiers
+  // Priority: Type (JSON 'type') > PageValue > PageID
   const allowedPages = new Set<string>(
-    dto.Pages
-      .filter(page => page.IsActive !== false)
-      .map(page => page.PageValue || page.PageID?.toString() || '')
-      .filter(Boolean)
+    dto.Pages.filter((page) => {
+      // Handle casing for IsActive
+      const isActive = page.IsActive ?? page.isActive ?? page['isActive'];
+      return isActive !== false;
+    })
+      .map((page) => {
+        // Handle casing and property preference
+        // JSON returns 'type': 'CompaniesList' -> matches registry 'pageKey'
+        const key =
+          page.Type ||
+          page.type ||
+          page['type'] ||
+          page.PageValue ||
+          page['value'] ||
+          page.PageID?.toString() ||
+          page['id']?.toString() ||
+          '';
+        return (key as string).trim();
+      })
+      .filter((k): k is string => !!k),
   );
 
-  // Extract action identifiers (prefer ActionValue, fallback to ActionID)
+  // Extract action identifiers
+  // Priority: Type > ActionValue > ActionID
   const allowedActions = new Set<string>(
-    dto.Actions
-      .filter(action => action.IsActive !== false)
-      .map(action => action.ActionValue || action.ActionID?.toString() || '')
-      .filter(Boolean)
+    dto.Actions.filter((action) => {
+      const isActive = action.IsActive ?? action.isActive ?? action['isActive'];
+      return isActive !== false;
+    })
+      .map((action) => {
+        const key =
+          action.Type ||
+          action.type ||
+          action['type'] ||
+          action.ActionValue ||
+          action['value'] ||
+          action.ActionID?.toString() ||
+          action['id']?.toString() ||
+          '';
+        return key as string;
+      })
+      .filter((k): k is string => !!k),
   );
 
   return {

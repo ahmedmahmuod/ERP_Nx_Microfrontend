@@ -5,7 +5,7 @@
  */
 
 import { Injectable, inject, computed } from '@angular/core';
-import { MenuBuilder, SHELL_NAVIGATION } from '@erp/shared/config';
+import { MenuBuilder, SHELL_NAVIGATION } from '@erp/shared/ui';
 import { PermissionsStore } from '@erp/shared/util-state';
 import { ShellTabsService } from './shell-tabs.service';
 

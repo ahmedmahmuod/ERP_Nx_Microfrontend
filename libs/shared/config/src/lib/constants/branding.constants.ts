@@ -21,11 +21,11 @@ export const BRAND = {
  */
 export const COMPANY = {
   NAME: 'Assemble Corporation',
-  EMAIL: 'info@assemble.com',
-  SUPPORT_EMAIL: 'support@assemble.com',
+  EMAIL: 'info@assemblestage.com',
+  SUPPORT_EMAIL: 'support@assemblestage.com',
   PHONE: '+1 (555) 123-4567',
   ADDRESS: '123 Business Street, Tech City, TC 12345',
-  WEBSITE: 'https://www.assemble.com',
+  WEBSITE: 'https://www.assemblestage.com',
 } as const;
 
 /**

@@ -22,3 +22,5 @@ export * from './lib/domain/permission-set.model';
 export * from './lib/mappers/company.mapper';
 export * from './lib/mappers/auth.mapper';
 export * from './lib/mappers/permission.mapper';
+
+// Force update

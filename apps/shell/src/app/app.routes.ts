@@ -5,6 +5,7 @@ import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { companyGuard } from './core/guards/company.guard';
 import { RemoteUnavailableComponent } from './pages/remote-unavailable/remote-unavailable.component';
 import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
+import { NotAuthorizedComponent } from './pages/not-authorized/not-authorized.component';
 
 // Fallback routes for when remotes are unavailable
 const remoteFallbackRoutes: Route[] = [
@@ -24,6 +25,7 @@ export const appRoutes: Route[] = [
         .then((m) => m.remoteRoutes)
         .catch(() => remoteFallbackRoutes),
   },
+  // Protected routes (with layout, auth required)
   // Protected routes (with layout, auth required)
   {
     path: '',
@@ -49,7 +51,140 @@ export const appRoutes: Route[] = [
         path: 'access-denied',
         component: AccessDeniedComponent,
       },
-      // All modules require company selection
+
+      // --- Shell Main Tab Routes (Placeholders) ---
+      {
+        path: 'companies',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Companies', pageKey: 'CompaniesList', moduleId: 10 },
+      },
+      {
+        path: 'users',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'All Users', pageKey: 'AllUsersList', moduleId: 10 },
+      },
+      {
+        path: 'company-users',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: {
+          title: 'Company Users',
+          pageKey: 'CompanyUsersList',
+          moduleId: 10,
+        },
+      },
+      {
+        path: 'roles',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Roles', pageKey: 'RolesList', moduleId: 10 },
+      },
+      {
+        path: 'vendors',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Vendors', pageKey: 'EntitiesList', moduleId: 10 },
+      },
+      {
+        path: 'resources',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Resources', pageKey: 'ResourcesList', moduleId: 10 },
+      },
+      {
+        path: 'groups',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Groups', pageKey: 'UserGroups ', moduleId: 10 },
+      },
+      {
+        path: 'auto-codes',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Auto Codes', pageKey: 'AutocodeList', moduleId: 10 },
+      },
+      {
+        path: 'locations',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: { title: 'Locations', pageKey: 'Locations', moduleId: 10 },
+      },
+      {
+        path: 'company-structure',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: {
+          title: 'Company Structure',
+          pageKey: 'CompanyStructure',
+          moduleId: 10,
+        },
+      },
+      {
+        path: 'support',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: {
+          title: 'Technical Support',
+          pageKey: 'TechnicalSupport',
+          moduleId: 10,
+        },
+      },
+      {
+        path: 'versions',
+        canActivate: [companyGuard],
+        loadComponent: () =>
+          import(
+            './pages/generic-placeholder/generic-placeholder.component'
+          ).then((m) => m.GenericPlaceholderPageComponent),
+        data: {
+          title: 'Versions Reports',
+          pageKey: 'VersionsReports',
+          moduleId: 10,
+        },
+      },
+      // Not Authorized page (403)
+      {
+        path: 'not-authorized',
+        component: NotAuthorizedComponent,
+        title: 'Access Denied',
+      },
+
+      // --- Microfrontend Remote Routes ---
       {
         path: 'finance',
         canActivate: [companyGuard],

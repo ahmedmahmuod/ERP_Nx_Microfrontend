@@ -19,7 +19,13 @@
           {
             "glob": "**/*",
             "input": "apps/remote-finance/public"
-          }
+          },
+          {
+            "glob": "workspace-config.json",
+            "input": "libs/shared/config/src/lib/assets",
+            "output": "/assets"
+          },
+          "apps/remote-finance/src/assets"
         ],
         "styles": ["apps/remote-finance/src/styles.scss"],
         "customWebpackConfig": {

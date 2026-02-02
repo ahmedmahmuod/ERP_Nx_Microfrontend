@@ -19,7 +19,13 @@
           {
             "glob": "**/*",
             "input": "apps/remote-auth/public"
-          }
+          },
+          {
+            "glob": "workspace-config.json",
+            "input": "libs/shared/config/src/lib/assets",
+            "output": "/assets"
+          },
+          "apps/remote-auth/src/assets"
         ],
         "styles": ["apps/remote-auth/src/styles.scss"],
         "customWebpackConfig": {

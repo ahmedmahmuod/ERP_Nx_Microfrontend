@@ -5,13 +5,20 @@
 
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { API_CONFIG } from '../config/api-config.token';
+import { ConfigService } from '@erp/shared/config';
 
 export const correlationIdInterceptor: HttpInterceptorFn = (req, next) => {
-  const config = inject(API_CONFIG);
+  const service = inject(ConfigService);
+
+  // Skip if config not loaded yet (e.g., during the config fetch itself)
+  if (!service.isLoaded) {
+    return next(req);
+  }
+
+  const config = service.get();
 
   // Skip if disabled
-  if (!config.enableCorrelationId) {
+  if (!config.constants?.enableCorrelationId) {
     return next(req);
   }
 

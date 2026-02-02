@@ -7,7 +7,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError, TimeoutError } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
-import { API_CONFIG } from '../config/api-config.token';
+import { ConfigService, AppConfig } from '@erp/shared/config';
 import { createApiError } from '../models/api-error.model';
 
 export interface RequestOptions {
@@ -21,7 +21,7 @@ export interface RequestOptions {
 })
 export class ApiClient {
   private readonly http = inject(HttpClient);
-  private readonly config = inject(API_CONFIG);
+  private readonly configService = inject(ConfigService);
 
   /**
    * GET request
@@ -99,8 +99,11 @@ export class ApiClient {
         );
     }
 
+    // Default timeout or from config
+    const timeoutMs = this.configService.get().api.gateway ? 30000 : 30000;
+
     return request$.pipe(
-      timeout(this.config.timeout),
+      timeout(timeoutMs),
       catchError((error) => {
         // Convert timeout errors
         if (error instanceof TimeoutError) {
@@ -116,8 +119,8 @@ export class ApiClient {
   /**
    * Build full URL for a service
    */
-  buildUrl(service: keyof typeof this.config.baseUrls, path: string): string {
-    const baseUrl = this.config.baseUrls[service];
+  buildUrl(service: keyof AppConfig['api'], path: string): string {
+    const baseUrl = this.configService.getApiBase(service);
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
     return `${baseUrl}${cleanPath}`;
   }
@@ -130,14 +133,14 @@ export class ApiClient {
    * @returns Full URL to the asset
    */
   buildAssetUrl(
-    service: keyof typeof this.config.baseUrls,
-    assetType: keyof typeof this.config.assetPaths,
+    service: keyof AppConfig['api'],
+    assetType: 'profilePictures', // For now hardcoded as per current model
     filename: string,
   ): string {
-    const baseUrl = this.config.baseUrls[service];
-    const assetPath = this.config.assetPaths[assetType];
+    const baseUrl = this.configService.getApiBase(service);
+    const assetPath = '/Uploads/ProfilePictures';
     // Remove '/api' suffix from base URL for assets
-    const cleanBaseUrl = baseUrl.replace(/\/api$/, '');
+    const cleanBaseUrl = baseUrl.replace(/\/api\/$/, '').replace(/\/api$/, '');
     return `${cleanBaseUrl}${assetPath}/${filename}`;
   }
 }

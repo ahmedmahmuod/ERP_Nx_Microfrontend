@@ -4,8 +4,23 @@
   "sourceRoot": "libs/shared/config/src",
   "prefix": "erp",
   "projectType": "library",
-  "tags": ["scope:shared", "type:util"],
+  "tags": ["scope:shared", "type:util", "buildable"],
   "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/shared/config/ng-package.json",
+        "tsConfig": "libs/shared/config/tsconfig.lib.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/config/tsconfig.lib.prod.json"
+        },
+        "development": {}
+      },
+      "defaultConfiguration": "production"
+    },
     "lint": {
       "executor": "@nx/eslint:lint"
     },

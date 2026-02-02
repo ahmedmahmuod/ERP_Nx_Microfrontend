@@ -1,0 +1,67 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  <div class="sidebar-header">
+    @if (!collapsed()) {
+      <div class="logo-container">
+        <span class="logo-text">Assemble</span>
+      </div>
+    }
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i
+        class="pi"
+        [class.pi-angle-left]="!collapsed()"
+        [class.pi-angle-right]="collapsed()"
+      ></i>
+    </button>
+  </div>
+
+  <div class="sidebar-content">
+    @if (permissionsStore.loading()) {
+      <div class="loading-skeleton">
+        <p-skeleton width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
+      </div>
+    } @else {
+      <!-- Main Menu Items -->
+      <div class="menu-section">
+        <ul class="menu-list">
+          @for (item of mainMenu(); track item.label) {
+            <li class="menu-item">
+              <a
+                [routerLink]="item.routerLink"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                [title]="collapsed() ? item.label : ''"
+              >
+                <i [class]="item.icon"></i>
+                @if (!collapsed()) {
+                  <span class="label">{{ item.label }}</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+
+        @if (mainMenu().length === 0) {
+          <div class="empty-state">
+            <i class="pi pi-lock-open" style="font-size: 2rem; color: #ccc; margin-bottom: 1rem;"></i>
+            @if (!collapsed()) {
+              <div class="debug-info" style="font-size: 0.8rem; color: #999; text-align: center;">
+                <p>No authorized items found.</p>
+                <div style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px;">
+                  <p><strong>Debug Info:</strong></p>
+                  <p>Allowed Keys: {{ allowedPagesCount().size }}</p>
+                  <p>Check console for "Permissions Loaded"</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="sidebar-footer">
+    <!-- Optional footer content -->
+  </div>
+</aside>

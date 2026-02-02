@@ -19,7 +19,13 @@
           {
             "glob": "**/*",
             "input": "apps/remote-hr/public"
-          }
+          },
+          {
+            "glob": "workspace-config.json",
+            "input": "libs/shared/config/src/lib/assets",
+            "output": "/assets"
+          },
+          "apps/remote-hr/src/assets"
         ],
         "styles": ["apps/remote-hr/src/styles.scss"],
         "customWebpackConfig": {

@@ -63,10 +63,6 @@
           {
             "sourceTag": "scope:hr",
             "onlyDependOnLibsWithTags": ["scope:hr", "scope:shared"]
-          },
-          {
-            "sourceTag": "scope:supply",
-            "onlyDependOnLibsWithTags": ["scope:supply", "scope:shared"]
           }
         ]
       }

@@ -24,10 +24,10 @@ export const PORTS = {
   REMOTE_AUTH: 4201,
   REMOTE_FINANCE: 4202,
   REMOTE_HR: 4203,
-  REMOTE_SUPPLY: 4204, // Deprecated
   REMOTE_SRM: 4207,
   REMOTE_PM: 4205,
   REMOTE_WAREHOUSES: 4206,
+  REMOTE_SUPPLY: 4204,
 } as const;
 
 /**
@@ -41,7 +41,7 @@ export const HOSTS = {
   },
   PRODUCTION: {
     PROTOCOL: 'https',
-    DOMAIN: 'erp.assemble.com', // Change this for production
+    DOMAIN: 'assemblestage.com', // Updated for production/stage
   },
 } as const;
 
@@ -68,9 +68,11 @@ export const APP_URLS = {
 
 /**
  * API Configuration
+ * @deprecated Use ConfigService for dynamic configuration
  */
 export const API = {
-  BASE_URL: (globalThis as any).API_BASE_URL || 'http://localhost:3000/api',
+  BASE_URL:
+    (globalThis as any).API_BASE_URL || 'https://assemblestage:44382/api',
   TIMEOUT: 30000, // 30 seconds
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000, // 1 second

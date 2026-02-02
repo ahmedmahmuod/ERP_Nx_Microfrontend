@@ -14,10 +14,10 @@ export const REMOTE_NAMES = {
   AUTH: 'remoteAuth',
   FINANCE: 'remoteFinance',
   HR: 'remoteHr',
-  SUPPLY: 'remoteSupply', // Deprecated, kept for compatibility
   SRM: 'remoteSrm',
   PM: 'remotePm',
   WAREHOUSES: 'remoteWarehouses',
+  SUPPLY: 'remoteSupply',
 } as const;
 
 /**
@@ -26,12 +26,13 @@ export const REMOTE_NAMES = {
  */
 export const REMOTE_ENTRY_POINTS = {
   [REMOTE_NAMES.AUTH]: 'apps/remote-auth/src/app/remote-entry/entry.routes.ts',
-  [REMOTE_NAMES.FINANCE]: 'apps/remote-finance/src/app/remote-entry/entry.routes.ts',
+  [REMOTE_NAMES.FINANCE]:
+    'apps/remote-finance/src/app/remote-entry/entry.routes.ts',
   [REMOTE_NAMES.HR]: 'apps/remote-hr/src/app/remote-entry/entry.routes.ts',
-  [REMOTE_NAMES.SUPPLY]: 'apps/remote-supply/src/app/remote-entry/entry.routes.ts',
   [REMOTE_NAMES.SRM]: 'apps/remote-srm/src/app/remote-entry/entry.routes.ts',
   [REMOTE_NAMES.PM]: 'apps/remotePm/src/app/remote-entry/entry.routes.ts',
-  [REMOTE_NAMES.WAREHOUSES]: 'apps/remote-warehouses/src/app/remote-entry/entry.routes.ts',
+  [REMOTE_NAMES.WAREHOUSES]:
+    'apps/remote-warehouses/src/app/remote-entry/entry.routes.ts',
 } as const;
 
 /**
@@ -74,7 +75,11 @@ export const MF_PORTS = PORTS;
  * Build Remote URLs
  * Helper to generate remote URLs for different environments
  */
-export const buildRemoteUrl = (remoteName: string, port: number, isDevelopment = true): string => {
+export const buildRemoteUrl = (
+  remoteName: string,
+  port: number,
+  isDevelopment = true,
+): string => {
   return buildUrl(port, isDevelopment);
 };
 
@@ -83,12 +88,21 @@ export const buildRemoteUrl = (remoteName: string, port: number, isDevelopment =
  */
 export const REMOTE_URLS = {
   [REMOTE_NAMES.AUTH]: buildRemoteUrl(REMOTE_NAMES.AUTH, PORTS.REMOTE_AUTH),
-  [REMOTE_NAMES.FINANCE]: buildRemoteUrl(REMOTE_NAMES.FINANCE, PORTS.REMOTE_FINANCE),
+  [REMOTE_NAMES.FINANCE]: buildRemoteUrl(
+    REMOTE_NAMES.FINANCE,
+    PORTS.REMOTE_FINANCE,
+  ),
   [REMOTE_NAMES.HR]: buildRemoteUrl(REMOTE_NAMES.HR, PORTS.REMOTE_HR),
-  [REMOTE_NAMES.SUPPLY]: buildRemoteUrl(REMOTE_NAMES.SUPPLY, PORTS.REMOTE_SUPPLY),
+  [REMOTE_NAMES.SUPPLY]: buildRemoteUrl(
+    REMOTE_NAMES.SUPPLY,
+    PORTS.REMOTE_SUPPLY,
+  ),
   [REMOTE_NAMES.SRM]: buildRemoteUrl(REMOTE_NAMES.SRM, PORTS.REMOTE_SRM),
   [REMOTE_NAMES.PM]: buildRemoteUrl(REMOTE_NAMES.PM, PORTS.REMOTE_PM),
-  [REMOTE_NAMES.WAREHOUSES]: buildRemoteUrl(REMOTE_NAMES.WAREHOUSES, PORTS.REMOTE_WAREHOUSES),
+  [REMOTE_NAMES.WAREHOUSES]: buildRemoteUrl(
+    REMOTE_NAMES.WAREHOUSES,
+    PORTS.REMOTE_WAREHOUSES,
+  ),
 } as const;
 
 /**

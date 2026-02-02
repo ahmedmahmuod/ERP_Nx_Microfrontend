@@ -9,7 +9,7 @@
   </div>
 
   <div class="modules-grid">
-    @for (module of modules; track module.id) {
+    @for (module of visibleModules(); track module.id) {
       <div
         class="module-card"
         [style.--module-color-light]="module.color.light.text"
@@ -37,4 +37,48 @@
       </div>
     }
   </div>
+
+  <!-- Operational Items Section -->
+  @if (visibleOperationalItems().length > 0) {
+    <div class="section-divider" style="margin: 2rem 0; border-top: 1px solid #eee;"></div>
+    
+    <div class="dashboard-header" style="margin-bottom: 1.5rem;">
+      <div>
+        <h2 class="dashboard-subtitle" style="font-size: 1.2rem; font-weight: 600; color: #4b5563;">
+          Operational Management
+        </h2>
+      </div>
+    </div>
+
+    <div class="modules-grid">
+      @for (item of visibleOperationalItems(); track item.id) {
+        <div
+          class="module-card"
+          [style.--module-color-light]="item.color.light.text"
+          [style.--module-bg-light]="item.color.light.bg"
+          [style.--module-color-dark]="item.color.dark.text"
+          [style.--module-bg-dark]="item.color.dark.bg"
+          (click)="navigateToModule(item.route)"
+          role="button"
+          tabindex="0"
+          (keydown.enter)="navigateToModule(item.route)"
+          (keydown.space)="navigateToModule(item.route)"
+        >
+          <div class="module-icon">
+            <i [class]="'pi ' + item.icon"></i>
+          </div>
+          <h3 class="module-title">
+            {{ item.title }}
+          </h3>
+          <p class="module-description">
+            {{ item.description }}
+          </p>
+          <div class="module-arrow">
+            <i class="pi pi-arrow-right"></i>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
 </div>

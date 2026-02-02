@@ -19,7 +19,13 @@
           {
             "glob": "**/*",
             "input": "apps/remote-warehouses/public"
-          }
+          },
+          {
+            "glob": "workspace-config.json",
+            "input": "libs/shared/config/src/lib/assets",
+            "output": "/assets"
+          },
+          "apps/remote-warehouses/src/assets"
         ],
         "styles": ["apps/remote-warehouses/src/styles.scss"],
         "customWebpackConfig": {

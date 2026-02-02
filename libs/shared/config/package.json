@@ -1,5 +1,10 @@
 {
-  "name": "@erp/shared-config",
+  "name": "@erp/shared/config",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "module",
+  "peerDependencies": {
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0"
+  },
+  "sideEffects": false
 }

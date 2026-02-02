@@ -24,9 +24,6 @@
       "remoteHr/Routes": [
         "apps/remote-hr/src/app/remote-entry/entry.routes.ts"
       ],
-      "remoteSupply/Routes": [
-        "apps/remote-supply/src/app/remote-entry/entry.routes.ts"
-      ],
       "@erp/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@erp/shared/ui/primeng-components": [
         "libs/shared/ui/src/primeng-components.ts"

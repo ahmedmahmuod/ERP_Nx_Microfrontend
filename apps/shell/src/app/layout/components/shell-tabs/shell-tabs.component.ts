@@ -21,13 +21,7 @@ import { ShellMenuService } from '../../../core/services/shell-menu.service';
 @Component({
   selector: 'app-shell-tabs',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    TranslocoDirective,
-    TranslocoPipe,
-  ],
+  imports: [CommonModule, RouterLink, RouterLinkActive, TranslocoDirective],
   templateUrl: './shell-tabs.component.html',
   styleUrl: './shell-tabs.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -23,5 +23,8 @@ export * from './lib/standalone-language-switch/standalone-language-switch';
 // Directives
 export * from './lib/directives/has-action.directive';
 
+// Navigation
+export * from './lib/navigation';
+
 // NOTE: Components with PrimeNG dependencies are exported from primeng-components.ts
 // Import from '@erp/shared/ui/primeng-components' if you need them

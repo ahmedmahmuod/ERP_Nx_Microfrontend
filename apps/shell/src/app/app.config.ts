@@ -4,7 +4,7 @@ import {
   provideAppInitializer,
   inject,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
@@ -23,6 +23,7 @@ import {
   LocalStorageTokenStorage,
 } from '@erp/shared/data-access';
 import { PermissionsStore } from '@erp/shared/util-state';
+import { ConfigService } from '@erp/shared/config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -50,7 +51,7 @@ export const appConfig: ApplicationConfig = {
       },
     },
     provideTranslocoConfig(),
-    provideRouter(appRoutes),
+    provideRouter(appRoutes, withComponentInputBinding()),
     provideAnimationsAsync(),
     MessageService,
     providePrimeNG({
@@ -65,12 +66,17 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
-    // Load Shell permissions on app initialization
-    // Using direct moduleId (10) to avoid circular dependency issues during bootstrap
-    // Setting force=true to ensure permissions are refreshed from server on full page reload
-    provideAppInitializer(() => {
+    // Load Configuration and Permissions on app initialization
+    provideAppInitializer(async () => {
+      const configService = inject(ConfigService);
       const permissionsStore = inject(PermissionsStore);
-      return permissionsStore.loadPermissions(10, true); // (moduleId=10, force=true)
+
+      // 1. Load runtime configuration from centralized workspace-config
+      await configService.load('shell');
+
+      // 2. Load permissions using moduleId from config
+      const moduleId = configService.getModuleId();
+      return permissionsStore.loadPermissions(moduleId, true);
     }),
   ],
 };

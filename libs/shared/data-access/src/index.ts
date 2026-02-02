@@ -1,7 +1,3 @@
-// Configuration
-export * from './lib/config/api-config.model';
-export * from './lib/config/api-config.token';
-
 // Models
 export * from './lib/models/api-error.model';
 

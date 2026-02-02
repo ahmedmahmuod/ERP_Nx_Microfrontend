@@ -7,7 +7,9 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true
   },
   "files": [],
   "include": [],
@@ -18,7 +20,7 @@
   ],
   "extends": "../../../tsconfig.base.json",
   "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": true,
+    "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
