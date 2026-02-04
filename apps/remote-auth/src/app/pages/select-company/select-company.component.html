@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<ng-container *transloco="let t; read: 'auth'">
   <div class="select-company-container relative">
     <!-- Language Switcher -->
     <div class="lang-switch-container">
@@ -19,8 +19,8 @@
                 class="brand-logo"
               />
             </div>
-            <h1 class="title">{{ t('auth.selectCompany.title') }}</h1>
-            <p class="subtitle">{{ t('auth.selectCompany.subtitle') }}</p>
+            <h1 class="title">{{ t('selectCompany.title') }}</h1>
+            <p class="subtitle">{{ t('selectCompany.subtitle') }}</p>
           </div>
 
           <!-- Error State: No Companies -->
@@ -28,10 +28,10 @@
             <div class="error-state">
               <i class="pi pi-exclamation-triangle error-icon"></i>
               <h3 class="error-title">
-                {{ t('auth.selectCompany.noCompaniesTitle') }}
+                {{ t('selectCompany.noCompaniesTitle') }}
               </h3>
               <p class="error-message">
-                {{ t('auth.selectCompany.noCompaniesMessage') }}
+                {{ t('selectCompany.noCompaniesMessage') }}
               </p>
               <erp-button
                 type="button"
@@ -41,7 +41,7 @@
                 (click)="backToLogin()"
               >
                 <i class="pi pi-arrow-left"></i>
-                {{ t('auth.selectCompany.backToLogin') }}
+                {{ t('selectCompany.backToLogin') }}
               </erp-button>
             </div>
           } @else {
@@ -55,7 +55,7 @@
                   optionLabel="name"
                   optionValue="id"
                   [filter]="true"
-                  [placeholder]="t('auth.selectCompany.searchPlaceholder')"
+                  [placeholder]="t('selectCompany.searchPlaceholder')"
                   appendTo="body"
                   [style]="{ width: '100%' }"
                   class="w-full"
@@ -79,7 +79,7 @@
                 [fullWidth]="true"
                 [disabled]="!selectedCompanyId()"
               >
-                {{ t('auth.selectCompany.selectButton') }}
+                {{ t('selectCompany.selectButton') }}
               </erp-button>
             </form>
           }
@@ -89,7 +89,7 @@
             <p class="back-text">
               <a (click)="backToLogin()" class="back-link">
                 <i class="pi pi-arrow-left"></i>
-                {{ t('auth.selectCompany.backToLogin') }}
+                {{ t('selectCompany.backToLogin') }}
               </a>
             </p>
           </div>

@@ -36,15 +36,26 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100%; /* Fit to parent container (layout-main) */
   width: var(--sidebar-width);
   background: var(--sidebar-bg);
   border-inline-end: 1px solid var(--sidebar-border);
   transition: all var(--transition-slow);
   box-shadow: var(--sidebar-shadow);
+  /* overflow: hidden; REMOVED to allow hanging button */
 
   &.collapsed {
     width: var(--sidebar-collapsed-width);
+  }
+
+  /* Inner content wrapper handles the scrolling bounds */
+  .sidebar-inner-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
   }
 
   /* Mobile sidebar */
@@ -75,6 +86,40 @@
     }
   }
 }
+
+/* ===== Sidebar Header ===== */
+.sidebar-header {
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--sidebar-border);
+  background: var(--sidebar-header-bg);
+  transition: background var(--transition-slow);
+  position: relative;
+  flex-shrink: 0; /* Prevent header shrinking */
+
+  /* Accent strip at bottom */
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    height: 3px;
+    background: var(--accent-primary, var(--color-primary));
+    opacity: 0.9;
+    transition: background var(--transition-base);
+  }
+}
+/* ... (Logo styles skipped for brevity, keeping original flows) ... */
+/* NOTE: I will skip replacing the Logo content to keep this chunk smaller if possible, but the user wants me to replace specific chunks.
+   I need to be careful with StartLine/EndLine.
+   The Sidebar Container starts at line 35.
+   Sidebar Nav starts at line 291.
+   I will split this into two replacements if needed, or just replace the specific blocks.
+   Actually, I can just replace the Sidebar Container block and the Sidebar Nav block.
+*/
 
 /* ===== Sidebar Header ===== */
 .sidebar-header {
@@ -152,7 +197,7 @@
     opacity: 0;
     transform: translateX(var(--sidebar-text-offset, -10px));
     width: 0;
-    
+
     [dir='rtl'] & {
       --sidebar-text-offset: 10px;
     }
@@ -293,10 +338,16 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem 0;
+  min-height: 0; /* Critical for flex scrolling */
+  overscroll-behavior: contain; /* Prevent scroll chaining */
+  scroll-behavior: smooth;
 
-  /* Custom scrollbar */
+  /* Custom Professional Scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, var(--accent-muted, #ccc)) transparent;
+
   &::-webkit-scrollbar {
-    width: 4px;
+    width: var(--sidebar-scrollbar-size, 6px); /* Slightly wider for usability */
   }
 
   &::-webkit-scrollbar-track {
@@ -304,8 +355,28 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: var(--radius-sm);
+    background-color: var(--scrollbar-thumb, var(--accent-muted, #9ca3af));
+    border-radius: 99px;
+    border: 2px solid transparent; /* Creates padding effect */
+    background-clip: content-box;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--accent-primary, var(--color-primary));
+    }
+  }
+
+  /* Dark mode scrollbar support */
+  :host-context(.dark) & {
+    scrollbar-color: var(--scrollbar-thumb, #4b5563) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb, #4b5563);
+
+      &:hover {
+        background-color: var(--accent-primary, var(--color-primary));
+      }
+    }
   }
 }
 
@@ -407,7 +478,10 @@
     background: var(--nav-item-active-bg);
     color: var(--accent-primary, var(--nav-item-active-color));
     font-weight: 600;
-    border-inline-start-color: var(--accent-primary, var(--nav-item-active-border));
+    border-inline-start-color: var(
+      --accent-primary,
+      var(--nav-item-active-border)
+    );
     transform: translateX(0);
     box-shadow: var(--shadow-sm);
 
@@ -576,7 +650,9 @@
 .nav-icon {
   font-size: 1.125rem;
   flex-shrink: 0;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
 }
 
 .nav-label {
@@ -622,7 +698,10 @@
   border-inline-start: 3px solid transparent;
 
   &.active {
-    border-inline-start-color: var(--accent-primary, var(--nav-item-active-border));
+    border-inline-start-color: var(
+      --accent-primary,
+      var(--nav-item-active-border)
+    );
     background: var(--nav-item-active-bg);
   }
 

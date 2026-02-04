@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvatarModule } from 'primeng/avatar';
@@ -46,12 +46,13 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             userFacade.userEmail()
           }}</span>
         </div>
-        @if (userFacade.userAvatarUrl()) {
+        @if (userFacade.userAvatarUrl() && !imageError()) {
           <p-avatar
             [image]="userFacade.userAvatarUrl()!"
             shape="circle"
             size="normal"
             class="border border-gray-200 dark:border-gray-700"
+            (onImageError)="onImageError()"
           >
           </p-avatar>
         } @else {
@@ -59,8 +60,8 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
             [label]="userFacade.userInitials()"
             shape="circle"
             size="normal"
-            styleClass="bg-[var(--accent-primary)] text-white font-semibold"
-            class="border border-gray-200 dark:border-gray-700"
+            [style.background-color]="'var(--accent-primary)'"
+            class="text-white font-semibold border border-gray-200 dark:border-gray-700"
           >
           </p-avatar>
         }
@@ -77,18 +78,20 @@ import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
           <div
             class="flex items-center gap-3 p-4 border-b border-[var(--color-border-primary)]"
           >
-            @if (userFacade.userAvatarUrl()) {
+            @if (userFacade.userAvatarUrl() && !imageError()) {
               <p-avatar
                 [image]="userFacade.userAvatarUrl()!"
                 shape="circle"
                 size="large"
+                (onImageError)="onImageError()"
               ></p-avatar>
             } @else {
               <p-avatar
                 [label]="userFacade.userInitials()"
                 shape="circle"
                 size="large"
-                styleClass="bg-[var(--accent-primary)] text-white font-semibold"
+                [style.background-color]="'var(--accent-primary)'"
+                class="text-white font-semibold"
               ></p-avatar>
             }
             <div class="flex flex-col">
@@ -259,6 +262,20 @@ export class ProfileDropdownComponent {
   private companyFacade = inject(CompanyFacade);
   private authFacade = inject(AuthFacadeService);
   readonly userFacade = inject(UserFacade);
+
+  imageError = signal(false);
+
+  constructor() {
+    // Reset error when URL changes
+    effect(() => {
+      this.userFacade.userAvatarUrl();
+      this.imageError.set(false);
+    });
+  }
+
+  onImageError() {
+    this.imageError.set(true);
+  }
 
   searchQuery = '';
 

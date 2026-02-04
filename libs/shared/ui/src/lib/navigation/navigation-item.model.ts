@@ -47,6 +47,12 @@ export interface NavigationItem {
   badge?: string;
 
   /**
+   * If true, the item will be hidden from the sidebar menu
+   * but still accessible via route and dashboard
+   */
+  hidden?: boolean;
+
+  /**
    * Child navigation items (for nested menus)
    */
   children?: NavigationItem[];

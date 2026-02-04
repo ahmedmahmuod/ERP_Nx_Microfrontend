@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<ng-container *transloco="let t; read: 'auth'">
   <div class="register-container relative">
     <!-- Language Switcher -->
     <div class="lang-switch-container">
@@ -20,9 +20,9 @@
               />
               <h1 class="brand-title">{{ brandName }}</h1>
             </div>
-            <h2 class="register-title">{{ t('auth.register.title') }}</h2>
+            <h2 class="register-title">{{ t('register.title') }}</h2>
             <p class="register-subtitle">
-              {{ t('auth.register.subtitle') }}
+              {{ t('register.subtitle') }}
             </p>
           </div>
 
@@ -34,8 +34,8 @@
           >
             <erp-input
               type="text"
-              [label]="t('auth.register.nameLabel')"
-              [placeholder]="t('auth.register.namePlaceholder')"
+              [label]="t('register.nameLabel')"
+              [placeholder]="t('register.namePlaceholder')"
               formControlName="name"
               [required]="true"
               [invalid]="isFieldInvalid('name')"
@@ -45,8 +45,8 @@
 
             <erp-input
               type="email"
-              [label]="t('auth.register.emailLabel')"
-              [placeholder]="t('auth.register.emailPlaceholder')"
+              [label]="t('register.emailLabel')"
+              [placeholder]="t('register.emailPlaceholder')"
               formControlName="email"
               [required]="true"
               [invalid]="isFieldInvalid('email')"
@@ -56,8 +56,8 @@
 
             <erp-input
               type="password"
-              [label]="t('auth.register.passwordLabel')"
-              [placeholder]="t('auth.register.passwordPlaceholder')"
+              [label]="t('register.passwordLabel')"
+              [placeholder]="t('register.passwordPlaceholder')"
               formControlName="password"
               [required]="true"
               [invalid]="isFieldInvalid('password')"
@@ -67,8 +67,8 @@
 
             <erp-input
               type="password"
-              [label]="t('auth.register.confirmPasswordLabel')"
-              [placeholder]="t('auth.register.confirmPasswordPlaceholder')"
+              [label]="t('register.confirmPasswordLabel')"
+              [placeholder]="t('register.confirmPasswordPlaceholder')"
               formControlName="confirmPassword"
               [required]="true"
               [invalid]="isFieldInvalid('confirmPassword')"
@@ -84,13 +84,13 @@
                   class="checkbox"
                 />
                 <span>
-                  {{ t('auth.register.terms.agree') }}
+                  {{ t('register.terms.agree') }}
                   <a href="#" class="terms-link">{{
-                    t('auth.register.terms.tos')
+                    t('register.terms.tos')
                   }}</a>
-                  {{ t('auth.register.terms.and') }}
+                  {{ t('register.terms.and') }}
                   <a href="#" class="terms-link">{{
-                    t('auth.register.terms.privacy')
+                    t('register.terms.privacy')
                   }}</a>
                 </span>
               </label>
@@ -111,8 +111,8 @@
             >
               {{
                 authFacade.isLoading()
-                  ? t('auth.register.creatingAccount')
-                  : t('auth.register.createAccount')
+                  ? t('register.creatingAccount')
+                  : t('register.createAccount')
               }}
             </erp-button>
           </form>
@@ -120,9 +120,9 @@
           <!-- Footer -->
           <div class="register-footer">
             <p class="signin-text">
-              {{ t('auth.register.alreadyHaveAccount') }}
+              {{ t('register.alreadyHaveAccount') }}
               <a routerLink="/auth/login" class="signin-link">{{
-                t('auth.register.signIn')
+                t('register.signIn')
               }}</a>
             </p>
           </div>

@@ -8,7 +8,6 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   provideTranslocoConfig,
   TRANSLOCO_REMOTE_MAP,
@@ -16,11 +15,9 @@ import {
 import { appRoutes } from './app.routes';
 import { ERPTheme } from '@erp/shared/theme';
 import {
-  authTokenInterceptor,
-  errorHandlingInterceptor,
-  correlationIdInterceptor,
   TOKEN_STORAGE,
   LocalStorageTokenStorage,
+  provideErpHttpClient,
 } from '@erp/shared/data-access';
 import { PermissionsStore } from '@erp/shared/util-state';
 import { ConfigService } from '@erp/shared/config';
@@ -28,13 +25,7 @@ import { ConfigService } from '@erp/shared/config';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(
-      withInterceptors([
-        correlationIdInterceptor,
-        authTokenInterceptor,
-        errorHandlingInterceptor,
-      ]),
-    ),
+    provideErpHttpClient(),
     {
       provide: TOKEN_STORAGE,
       useClass: LocalStorageTokenStorage,
@@ -76,7 +67,7 @@ export const appConfig: ApplicationConfig = {
 
       // 2. Load permissions using moduleId from config
       const moduleId = configService.getModuleId();
-      return permissionsStore.loadPermissions(moduleId, true);
+      return permissionsStore.loadPermissions(moduleId);
     }),
   ],
 };

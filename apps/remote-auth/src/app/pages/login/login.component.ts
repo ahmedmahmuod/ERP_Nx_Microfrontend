@@ -15,7 +15,10 @@ import {
 import { ToastNotificationService } from '@erp/shared/ui/primeng-components';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ValidationMessageResolver } from '@erp/shared/util-i18n';
+import {
+  ValidationMessageResolver,
+  provideTranslocoScope,
+} from '@erp/shared/util-i18n';
 import {
   BRAND,
   DEMO_CREDENTIALS,
@@ -37,6 +40,7 @@ import {
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideTranslocoScope('auth')],
 })
 export class LoginComponent {
   // Services
@@ -86,8 +90,8 @@ export class LoginComponent {
    */
   private showValidationError(): void {
     this.toastService.warning(
-      this.transloco.translate('auth.login.validationTitle'),
-      this.transloco.translate('auth.validation.fillRequired'),
+      this.transloco.translate('login.validationTitle', {}, 'auth'),
+      this.transloco.translate('validation.fillRequired', {}, 'auth'),
     );
   }
 
@@ -95,12 +99,17 @@ export class LoginComponent {
    * Handle successful login
    */
   private handleLoginSuccess(): void {
-    const successTitle = this.transloco.translate('auth.login.successTitle');
+    const successTitle = this.transloco.translate(
+      'login.successTitle',
+      {},
+      'auth',
+    );
     const successMessage = this.transloco.translate(
-      'auth.login.successMessage',
+      'login.successMessage',
       {
         brand: BRAND.NAME,
       },
+      'auth',
     );
 
     // Increase toast life to 5000ms to ensure visibility
@@ -117,7 +126,7 @@ export class LoginComponent {
    * Handle login error with translated messages
    */
   private handleLoginError(error: unknown): void {
-    const errorTitle = this.transloco.translate('auth.login.errorTitle');
+    const errorTitle = this.transloco.translate('login.errorTitle', {}, 'auth');
     const errorMessage = this.getErrorMessage(error);
 
     this.toastService.error(errorTitle, errorMessage);
@@ -127,14 +136,18 @@ export class LoginComponent {
    * Extract error message from ApiError or use default
    */
   private getErrorMessage(error: unknown): string {
-    const defaultMessage = this.transloco.translate('auth.login.errorDefault');
+    const defaultMessage = this.transloco.translate(
+      'login.errorDefault',
+      {},
+      'auth',
+    );
 
     if (typeof error === 'object' && error !== null && 'messageKey' in error) {
       const messageKey = (error as { messageKey: string }).messageKey;
-      const translated = this.transloco.translate(`auth.${messageKey}`);
+      const translated = this.transloco.translate(`${messageKey}`, {}, 'auth');
 
       // Return translated message if found, otherwise use default
-      return translated !== `auth.${messageKey}` ? translated : defaultMessage;
+      return translated !== `${messageKey}` ? translated : defaultMessage;
     }
 
     return defaultMessage;

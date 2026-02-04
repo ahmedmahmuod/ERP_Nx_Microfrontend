@@ -16,7 +16,10 @@ import {
 } from '@erp/shared/ui';
 import { AuthFacadeService } from '../../services/auth-facade.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { ValidationMessageResolver } from '@erp/shared/util-i18n';
+import {
+  ValidationMessageResolver,
+  provideTranslocoScope,
+} from '@erp/shared/util-i18n';
 import { BRAND } from '@erp/shared/config';
 
 @Component({
@@ -34,6 +37,7 @@ import { BRAND } from '@erp/shared/config';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideTranslocoScope('auth')],
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);

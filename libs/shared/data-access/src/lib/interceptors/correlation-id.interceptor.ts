@@ -22,6 +22,11 @@ export const correlationIdInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  // Skip assets (i18n, images, etc.) to avoid CORS preflight issues on static files
+  if (req.url.includes('/assets/') || req.url.endsWith('.json')) {
+    return next(req);
+  }
+
   // Generate correlation ID
   const correlationId = generateCorrelationId();
 

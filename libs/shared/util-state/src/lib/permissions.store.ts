@@ -4,7 +4,14 @@
  * Server-authoritative: permissions loaded from API on app entry
  */
 
-import { Injectable, inject, signal, computed, effect } from '@angular/core';
+import {
+  Injectable,
+  inject,
+  signal,
+  computed,
+  effect,
+  untracked,
+} from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { PermissionsApiService } from '@erp/shared/data-access';
 import {
@@ -50,8 +57,11 @@ export class PermissionsStore {
       const moduleId = this.currentModuleId();
 
       // If we have all required data and a module is set, reload permissions
+      // Don't force reload - rely on cache keys (userId/companyId/moduleId)
       if (userId && companyId && moduleId) {
-        this.loadPermissions(moduleId, true); // Force reload on context change
+        untracked(() => {
+          this.loadPermissions(moduleId);
+        });
       }
     });
   }
@@ -70,14 +80,13 @@ export class PermissionsStore {
       return;
     }
 
-    // Check cache unless force requested
-    if (!force) {
-      const cached = this.getCachedPermissions(userId, companyId, moduleId);
-      if (cached) {
-        this.permissionsSignal.set(cached);
-        return;
-      }
+    // Check active request to prevent duplicates
+    if (!force && this.loadingSignal()) {
+      return;
     }
+
+    // REMOVED SESSION CACHE AS PER USER REQUEST
+    // Always fetch fresh data on context change or refresh
 
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
@@ -104,7 +113,7 @@ export class PermissionsStore {
       );
 
       this.permissionsSignal.set(permissionSet);
-      this.cachePermissions(userId, companyId, moduleId, permissionSet);
+      // this.cachePermissions(userId, companyId, moduleId, permissionSet); // Disabled persistence
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';

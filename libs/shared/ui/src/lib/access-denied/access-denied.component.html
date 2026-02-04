@@ -1,0 +1,37 @@
+<div
+  class="access-denied-wrapper"
+  *transloco="let t; read: 'shell.pages.accessDenied'"
+>
+  <div class="access-denied-card">
+    <div class="icon-container">
+      <i class="pi pi-lock-open"></i>
+    </div>
+
+    <h1 class="title">{{ t('title') }}</h1>
+    <p class="message">{{ t('message') }}</p>
+
+    <div class="actions">
+      <erp-button
+        variant="primary"
+        size="lg"
+        [fullWidth]="true"
+        (clicked)="goToDashboard()"
+      >
+        <i class="pi pi-home mr-2"></i>
+        {{ t('goToDashboard') }}
+      </erp-button>
+
+      <erp-button
+        variant="ghost"
+        size="md"
+        [fullWidth]="true"
+        (clicked)="goBack()"
+      >
+        <i class="pi pi-arrow-left mr-2"></i>
+        {{ t('goBack') }}
+      </erp-button>
+    </div>
+
+    <div class="footer-info">Error Code: 403_FORBIDDEN</div>
+  </div>
+</div>

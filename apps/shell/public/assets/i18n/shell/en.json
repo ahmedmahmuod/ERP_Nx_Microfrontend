@@ -25,16 +25,52 @@
   },
   "nav": {
     "dashboard": "Dashboard",
+    "payroll": "Payroll",
+    "finance": "Finance",
+    "warehouse": "Warehouse",
+    "crm": "CRM",
+    "srm": "SRM",
+    "projects": "Project Management",
+    "pipeline": "Pipeline",
+    "entities": "Entities",
+    "resources": "Resources",
+    "units": "Units",
     "allUsers": "All Users",
+    "companyUsers": "Company Users",
     "companies": "Companies",
     "roles": "Roles",
     "vendors": "Vendors",
     "groups": "Groups",
     "autoCodes": "Auto Codes",
     "locations": "Locations",
+    "cities": "Cities",
+    "countries": "Countries",
+    "governments": "Governments",
+    "branches": "Branches",
+    "positions": "Positions",
+    "districts": "Districts",
     "companyStructure": "Company Structure",
-    "techSupport": "Technical Support",
-    "versionsReports": "Versions & Reports"
+    "technicalSupport": "Technical Support",
+    "versionsReports": "Versions & Reports",
+    "paymentRequests": "Payment Requests",
+    "myPaymentRequests": "My Requests",
+    "paymentApprovals": "Approvals",
+    "paymentPaying": "Paying",
+    "paymentCategories": "Categories",
+    "paymentLimits": "Limits",
+    "needsRequests": "Needs Requests",
+    "myNeedRequests": "My Requests",
+    "needsCategories": "Categories",
+    "needsConfigurations": "Configurations",
+    "addNeedItems": "Add Items",
+    "documents": "Documents",
+    "myDocuments": "My Documents",
+    "documentCategories": "Categories",
+    "documentPermissions": "Permissions",
+    "permissionCategories": "Category Permissions",
+    "permissionGroups": "Group Permissions",
+    "permissionRoles": "Role Permissions",
+    "permissionUsers": "User Permissions"
   },
   "profile": {
     "admin": "Admin",
@@ -66,9 +102,17 @@
         "title": "Project Management",
         "description": "Plan, track, and deliver projects"
       },
-      "warehouses": {
+      "warehouse": {
         "title": "Warehouses",
         "description": "Manage inventory, stock, and warehouse operations"
+      },
+      "crm": {
+        "title": "CRM",
+        "description": "Customer Relationship Management"
+      },
+      "pipeline": {
+        "title": "Pipeline",
+        "description": "Manage process pipelines"
       }
     }
   },
@@ -76,6 +120,44 @@
     "title": "Module Temporarily Unavailable",
     "message": "The requested module is currently unavailable. This may be because the service is not running in development mode.",
     "backToDashboard": "Go to Dashboard"
+  },
+  "pages": {
+    "technicalSupport": {
+      "title": "Technical Support",
+      "welcome": "Welcome to the Technical Support center. Here you can find resources and contact information for assistance."
+    },
+    "versionsReports": {
+      "title": "Versions Reports",
+      "table": {
+        "version": "Version",
+        "date": "Date",
+        "description": "Description",
+        "status": "Status"
+      },
+      "status": {
+        "released": "Released",
+        "beta": "Beta"
+      }
+    },
+    "accessDenied": {
+      "title": "Access Denied",
+      "message": "You don't have permission to access this page. Please contact your administrator if you believe this is an error.",
+      "goToDashboard": "Go to Dashboard",
+      "goBack": "Go Back"
+    },
+    "notAuthorized": {
+      "title": "Access Denied",
+      "message": "You do not have permission to view this page.",
+      "subtext": "Please contact your administrator if you believe this is a mistake."
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage system users",
+      "emptyState": {
+        "title": "No Users Found",
+        "message": "There are no users to display."
+      }
+    }
   },
   "footer": {
     "copyright": "All rights reserved {{ year }} ©",

@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   inject,
   computed,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -23,7 +24,7 @@ import { UserFacade, PermissionsStore } from '@erp/shared/util-state';
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly userFacade = inject(UserFacade);
 
@@ -39,7 +40,7 @@ export class DashboardComponent {
       id: 'hr',
       title: 'HR & Payroll',
       description: 'Manage employees, payroll, and HR operations',
-      icon: 'pi-users',
+      icon: 'pi-briefcase',
       route: '/hr',
       permissionKey: 'PayrollModule',
       color: {
@@ -52,9 +53,9 @@ export class DashboardComponent {
       id: 'finance',
       title: 'Finance',
       description: 'Track finances, invoices, and accounting',
-      icon: 'pi-wallet',
+      icon: 'pi-dollar', // Changed from pi-sack-dollar to closest PrimeIcon
       route: '/finance',
-      permissionKey: 'FinanceModule', // Reverted to strict module key (hidden for this user)
+      permissionKey: 'FinanceModule',
       color: {
         name: 'emerald',
         light: { text: 'rgb(16 185 129)', bg: 'rgb(209 250 229)' },
@@ -62,16 +63,16 @@ export class DashboardComponent {
       },
     },
     {
-      id: 'srm',
-      title: 'SRM',
-      description: 'Supplier relationship and procurement management',
-      icon: 'pi-building',
-      route: '/srm',
-      permissionKey: 'SRM', // Reverted to strict module key (hidden for this user)
+      id: 'warehouse',
+      title: 'Warehouses',
+      description: 'Manage inventory, stock, and warehouse operations',
+      icon: 'pi-box', // pi-warehouse not standard, using pi-box
+      route: '/warehouses',
+      permissionKey: 'WarehouseModule',
       color: {
-        name: 'violet',
-        light: { text: 'rgb(124 58 237)', bg: 'rgb(245 243 255)' },
-        dark: { text: 'rgb(124 58 237)', bg: 'rgb(76 29 149)' },
+        name: 'orange',
+        light: { text: 'rgb(234 88 12)', bg: 'rgb(255 237 213)' },
+        dark: { text: 'rgb(234 88 12)', bg: 'rgb(124 45 18)' },
       },
     },
     {
@@ -80,7 +81,7 @@ export class DashboardComponent {
       description: 'Plan, track, and deliver projects',
       icon: 'pi-sitemap',
       route: '/pm',
-      permissionKey: 'ProjectManagmentModule', // Updated based on user JSON
+      permissionKey: 'ProjectManagmentModule',
       color: {
         name: 'pink',
         light: { text: 'rgb(236 72 153)', bg: 'rgb(252 231 243)' },
@@ -88,16 +89,16 @@ export class DashboardComponent {
       },
     },
     {
-      id: 'warehouses',
-      title: 'Warehouses',
-      description: 'Manage inventory, stock, and warehouse operations',
-      icon: 'pi-box',
-      route: '/warehouses',
-      permissionKey: 'WarehousesModule',
+      id: 'srm',
+      title: 'SRM',
+      description: 'Supplier relationship and procurement management',
+      icon: 'pi-database',
+      route: '/srm',
+      permissionKey: 'SRMModule',
       color: {
-        name: 'orange',
-        light: { text: 'rgb(234 88 12)', bg: 'rgb(255 237 213)' },
-        dark: { text: 'rgb(234 88 12)', bg: 'rgb(124 45 18)' },
+        name: 'violet',
+        light: { text: 'rgb(124 58 237)', bg: 'rgb(245 243 255)' },
+        dark: { text: 'rgb(124 58 237)', bg: 'rgb(76 29 149)' },
       },
     },
   ];
@@ -105,25 +106,12 @@ export class DashboardComponent {
   // Operational Items (Uniform Dark Gray)
   readonly operationalItems = [
     {
-      id: 'documents',
-      title: 'Documents',
-      description: 'Manage company documents and archives',
-      icon: 'pi-file',
-      route: '/documents', // Placeholder route
-      permissionKey: 'Documents',
-      color: {
-        name: 'gray',
-        light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
-        dark: { text: 'rgb(255 255 255)', bg: 'rgb(55 65 81)' }, // Dark Gray
-      },
-    },
-    {
-      id: 'needs',
-      title: 'Need Requests',
-      description: 'Track and manage need requests',
-      icon: 'pi-list',
-      route: '/needs-requests', // Placeholder route
-      permissionKey: 'NeedsRequest',
+      id: 'entities',
+      title: 'Entities',
+      description: 'Manage business entities and vendors',
+      icon: 'pi-users', // best match for fa-people-group
+      route: '/entities',
+      permissionKey: 'EntitiesList',
       color: {
         name: 'gray',
         light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
@@ -131,12 +119,12 @@ export class DashboardComponent {
       },
     },
     {
-      id: 'payments',
-      title: 'Payment Requests',
-      description: 'Manage payment requests and approvals',
-      icon: 'pi-dollar',
-      route: '/payment-requests', // Placeholder route
-      permissionKey: 'MyPaymentRequests',
+      id: 'resources',
+      title: 'Resources',
+      description: 'Manage all resources and their allocation',
+      icon: 'pi-database',
+      route: '/resources',
+      permissionKey: 'Resources',
       color: {
         name: 'gray',
         light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
@@ -146,10 +134,10 @@ export class DashboardComponent {
     {
       id: 'pipeline',
       title: 'Processes Pipeline',
-      description: 'View and manage process pipelines',
-      icon: 'pi-chart-line',
-      route: '/pipeline', // Placeholder route
-      permissionKey: 'PiblineAp',
+      description: 'Manage all processes and their pipeline',
+      icon: 'pi-database',
+      route: '/pipeline',
+      permissionKey: 'PiblineApp',
       color: {
         name: 'gray',
         light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
@@ -157,12 +145,38 @@ export class DashboardComponent {
       },
     },
     {
-      id: 'entities',
-      title: 'Entities',
-      description: 'Manage business entities and vendors',
-      icon: 'pi-briefcase',
-      route: '/vendors',
-      permissionKey: 'EntitiesList',
+      id: 'payments',
+      title: 'Payment Requests',
+      description: 'Manage all payment requests and transactions',
+      icon: 'pi-credit-card',
+      route: '/payment-requests',
+      permissionKey: 'PaymentRequest',
+      color: {
+        name: 'gray',
+        light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
+        dark: { text: 'rgb(255 255 255)', bg: 'rgb(55 65 81)' },
+      },
+    },
+    {
+      id: 'needs',
+      title: 'Needs Requests',
+      description: 'Create and manage all need requests',
+      icon: 'pi-question-circle', // BEST MATCH for fa-question
+      route: '/needs-requests',
+      permissionKey: 'NeedsRequest',
+      color: {
+        name: 'gray',
+        light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
+        dark: { text: 'rgb(255 255 255)', bg: 'rgb(55 65 81)' },
+      },
+    },
+    {
+      id: 'documents',
+      title: 'Documents',
+      description: 'Access and manage all important documents',
+      icon: 'pi-file',
+      route: '/documents',
+      permissionKey: 'DocumnetsModule', // Preserving backend typo
       color: {
         name: 'gray',
         light: { text: 'rgb(55 65 81)', bg: 'rgb(243 244 246)' },
@@ -193,6 +207,16 @@ export class DashboardComponent {
   readonly debugAllowedKeys = computed(() =>
     Array.from(this.permissionsStore.allowedPages()).sort(),
   );
+
+  /**
+   * Load Shell permissions when dashboard initializes
+   * This ensures permission-based filtering works correctly
+   */
+  ngOnInit(): void {
+    // Load Shell module permissions (Module ID 10)
+    // This is non-blocking and updates the store asynchronously
+    this.permissionsStore.loadPermissions(10);
+  }
 
   navigateToModule(route: string): void {
     this.router.navigate([route]);

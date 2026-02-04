@@ -21,6 +21,7 @@ import {
   type Company,
   PermissionsFacade,
 } from '@erp/shared/util-state';
+import { provideTranslocoScope } from '@erp/shared/util-i18n';
 import { SelectModule } from 'primeng/select';
 import { ToastNotificationService } from '@erp/shared/ui/primeng-components';
 import {
@@ -45,6 +46,7 @@ import { BRAND } from '@erp/shared/config';
   templateUrl: './select-company.component.html',
   styleUrls: ['./select-company.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideTranslocoScope('auth')],
 })
 export class SelectCompanyComponent implements OnInit {
   private readonly router = inject(Router);
@@ -113,7 +115,7 @@ export class SelectCompanyComponent implements OnInit {
    */
   private showError(message: string): void {
     this.toastService.error(
-      this.transloco.translate('auth.errors.unknown'),
+      this.transloco.translate('errors.unknown', {}, 'auth'),
       message,
     );
   }

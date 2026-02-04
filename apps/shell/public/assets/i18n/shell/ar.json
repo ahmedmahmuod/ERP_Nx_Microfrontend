@@ -25,16 +25,52 @@
   },
   "nav": {
     "dashboard": "لوحة التحكم",
+    "payroll": "الرواتب",
+    "finance": "المالية",
+    "warehouse": "المستودع",
+    "crm": "إدارة علاقات العملاء",
+    "srm": "إدارة علاقات الموردين",
+    "projects": "إدارة المشاريع",
+    "pipeline": "خط العمل",
+    "entities": "الكيانات",
+    "resources": "الموارد",
+    "units": "الوحدات",
     "allUsers": "المستخدمين",
+    "companyUsers": "مستخدمي الشركة",
     "companies": "الشركات",
     "roles": "الأدوار",
     "vendors": "الموردين",
     "groups": "المجموعات",
     "autoCodes": "الأكواد التلقائية",
     "locations": "المواقع",
+    "cities": "المدن",
+    "countries": "الدول",
+    "governments": "المحافظات",
+    "branches": "الفروع",
+    "positions": "الوظائف",
+    "districts": "الأحياء",
     "companyStructure": "هيكل الشركة",
-    "techSupport": "الدعم الفني",
-    "versionsReports": "الإصدارات والتقارير"
+    "technicalSupport": "الدعم الفني",
+    "versionsReports": "الإصدارات والتقارير",
+    "paymentRequests": "طلبات الدفع",
+    "myPaymentRequests": "طلباتي",
+    "paymentApprovals": "الموافقات",
+    "paymentPaying": "الدفع",
+    "paymentCategories": "الفئات",
+    "paymentLimits": "الحدود",
+    "needsRequests": "طلبات الاحتياجات",
+    "myNeedRequests": "طلباتي",
+    "needsCategories": "الفئات",
+    "needsConfigurations": "الإعدادات",
+    "addNeedItems": "إضافة عناصر",
+    "documents": "المستندات",
+    "myDocuments": "مستنداتي",
+    "documentCategories": "الفئات",
+    "documentPermissions": "الأذونات",
+    "permissionCategories": "أذونات الفئات",
+    "permissionGroups": "أذونات المجموعات",
+    "permissionRoles": "أذونات الأدوار",
+    "permissionUsers": "أذونات المستخدمين"
   },
   "profile": {
     "admin": "مسؤول",
@@ -66,7 +102,7 @@
         "title": "إدارة المشاريع",
         "description": "تخطيط وتتبع وتسليم المشاريع"
       },
-      "warehouses": {
+      "warehouse": {
         "title": "المستودعات",
         "description": "إدارة المخزون والعمليات المستودعية"
       }
@@ -76,6 +112,44 @@
     "title": "الوحدة غير متوفرة حالياً",
     "message": "الوحدة المطلوبة غير متوفرة حالياً. قد يكون ذلك بسبب عدم تشغيل الخدمة في وضع التطوير.",
     "backToDashboard": "الذهاب للوحة التحكم"
+  },
+  "pages": {
+    "technicalSupport": {
+      "title": "الدعم الفني",
+      "welcome": "مرحباً بك في مركز الدعم الفني. هنا يمكنك العثور على الموارد ومعلومات الاتصال للمساعدة."
+    },
+    "versionsReports": {
+      "title": "تقارير الإصدارات",
+      "table": {
+        "version": "الإصدار",
+        "date": "التاريخ",
+        "description": "الوصف",
+        "status": "الحالة"
+      },
+      "status": {
+        "released": "تم الإصدار",
+        "beta": "تجريبي"
+      }
+    },
+    "accessDenied": {
+      "title": "تم رفض الوصول",
+      "message": "ليس لديك إذن للوصول إلى هذه الصفحة. يرجى الاتصال بالمسؤول إذا كنت تعتقد أن هذا خطأ.",
+      "goToDashboard": "الذهاب للوحة التحكم",
+      "goBack": "العودة"
+    },
+    "notAuthorized": {
+      "title": "تم رفض الوصول",
+      "message": "ليس لديك إذن لعرض هذه الصفحة.",
+      "subtext": "يرجى الاتصال بالمسؤول إذا كنت تعتقد أن هذا خطأ."
+    },
+    "users": {
+      "title": "المستخدمين",
+      "description": "إدارة مستخدمي النظام",
+      "emptyState": {
+        "title": "لم يتم العثور على مستخدمين",
+        "message": "لا يوجد مستخدمين للعرض."
+      }
+    }
   },
   "footer": {
     "copyright": "جميع الحقوق محفوظة {{ year }} ©",

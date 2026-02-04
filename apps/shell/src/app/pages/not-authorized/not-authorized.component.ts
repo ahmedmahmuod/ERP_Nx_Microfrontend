@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-not-authorized',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslocoDirective],
   template: `
-    <div class="error-container">
+    <div class="error-container" *transloco="let t; read: 'shell'">
       <div class="error-content">
         <i class="pi pi-lock error-icon"></i>
-        <h1>Access Denied</h1>
-        <p>You do not have permission to view this page.</p>
+        <h1>{{ t('pages.notAuthorized.title') }}</h1>
+        <p>{{ t('pages.notAuthorized.message') }}</p>
         <p class="sub-text">
-          Please contact your administrator if you believe this is a mistake.
+          {{ t('pages.notAuthorized.subtext') }}
         </p>
       </div>
     </div>

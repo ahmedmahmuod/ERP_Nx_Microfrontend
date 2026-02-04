@@ -31,6 +31,9 @@ export class MenuBuilder {
       filtered = filtered.filter((item) => item.category === category);
     }
 
+    // Filter hidden items (e.g. apps that only appear on dashboard)
+    filtered = filtered.filter((item) => !item.hidden);
+
     // Filter by permissions
     filtered = filtered.filter((item) => this.canAccess(item));
 

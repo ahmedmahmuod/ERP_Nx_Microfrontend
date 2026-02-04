@@ -8,6 +8,7 @@ export * from './lib/services/api-client.service';
 export * from './lib/storage/token-storage.interface';
 export * from './lib/storage/local-storage-token-storage.service';
 export * from './lib/storage/token-storage.token';
+export * from './lib/providers/http-client.provider';
 
 // Interceptors
 export * from './lib/interceptors/auth-token.interceptor';

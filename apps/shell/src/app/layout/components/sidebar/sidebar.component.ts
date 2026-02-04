@@ -7,6 +7,8 @@ import {
   inject,
   computed,
   effect,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -39,278 +41,7 @@ import {
       useValue: 'shell',
     },
   ],
-  template: `
-    <!-- Mobile Backdrop -->
-    @if (mobileOpen) {
-      <div
-        class="sidebar-backdrop"
-        (click)="handleMobileClose()"
-        (keydown.escape)="handleMobileClose()"
-        role="button"
-        tabindex="0"
-        [attr.aria-label]="'shell.sidebar.collapse' | transloco"
-      ></div>
-    }
-
-    <aside
-      *transloco="let t; read: 'shell'"
-      class="sidebar"
-      [class.collapsed]="collapsed"
-      [class.mobile-open]="mobileOpen"
-      [attr.data-accent]="navigationFacade.accentToken()"
-    >
-      <!-- Header with App Branding -->
-      <div class="sidebar-header">
-        <div class="logo-content">
-          @if (navigationFacade.appIcon()) {
-            <i
-              [class]="'pi ' + navigationFacade.appIcon() + ' app-icon'"
-              [class.icon-collapsed]="collapsed"
-            ></i>
-          } @else if (logoError) {
-            <div class="logo-fallback" [class.logo-collapsed]="collapsed">
-              <i class="pi pi-building"></i>
-              @if (!collapsed) {
-                <span>{{ brandName }}</span>
-              }
-            </div>
-          } @else {
-            <img
-              [src]="brandLogo"
-              [alt]="brandName"
-              class="logo-image"
-              [class.logo-collapsed]="collapsed"
-              (error)="onLogoError()"
-            />
-          }
-          @if (!collapsed) {
-            <span class="logo-text">{{ navigationFacade.sidebarTitle() }}</span>
-          }
-        </div>
-
-        <!-- Mobile Close Button -->
-        @if (mobileOpen) {
-          <button
-            (click)="handleMobileClose()"
-            class="mobile-close-btn"
-            [attr.aria-label]="t('sidebar.collapse')"
-          >
-            <i class="pi pi-times"></i>
-          </button>
-        }
-      </div>
-
-      <!-- Search Input -->
-      @if (!collapsed) {
-        <div class="sidebar-search">
-          <div class="search-input-wrapper">
-            <i class="pi pi-search search-icon"></i>
-            <input
-              type="text"
-              class="search-input"
-              [placeholder]="t('sidebar.searchPlaceholder')"
-              [value]="sidebarFacade.searchQuery()"
-              (input)="onSearchInput($event)"
-              [attr.aria-label]="
-                t('sidebar.searchAriaLabel', {
-                  title: navigationFacade.sidebarTitle(),
-                })
-              "
-            />
-            @if (sidebarFacade.searchQuery()) {
-              <button
-                class="search-clear"
-                (click)="clearSearch()"
-                [attr.aria-label]="t('sidebar.clearSearch')"
-              >
-                <i class="pi pi-times"></i>
-              </button>
-            }
-          </div>
-          @if (
-            sidebarFacade.searchQuery() &&
-            sidebarFacade.filteredMenuItems().length === 0
-          ) {
-            <div class="search-no-results">
-              <i class="pi pi-info-circle"></i>
-              <span>{{ t('sidebar.noResults') }}</span>
-            </div>
-          }
-        </div>
-      }
-
-      <!-- Navigation Menu -->
-      @if (navigationFacade.activeAppId() === 'shell') {
-        <div class="flex-1 overflow-hidden flex flex-col">
-          <app-shell-tabs [collapsed]="collapsed"></app-shell-tabs>
-        </div>
-      } @else {
-        <nav
-          class="sidebar-nav"
-          [attr.aria-label]="navigationFacade.sidebarTitle() + ' navigation'"
-        >
-          @if (navigationFacade.loading()) {
-            <div class="nav-loading">
-              <i class="pi pi-spin pi-spinner"></i>
-              <span>{{ t('sidebar.loading') }}</span>
-            </div>
-          } @else if (navigationFacade.error()) {
-            <div class="nav-error">
-              <i class="pi pi-exclamation-triangle"></i>
-              <span>{{ navigationFacade.error() }}</span>
-              <button class="retry-btn" (click)="retryLoadManifest()">
-                <i class="pi pi-refresh"></i> {{ t('sidebar.retry') }}
-              </button>
-            </div>
-          } @else {
-            <ul class="nav-list" role="menu">
-              @for (
-                item of menuItemsWithState();
-                track item.route || item.label
-              ) {
-                <li role="none">
-                  @if (
-                    item.children && item.children.length > 0 && !collapsed
-                  ) {
-                    <!-- Parent Group with Children -->
-                    <div
-                      class="nav-group"
-                      [class.has-active-child]="item._hasActiveChild"
-                    >
-                      <button
-                        class="nav-item nav-group-header"
-                        [class.expanded]="isGroupExpanded(item.label)"
-                        [class.has-active-child]="item._hasActiveChild"
-                        (click)="toggleGroup(item.label)"
-                        [attr.aria-expanded]="isGroupExpanded(item.label)"
-                        role="menuitem"
-                      >
-                        @if (item.icon) {
-                          <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
-                        }
-                        <span class="nav-label" [title]="item.label">{{
-                          item.label
-                        }}</span>
-                        @if (item.badge) {
-                          <span
-                            [class]="
-                              'badge ' + (item.badgeClass || 'badge-primary')
-                            "
-                          >
-                            {{ item.badge }}
-                          </span>
-                        }
-                        <i
-                          [class]="
-                            'pi nav-chevron ' +
-                            (isGroupExpanded(item.label)
-                              ? 'pi-chevron-down'
-                              : 'pi-chevron-right')
-                          "
-                        ></i>
-                      </button>
-
-                      <!-- Nested Children with Animation -->
-                      <div
-                        class="nav-sublist-wrapper"
-                        [class.expanded]="isGroupExpanded(item.label)"
-                      >
-                        <ul class="nav-sublist" role="menu">
-                          @for (
-                            child of item.children;
-                            track child.route || child.label
-                          ) {
-                            <li role="none">
-                              <a
-                                [routerLink]="child.route || []"
-                                routerLinkActive="active"
-                                [routerLinkActiveOptions]="{ exact: false }"
-                                (click)="onNavItemClick()"
-                                class="nav-item nav-subitem"
-                                [class.active]="child._isActive"
-                                role="menuitem"
-                              >
-                                @if (child.icon) {
-                                  <i
-                                    [class]="'pi ' + child.icon + ' nav-icon'"
-                                  ></i>
-                                }
-                                <span class="nav-label" [title]="child.label">{{
-                                  child.label
-                                }}</span>
-                                @if (child.badge) {
-                                  <span
-                                    [class]="
-                                      'badge ' +
-                                      (child.badgeClass || 'badge-primary')
-                                    "
-                                  >
-                                    {{ child.badge }}
-                                  </span>
-                                }
-                              </a>
-                            </li>
-                          }
-                        </ul>
-                      </div>
-                    </div>
-                  } @else {
-                    <!-- Simple Leaf Item -->
-                    <a
-                      [routerLink]="item.route || []"
-                      routerLinkActive="active"
-                      [routerLinkActiveOptions]="{
-                        exact:
-                          item.route === '/' || item.route === '/dashboard',
-                      }"
-                      (click)="onNavItemClick()"
-                      class="nav-item"
-                      [class.collapsed-item]="collapsed"
-                      [class.active]="item._isActive"
-                      [attr.title]="collapsed ? item.label : null"
-                      [attr.aria-current]="item._isActive ? 'page' : null"
-                      role="menuitem"
-                    >
-                      @if (item.icon) {
-                        <i [class]="'pi ' + item.icon + ' nav-icon'"></i>
-                      }
-                      @if (!collapsed) {
-                        <span class="nav-label" [title]="item.label">{{
-                          item.label
-                        }}</span>
-                      }
-                      @if (!collapsed && item.badge) {
-                        <span
-                          [class]="
-                            'badge ' + (item.badgeClass || 'badge-primary')
-                          "
-                        >
-                          {{ item.badge }}
-                        </span>
-                      }
-                    </a>
-                  }
-                </li>
-              }
-            </ul>
-          }
-        </nav>
-      }
-
-      <!-- Collapse Toggle Button (Desktop only) -->
-      <button
-        (click)="toggleCollapse()"
-        class="collapse-toggle-btn"
-        [attr.aria-label]="
-          collapsed ? t('sidebar.expand') : t('sidebar.collapse')
-        "
-      >
-        <i
-          [class]="collapsed ? 'pi pi-chevron-right' : 'pi pi-chevron-left'"
-        ></i>
-      </button>
-    </aside>
-  `,
+  templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -322,6 +53,8 @@ export class SidebarComponent {
   @Input() mobileOpen = false;
   @Output() collapsedChange = new EventEmitter<boolean>();
   @Output() mobileClose = new EventEmitter<void>();
+
+  @ViewChild('sidebarNav') sidebarNavRef!: ElementRef<HTMLElement>;
 
   // Branding constants
   readonly brandName = BRAND.SHORT_NAME;
@@ -343,6 +76,29 @@ export class SidebarComponent {
         this.collapsedChange.emit(facadeCollapsed);
       }
     });
+
+    // Auto-scroll to active item
+    effect(() => {
+      // Depend on menu state change
+      this.menuItemsWithState();
+
+      // Schedule scroll after view update
+      setTimeout(() => {
+        this.scrollToActiveItem();
+      }, 100);
+    });
+  }
+
+  private scrollToActiveItem(): void {
+    if (!this.sidebarNavRef?.nativeElement) return;
+
+    const container = this.sidebarNavRef.nativeElement;
+    // Find the active item (either top-level or sub-item)
+    const activeItem = container.querySelector('.nav-item.active');
+
+    if (activeItem) {
+      activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
   }
 
   toggleCollapse(): void {

@@ -3,8 +3,9 @@ import { loadRemoteModule } from '@nx/angular/mf';
 import { LayoutComponent } from './layout/layout.component';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { companyGuard } from './core/guards/company.guard';
+import { permissionGuard } from './core/guards/permission.guard';
 import { RemoteUnavailableComponent } from './pages/remote-unavailable/remote-unavailable.component';
-import { AccessDeniedComponent } from './pages/access-denied/access-denied.component';
+import { AccessDeniedComponent } from '@erp/shared/ui';
 import { NotAuthorizedComponent } from './pages/not-authorized/not-authorized.component';
 
 // Fallback routes for when remotes are unavailable
@@ -155,12 +156,12 @@ export const appRoutes: Route[] = [
         path: 'support',
         canActivate: [companyGuard],
         loadComponent: () =>
-          import(
-            './pages/generic-placeholder/generic-placeholder.component'
-          ).then((m) => m.GenericPlaceholderPageComponent),
+          import('./pages/technical-support/technical-support.component').then(
+            (m) => m.TechnicalSupportComponent,
+          ),
         data: {
           title: 'Technical Support',
-          pageKey: 'TechnicalSupport',
+          pageKey: 'TechnicalSupport', // Matches registry
           moduleId: 10,
         },
       },
@@ -168,12 +169,12 @@ export const appRoutes: Route[] = [
         path: 'versions',
         canActivate: [companyGuard],
         loadComponent: () =>
-          import(
-            './pages/generic-placeholder/generic-placeholder.component'
-          ).then((m) => m.GenericPlaceholderPageComponent),
+          import('./pages/versions-reports/versions-reports.component').then(
+            (m) => m.VersionsReportsComponent,
+          ),
         data: {
           title: 'Versions Reports',
-          pageKey: 'VersionsReports',
+          pageKey: 'VersionsReports', // Matches registry
           moduleId: 10,
         },
       },
@@ -187,7 +188,8 @@ export const appRoutes: Route[] = [
       // --- Microfrontend Remote Routes ---
       {
         path: 'finance',
-        canActivate: [companyGuard],
+        canActivate: [companyGuard, permissionGuard],
+        data: { moduleId: 8, permissionKey: 'FinanceModule' },
         loadChildren: () =>
           loadRemoteModule('remoteFinance', './Routes')
             .then((m) => m.remoteRoutes)
@@ -195,7 +197,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'hr',
-        canActivate: [companyGuard],
+        canActivate: [companyGuard, permissionGuard],
+        data: { moduleId: 12, permissionKey: 'PayrollModule' },
         loadChildren: () =>
           loadRemoteModule('remoteHr', './Routes')
             .then((m) => m.remoteRoutes)
@@ -203,7 +206,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'srm',
-        canActivate: [companyGuard],
+        canActivate: [companyGuard, permissionGuard],
+        data: { moduleId: 7, permissionKey: 'SRMModule' },
         loadChildren: () =>
           loadRemoteModule('remoteSrm', './Routes')
             .then((m) => m.remoteRoutes)
@@ -211,7 +215,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'pm',
-        canActivate: [companyGuard],
+        canActivate: [companyGuard, permissionGuard],
+        data: { moduleId: 5, permissionKey: 'ProjectManagmentModule' },
         loadChildren: () =>
           loadRemoteModule('remotePm', './Routes')
             .then((m) => m.remoteRoutes)
@@ -219,7 +224,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'warehouses',
-        canActivate: [companyGuard],
+        canActivate: [companyGuard, permissionGuard],
+        data: { moduleId: 9, permissionKey: 'WarehouseModule' },
         loadChildren: () =>
           loadRemoteModule('remoteWarehouses', './Routes')
             .then((m) => m.remoteRoutes)

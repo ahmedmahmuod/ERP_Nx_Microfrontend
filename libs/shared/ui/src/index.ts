@@ -10,6 +10,7 @@ export * from './lib/input/input.component';
 export * from './lib/card/card.component';
 export * from './lib/modal/modal.component';
 export * from './lib/table/table.component';
+export * from './lib/access-denied/access-denied.component';
 
 // Services
 export * from './lib/services/theme.service';

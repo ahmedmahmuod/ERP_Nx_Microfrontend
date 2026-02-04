@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<ng-container *transloco="let t; read: 'auth'">
   <div class="login-container relative">
     <!-- Language Switcher -->
     <div class="lang-switch-container">
@@ -20,9 +20,9 @@
               />
               <h1 class="brand-title">{{ brandName }}</h1>
             </div>
-            <h2 class="login-title">{{ t('auth.login.title') }}</h2>
+            <h2 class="login-title">{{ t('login.title') }}</h2>
             <p class="login-subtitle">
-              {{ t('auth.login.subtitle') }}
+              {{ t('login.subtitle') }}
             </p>
           </div>
 
@@ -34,8 +34,8 @@
           >
             <erp-input
               type="email"
-              [label]="t('auth.login.emailLabel')"
-              [placeholder]="t('auth.login.emailPlaceholder')"
+              [label]="t('login.emailLabel')"
+              [placeholder]="t('login.emailPlaceholder')"
               formControlName="email"
               [required]="true"
               [invalid]="isFieldInvalid('email')"
@@ -45,8 +45,8 @@
 
             <erp-input
               type="password"
-              [label]="t('auth.login.passwordLabel')"
-              [placeholder]="t('auth.login.passwordPlaceholder')"
+              [label]="t('login.passwordLabel')"
+              [placeholder]="t('login.passwordPlaceholder')"
               formControlName="password"
               [required]="true"
               [invalid]="isFieldInvalid('password')"
@@ -61,11 +61,11 @@
                   formControlName="rememberMe"
                   class="checkbox"
                 />
-                <span>{{ t('auth.login.rememberMe') }}</span>
+                <span>{{ t('login.rememberMe') }}</span>
               </label>
 
               <a href="#" class="forgot-link">{{
-                t('auth.login.forgotPassword')
+                t('login.forgotPassword')
               }}</a>
             </div>
 
@@ -79,8 +79,8 @@
             >
               {{
                 authFacade.isLoading()
-                  ? t('auth.login.signingIn')
-                  : t('auth.login.signIn')
+                  ? t('login.signingIn')
+                  : t('login.signIn')
               }}
             </erp-button>
           </form>
@@ -88,9 +88,9 @@
           <!-- Footer -->
           <div class="login-footer">
             <p class="signup-text">
-              {{ t('auth.login.noAccount') }}
+              {{ t('login.noAccount') }}
               <a routerLink="/auth/register" class="signup-link">{{
-                t('auth.login.signup')
+                t('login.signup')
               }}</a>
             </p>
           </div>
