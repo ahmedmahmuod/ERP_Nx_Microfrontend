@@ -22,7 +22,7 @@ import { ButtonComponent } from '../button/button.component';
 import { CardComponent } from '../card/card.component';
 
 @Component({
-  selector: 'erp-access-denied',
+  selector: 'lib-access-denied',
   standalone: true,
   imports: [ButtonComponent, CardComponent, TranslocoDirective],
   templateUrl: './access-denied.component.html',
