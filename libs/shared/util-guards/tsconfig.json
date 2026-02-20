@@ -1,0 +1,25 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "target": "es2022",
+    "moduleResolution": "bundler",
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "emitDecoratorMetadata": false,
+    "module": "esnext"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
+}
