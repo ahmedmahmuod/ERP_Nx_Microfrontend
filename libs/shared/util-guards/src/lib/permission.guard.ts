@@ -31,7 +31,7 @@ export const permissionGuard: CanActivateFn = async (
   let moduleKey = data.moduleKey;
   if (!moduleKey) {
     const url = '/' + route.url.map((segment) => segment.path).join('/');
-    moduleKey = getModuleKeyByRoute(url);
+    moduleKey = getModuleKeyByRoute(url) || undefined;
   }
 
   if (!moduleKey) {

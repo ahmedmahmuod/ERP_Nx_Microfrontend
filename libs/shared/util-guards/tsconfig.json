@@ -7,7 +7,7 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "emitDecoratorMetadata": false,
-    "module": "preserve"
+    "module": "esnext"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -20,9 +20,6 @@
   "references": [
     {
       "path": "./tsconfig.lib.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
     }
   ]
 }

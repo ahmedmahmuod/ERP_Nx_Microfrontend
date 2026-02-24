@@ -19,12 +19,11 @@ import {
 import { Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ButtonComponent } from '../button/button.component';
-import { CardComponent } from '../card/card.component';
 
 @Component({
-  selector: 'erp-access-denied',
+  selector: 'lib-access-denied',
   standalone: true,
-  imports: [ButtonComponent, CardComponent, TranslocoDirective],
+  imports: [ButtonComponent, TranslocoDirective],
   templateUrl: './access-denied.component.html',
   styleUrl: './access-denied.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
