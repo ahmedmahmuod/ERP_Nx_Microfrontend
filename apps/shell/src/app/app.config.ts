@@ -8,10 +8,7 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { MessageService } from 'primeng/api';
-import {
-  provideTranslocoConfig,
-  TRANSLOCO_REMOTE_MAP,
-} from '@erp/shared/util-i18n';
+import { provideTranslocoConfig } from '@erp/shared/util-i18n';
 import { appRoutes } from './app.routes';
 import { ERPTheme } from '@erp/shared/theme';
 import {
@@ -29,17 +26,6 @@ export const appConfig: ApplicationConfig = {
     {
       provide: TOKEN_STORAGE,
       useClass: LocalStorageTokenStorage,
-    },
-    {
-      provide: TRANSLOCO_REMOTE_MAP,
-      useValue: {
-        auth: 'http://localhost:4201',
-        finance: 'http://localhost:4202',
-        hr: 'http://localhost:4203',
-        srm: 'http://localhost:4207',
-        pm: 'http://localhost:4205',
-        warehouses: 'http://localhost:4206',
-      },
     },
     provideTranslocoConfig(),
     provideRouter(appRoutes, withComponentInputBinding()),

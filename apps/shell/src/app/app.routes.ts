@@ -1,20 +1,10 @@
 import { Route } from '@angular/router';
-import { loadRemoteModule } from '@nx/angular/mf';
 import { LayoutComponent } from './layout/layout.component';
 import { authGuard, guestGuard } from './core/guards/auth.guard';
 import { companyGuard } from './core/guards/company.guard';
 import { permissionGuard } from './core/guards/permission.guard';
-import { RemoteUnavailableComponent } from './pages/remote-unavailable/remote-unavailable.component';
 import { AccessDeniedComponent } from '@erp/shared/ui';
 import { NotAuthorizedComponent } from './pages/not-authorized/not-authorized.component';
-
-// Fallback routes for when remotes are unavailable
-const remoteFallbackRoutes: Route[] = [
-  {
-    path: '**',
-    component: RemoteUnavailableComponent,
-  },
-];
 
 export const appRoutes: Route[] = [
   // Auth routes (no layout, guest only)
@@ -22,11 +12,8 @@ export const appRoutes: Route[] = [
     path: 'auth',
     canActivate: [guestGuard],
     loadChildren: () =>
-      loadRemoteModule('remoteAuth', './Routes')
-        .then((m) => m.remoteRoutes)
-        .catch(() => remoteFallbackRoutes),
+      import('./features/auth/auth.routes').then((m) => m.authRoutes),
   },
-  // Protected routes (with layout, auth required)
   // Protected routes (with layout, auth required)
   {
     path: '',
@@ -161,7 +148,7 @@ export const appRoutes: Route[] = [
           ),
         data: {
           title: 'Technical Support',
-          pageKey: 'TechnicalSupport', // Matches registry
+          pageKey: 'TechnicalSupport',
           moduleId: 10,
         },
       },
@@ -174,7 +161,7 @@ export const appRoutes: Route[] = [
           ),
         data: {
           title: 'Versions Reports',
-          pageKey: 'VersionsReports', // Matches registry
+          pageKey: 'VersionsReports',
           moduleId: 10,
         },
       },
@@ -185,51 +172,45 @@ export const appRoutes: Route[] = [
         title: 'Access Denied',
       },
 
-      // --- Microfrontend Remote Routes ---
+      // --- Feature Module Routes (previously Microfrontend Remotes) ---
       {
         path: 'finance',
         canActivate: [companyGuard, permissionGuard],
         data: { moduleId: 8, permissionKey: 'FinanceModule' },
         loadChildren: () =>
-          loadRemoteModule('remoteFinance', './Routes')
-            .then((m) => m.remoteRoutes)
-            .catch(() => remoteFallbackRoutes),
+          import('./features/finance/finance.routes').then(
+            (m) => m.financeRoutes,
+          ),
       },
       {
         path: 'hr',
         canActivate: [companyGuard, permissionGuard],
         data: { moduleId: 12, permissionKey: 'PayrollModule' },
         loadChildren: () =>
-          loadRemoteModule('remoteHr', './Routes')
-            .then((m) => m.remoteRoutes)
-            .catch(() => remoteFallbackRoutes),
+          import('./features/hr/hr.routes').then((m) => m.hrRoutes),
       },
       {
         path: 'srm',
         canActivate: [companyGuard, permissionGuard],
         data: { moduleId: 7, permissionKey: 'SRMModule' },
         loadChildren: () =>
-          loadRemoteModule('remoteSrm', './Routes')
-            .then((m) => m.remoteRoutes)
-            .catch(() => remoteFallbackRoutes),
+          import('./features/srm/srm.routes').then((m) => m.srmRoutes),
       },
       {
         path: 'pm',
         canActivate: [companyGuard, permissionGuard],
         data: { moduleId: 5, permissionKey: 'ProjectManagmentModule' },
         loadChildren: () =>
-          loadRemoteModule('remotePm', './Routes')
-            .then((m) => m.remoteRoutes)
-            .catch(() => remoteFallbackRoutes),
+          import('./features/pm/pm.routes').then((m) => m.pmRoutes),
       },
       {
         path: 'warehouses',
         canActivate: [companyGuard, permissionGuard],
         data: { moduleId: 9, permissionKey: 'WarehouseModule' },
         loadChildren: () =>
-          loadRemoteModule('remoteWarehouses', './Routes')
-            .then((m) => m.remoteRoutes)
-            .catch(() => remoteFallbackRoutes),
+          import('./features/warehouses/warehouses.routes').then(
+            (m) => m.warehousesRoutes,
+          ),
       },
       {
         path: '**',

@@ -1,0 +1,71 @@
+{
+  "login": {
+    "title": "Sign In",
+    "subtitle": "Enter your credentials to access your account",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "noAccount": "Don't have an account?",
+    "signup": "Sign up",
+    "validationTitle": "Validation Error",
+    "successTitle": "Login Successful!",
+    "successMessage": "Welcome to {{brand}}",
+    "errorTitle": "Login Failed",
+    "errorDefault": "Invalid email or password. Please try again."
+  },
+  "register": {
+    "title": "Create Account",
+    "subtitle": "Sign up to get started with Assemble ERP",
+    "nameLabel": "Full Name",
+    "namePlaceholder": "John Doe",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "john.doe@company.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Create a strong password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "terms": {
+      "agree": "I agree to the",
+      "tos": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    },
+    "createAccount": "Create Account",
+    "creatingAccount": "Creating Account...",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email",
+    "minlength": "Minimum {{requiredLength}} characters required",
+    "passwordMismatch": "Passwords do not match",
+    "acceptTerms": "You must accept the terms",
+    "fillRequired": "Please fill in all required fields"
+  },
+  "errors": {
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "Session expired. Please login again.",
+    "forbidden": "You don't have permission to access this resource.",
+    "notFound": "The requested resource was not found.",
+    "validation": "Please check your input and try again.",
+    "invalidCredentials": "Invalid email or password.",
+    "server": "Server error. Please try again later.",
+    "timeout": "Request timeout. Please try again.",
+    "unknown": "An unexpected error occurred."
+  },
+  "selectCompany": {
+    "title": "Select Company",
+    "subtitle": "Choose a company to continue",
+    "searchPlaceholder": "Search companies...",
+    "selectButton": "Continue",
+    "backToLogin": "Back to Login",
+    "noCompaniesTitle": "No Companies Available",
+    "noCompaniesMessage": "Your account is not associated with any companies. Please contact your administrator or login again."
+  }
+}

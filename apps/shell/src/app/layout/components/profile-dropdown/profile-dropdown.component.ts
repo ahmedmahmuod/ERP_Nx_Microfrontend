@@ -6,7 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { InputTextModule } from 'primeng/inputtext';
 import { CompanyFacade, UserFacade } from '@erp/shared/util-state';
-import { AuthFacadeService } from '@erp/remote-auth/src/app/services/auth-facade.service';
+import { AuthFacadeService } from '../../../features/auth/services/auth-facade.service';
 import { LanguageSwitchComponent } from '@erp/shared/ui/primeng-components';
 import { TranslocoDirective, TRANSLOCO_SCOPE } from '@jsverse/transloco';
 @Component({

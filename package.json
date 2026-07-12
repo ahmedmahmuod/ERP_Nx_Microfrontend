@@ -2,7 +2,12 @@
   "name": "@erp/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "npx nx serve shell",
+    "build": "npx nx build shell",
+    "serve": "npx nx serve shell",
+    "lint": "npx nx lint shell"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^21.0.8",

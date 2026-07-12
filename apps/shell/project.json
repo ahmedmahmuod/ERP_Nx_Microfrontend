@@ -33,11 +33,6 @@
             "glob": "workspace-config.json",
             "input": "libs/shared/config/src/lib/assets",
             "output": "/assets"
-          },
-          {
-            "glob": "module-federation.manifest.json",
-            "input": "apps/shell",
-            "output": "/assets"
           }
         ],
         "styles": [
@@ -55,8 +50,8 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
             },
             {
               "type": "anyComponentStyle",
@@ -64,7 +59,8 @@
               "maximumError": "100kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "optimization": true
         },
         "development": {
           "optimization": false,
@@ -72,27 +68,11 @@
           "sourceMap": true
         }
       },
-      "defaultConfiguration": "production"
+      "defaultConfiguration": "development"
     },
     "serve": {
       "continuous": true,
       "executor": "@nx/angular:dev-server",
-      "configurations": {
-        "production": {
-          "buildTarget": "shell:build:production"
-        },
-        "development": {
-          "buildTarget": "shell:build:development"
-        }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "port": 4200,
-        "publicHost": "http://localhost:4200"
-      }
-    },
-    "serve-mf": {
-      "executor": "@nx/angular:module-federation-dev-server",
       "configurations": {
         "production": {
           "buildTarget": "shell:build:production"
