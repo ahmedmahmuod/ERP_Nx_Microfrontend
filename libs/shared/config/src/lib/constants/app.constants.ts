@@ -69,10 +69,11 @@ export const APP_URLS = {
 /**
  * API Configuration
  * @deprecated Use ConfigService for dynamic configuration
+ * ⚠️ MOCK MODE: BASE_URL points to localhost. Restore to 'https://assemblestage:44382/api' when switching back.
  */
 export const API = {
   BASE_URL:
-    (globalThis as any).API_BASE_URL || 'https://assemblestage:44382/api',
+    (globalThis as any).API_BASE_URL || 'http://localhost:44382/api',
   TIMEOUT: 30000, // 30 seconds
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000, // 1 second

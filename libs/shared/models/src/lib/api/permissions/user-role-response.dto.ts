@@ -9,7 +9,7 @@ import { PermissionActionDto } from './permission-action.dto';
 export interface SelectedCompanyDto {
   readonly ID?: number;
   readonly Name?: string;
-  readonly Logo?: string;
+  readonly Logo?: string | null;
   [key: string]: unknown;
 }
 

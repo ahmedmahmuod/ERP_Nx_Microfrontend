@@ -2,7 +2,9 @@ import { WorkspaceConfig } from '../models/config.models';
 
 export const WORKSPACE_CONFIG: WorkspaceConfig = {
   globals: {
-    domain: 'www.assemblestage.com',
+    // ⚠️ MOCK MODE: Domain changed to localhost — no real network calls will leave the machine.
+    // Restore to: 'www.assemblestage.com' when switching back to real APIs.
+    domain: 'localhost',
     envName: 'stage',
     servicePorts: {
       gateway: 44382, // GETWAY_API_ENDPOINT
