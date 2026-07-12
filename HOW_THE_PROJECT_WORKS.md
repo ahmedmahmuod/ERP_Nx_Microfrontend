@@ -1,132 +1,218 @@
 # How the ERP Project Works Internally
 
-Welcome to the ERP project. This guide is designed to help you understand the "why" and "how" behind our architecture. We use a **Micro-Frontend (MFE)** approach built with **Angular**, **Nx**, and **Module Federation**.
+Welcome to the ERP project. This guide describes the architecture of our **Enterprise Angular Application** built with **Angular**, **Nx**, and a **monolithic feature-based** structure.
 
 ---
 
 ## 1. High-Level Idea (The Big Picture)
 
-### What is a Micro-Frontend?
+### What is the Architecture?
 
-Think of it like microservices, but for the browser. Instead of one massive Angular application ("The Monolith"), we split the ERP into smaller, independent pieces called **Remotes** (e.g., HR, Finance, SRM) and one **Shell** (the Host).
+This is a **single Angular application** that contains all business modules as **lazy-loaded features**. Instead of separate micro-frontend apps communicating over the network at runtime, all features live inside one unified app.
 
 ### Why this architecture?
 
-- **Scaling Teams**: Multiple teams can work on different modules (HR vs. Finance) without stepping on each other's toes.
-- **Independent Deployment**: You can deploy a bug fix to the Finance module without rebuilding or re-deploying the entire ERP.
-- **Isolation**: A crash or error in the "Warehouses" module shouldn't take down the entire system or affect the "Auth" flow.
+- **Simplified Development**: Run a single `npm start` — no need to spin up multiple servers.
+- **Type Safety Across Features**: TypeScript catches errors across module boundaries at build time.
+- **Faster Initial Load**: Angular's built-in lazy loading handles code splitting automatically.
+- **Easier Debugging**: One process, one source map, one DevTools session.
 
 ---
 
 ## 2. Workspace Structure (Nx Monorepo)
 
-The project lives in an **Nx Monorepo**. This means all apps and shared code are in one repository, but they are strictly separated.
+The project lives in an **Nx Monorepo**. All app code and shared code are strictly separated.
 
-- **`apps/`**: Contains the deployable units.
-  - **`shell`**: The portal/entry point.
-  - **`remote-*`**: The actual business modules (HR, Finance, etc.).
-- **`libs/`**: Contains shared logic and components.
-  - **`shared/ui`**: Our internal Design System (Buttons, Tables, etc.).
-  - **`shared/theme`**: Logic for dynamic branding and accent colors.
-  - **`shared/models`**: TypeScript interfaces used by everyone.
+```
+ERP_Nx_Microfrontend/
+├── apps/
+│   └── shell/               ← THE ONLY running app
+│       └── src/app/
+│           ├── core/        ← Guards, services, config
+│           ├── layout/      ← Header, Sidebar, Footer
+│           ├── navigation/  ← Navigation registry & menu builder
+│           ├── pages/       ← Shell-level pages (Dashboard, etc.)
+│           ├── shared/      ← Shell-specific shared components
+│           └── features/    ← ALL BUSINESS MODULES LIVE HERE
+│               ├── auth/    ← Authentication (login, register, company select)
+│               ├── finance/ ← Finance module
+│               ├── hr/      ← Human Resources module
+│               ├── srm/     ← Supplier Relationship Management
+│               ├── pm/      ← Project Management
+│               └── warehouses/ ← Warehouses & Inventory
+└── libs/
+    └── shared/
+        ├── ui/              ← Design System (Buttons, Tables, Cards, etc.)
+        ├── theme/           ← Dynamic branding & accent colors
+        ├── models/          ← TypeScript interfaces shared by all features
+        ├── config/          ← Runtime configuration service
+        ├── data-access/     ← HTTP client, API services, token storage
+        ├── util-state/      ← Signal-based state (User, Company, Permissions)
+        ├── util-i18n/       ← Transloco internationalization helpers
+        └── utils/           ← General utilities
+```
 
-**Why Nx?** Nx gives us "Dependency Graph" tools to ensure that Remotes never import from each other directly, preventing "spaghetti code."
+**Why Nx?** Nx gives us Dependency Graph tools to enforce that features only depend on shared libraries — never on each other.
 
 ---
 
-## 3. The Shell Application (The Host)
+## 3. The Shell Application
 
-The Shell is the "glue." It is the first thing the user loads.
+The Shell (`apps/shell`) is the **only deployable Angular application**. It:
 
-- **Responsibilities**: Authentication, Layout (Header/Sidebar), Theme switching, and loading the correct Remote.
-- **What it NEVER does**: It should **never** contain business logic for a specific module (e.g., don't put "Calculate Payroll" logic here).
-- **Runtime Loading**: The Shell doesn't have the code for HR or Finance at build time. It fetches it from a separate URL only when the user navigates to that section.
-
----
-
-## 4. Remote Applications (The Modules)
-
-Each Remote (like `remote-hr`) is a standalone Angular app that is "plugged" into the Shell at runtime.
-
-- **`remoteRoutes`**: Each remote exports its own routes.
-- **`remoteManifest`**: A JSON-like configuration that tells the Shell what its menu items look like and what its special "accent color" is.
-- **Pluggable Design**: A Remote doesn't know the Shell exists. It just exports what it's told, and the Shell handles the rest.
+- Bootstraps the app (`bootstrap.ts`)
+- Provides the layout (Header + Sidebar + Footer via `LayoutComponent`)
+- Manages authentication guards (`authGuard`, `guestGuard`, `companyGuard`, `permissionGuard`)
+- Owns the application routes (`app.routes.ts`)
+- Lazy-loads all feature modules
 
 ---
 
-## 5. Routing Flow: How the "Magic" Happens
+## 4. Feature Modules (previously Micro-Frontend Remotes)
+
+Each feature inside `apps/shell/src/app/features/` is:
+
+- **Lazy-loaded** via Angular's standard `loadChildren()` / `loadComponent()`
+- **Self-contained** — its components, routes, and services are scoped to the feature folder
+- **Manifest-driven** — exports a `remoteManifest` that tells the Sidebar what menu items to display
+
+### Feature Structure
+
+```
+features/hr/
+├── hr.routes.ts       ← All HR routes (lazy-loaded)
+├── manifest.ts        ← Navigation manifest (sidebar menu)
+└── entry/
+    └── entry.ts       ← HR module placeholder/entry component
+```
+
+### Auth Feature (Special)
+
+The auth feature has more structure because it has real pages:
+
+```
+features/auth/
+├── auth.routes.ts              ← Auth routes (login, register, select-company)
+├── auth-layout.component.ts    ← Auth layout wrapper
+├── pages/
+│   ├── login/
+│   ├── register/
+│   └── select-company/
+└── services/
+    └── auth-facade.service.ts  ← Auth state & API facade
+```
+
+---
+
+## 5. Routing Flow
 
 When you navigate:
 
-1.  **User goes to `/hr`**: The Shell's `app.routes.ts` sees the `/hr` path.
-2.  **Dynamic Import**: The Shell uses `loadRemoteModule` to download the specific JavaScript bundle for the HR app.
-3.  **Route Injection**: The Shell takes the `remoteRoutes` from the HR bundle and injects them into the main Angular router.
-4.  **Fallback**: If the HR server is down, the Shell catches the error and shows a `RemoteUnavailableComponent` instead of a blank white screen.
+1. **User goes to `/hr`**: `app.routes.ts` matches the `/hr` path.
+2. **Lazy Import**: Angular dynamically imports `features/hr/hr.routes.ts`.
+3. **Route Resolution**: Angular renders the correct HR component.
+
+No network fetching of remote bundles — it's all code-split by Angular's webpack bundler at build time.
 
 ---
 
 ## 6. Sidebar & Navigation System
 
-The Sidebar lives in the **Shell**, but its content is dynamic.
+The Sidebar content is **dynamic per feature**:
 
-- **Navigation Manifest**: When a user enters a module, the `NavigationFacade` in the Shell loads the `remoteManifest` from that module.
-- **Context Switching**: If you move from Finance to HR, the Sidebar instantly updates its labels and icons to reflect the HR menu.
-- **State Management**: We use **Signals** to track which menu group is open, which item is active, and the current search query.
+- **NavigationFacadeService** watches the URL and detects which feature is active.
+- It lazy-loads the `manifest.ts` for that feature (e.g., `features/hr/manifest.ts`).
+- The manifest defines the sidebar title, menu items, icons, routes, and accent color.
+- **Context Switching**: Moving from Finance to HR instantly updates the Sidebar.
+
+### Manifest Example (`features/hr/manifest.ts`):
+```ts
+export const remoteManifest: NavigationManifest = {
+  appId: 'hr',
+  appName: 'Human Resources',
+  sidebarTitle: 'HR',
+  accentToken: 'hr',
+  appIcon: 'pi-users',
+  menuItems: [ ... ],
+};
+```
 
 ---
 
 ## 7. Shared Libraries: The "Single Source of Truth"
 
-To keep the ERP looking consistent, we use shared libraries:
-
-- **Shared UI**: Every button and table in HR looks exactly like the ones in Finance because they import from `@erp/shared/ui`.
-- **Shared Theme**: We use **CSS Variables** (`--accent-primary`). When you switch to HR, the Shell updates these variables to "HR Orange." When you switch to Finance, they change to "Finance Green."
+- **`@erp/shared/ui`** — Design System (buttons, tables, cards, inputs)
+- **`@erp/shared/theme`** — CSS Variables & accent color tokens
+- **`@erp/shared/models`** — TypeScript interfaces (NavigationManifest, NavItem, etc.)
+- **`@erp/shared/config`** — Runtime config (API URLs, module IDs)
+- **`@erp/shared/data-access`** — HTTP client, API services
+- **`@erp/shared/util-state`** — Signal-based stores (User, Company, Permissions)
+- **`@erp/shared/util-i18n`** — Transloco i18n configuration
 
 ---
 
 ## 8. State & Communication
 
-**Rule #1: Remotes do not talk to each other.**
+**Rule: Features do not import from each other.**
 
-- **Shell to Remote**: Communication happens via the URL or shared services in `libs/`.
-- **Facades**: We use Facade services to hide complex logic. Components only talk to the Facade, and the Facade talks to the State (Signals).
-- **Global State**: Things like the "Current User," "Active Company," and "Language" live in the Shell's core services and are accessible to Remotes via shared libs.
+- **Services**: Shared state lives in `libs/shared/util-state` (signals).
+- **Facades**: Components talk to Facade services; Facades talk to State.
+- **Guards**: Route guards (`authGuard`, `permissionGuard`) are in the Shell's `core/guards/`.
 
 ---
 
 ## 9. Internationalization (Transloco)
 
-We use **Transloco** for multi-language support (English/Arabic).
-
-- **Scoped Translations**: The Shell has its own translation files, and each Remote has its own. This prevents one huge, unmanageable translation file.
-- **RTL/LTR**: Direction is handled at the Shell level. When the language changes to Arabic, the Shell updates the `dir="rtl"` attribute on the `<html>` tag, and our CSS adapts automatically.
-
----
-
-## 10. CI/CD & Deployment
-
-In a standard Angular app, you build everything together. Here:
-
-- We can build **only** the `remote-hr` app if that's all that changed.
-- In production, each Remote can live on a different subdomain or port.
-- The Shell reads a `module-federation.manifest.json` to know where to find each remote.
+- **Scoped Translations**: Shell has `/assets/i18n/shell/en.json`, Auth has `/assets/i18n/auth/en.json`.
+- **RTL/LTR**: Direction is managed at the Shell level via the `LanguageService`.
+- The `TranslocoHttpLoader` fetches translations from `/assets/i18n/{scope}/{lang}.json`.
 
 ---
 
-## 11. Common Mistakes to Avoid
+## 10. Running the App
 
-1.  **Direct Imports**: Never do `import { ... } from '../../apps/remote-finance'`. This breaks the micro-frontend boundary. Always use shared libraries.
-2.  **Hardcoded URLs**: Never hardcode production URLs in your code. Use environment variables or the manifest registry.
-3.  **Heavy Remotes**: Don't put huge global libraries inside a Remote. If it's used by everyone, move it to `libs/`.
+```bash
+# Install dependencies
+npm install
+
+# Start the enterprise app (single command!)
+npm start
+# or: npx nx serve shell
+
+# Build for production
+npm run build
+# or: npx nx build shell
+```
+
+The app will be available at **http://localhost:4200**.
 
 ---
 
-## 12. Mental Model Summary
+## 11. Adding a New Feature Module
 
-If you remember only one thing: **The Shell is the stage, and Remotes are the actors.**
-
-The stage (Shell) provides the lights, the curtains, and the entrance/exit (Routing/Sidebar). The actors (Remotes) perform their specific scene (Business Logic) when they are called to the stage. They don't need to know who the other actors are; they just need to know their own script.
+1. Create `apps/shell/src/app/features/{feature-name}/`
+2. Add `{feature}.routes.ts` with lazy-loaded routes
+3. Add `manifest.ts` with the `remoteManifest` configuration
+4. Register the route in `app.routes.ts` using `loadChildren()`
+5. Add the feature to `MANIFEST_LOADERS` in `navigation-facade.service.ts`
+6. Add the feature to `REMOTE_REGISTRY` in `remote-registry.config.ts`
 
 ---
 
-_Created by the Principal Frontend Architect._
+## 12. Common Mistakes to Avoid
+
+1. **Cross-Feature Imports**: Never import directly from another feature folder. Use shared libraries instead.
+2. **Hardcoded URLs**: Never hardcode API URLs — use `ConfigService` or environment variables.
+3. **Heavy Features**: Don't include huge global libraries inside a feature. If it's used by everyone, move it to `libs/`.
+
+---
+
+## 13. Mental Model Summary
+
+**The Shell is the stage. Features are the acts.**
+
+The stage (Shell) provides the layout, navigation, authentication, and routing. Each feature act (HR, Finance, etc.) performs its specific business logic when the user navigates to it. Features share props via shared libraries — they never talk directly to each other.
+
+---
+
+_Updated by Principal Frontend Architect — Migrated from Micro-Frontend to Monolithic Enterprise Architecture._
