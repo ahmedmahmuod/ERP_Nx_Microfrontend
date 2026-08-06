@@ -76,20 +76,11 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "@nx/vitest:test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
-    },
+    "@nx/vitest:test": { "cache": true, "inputs": ["default", "^production"] },
     "@nx/angular:webpack-browser": {
       "cache": true,
       "dependsOn": ["^build"],
-      "inputs": [
-        "production",
-        "^production",
-        {
-          "env": "NX_MF_DEV_REMOTES"
-        }
-      ]
+      "inputs": ["production", "^production", { "env": "NX_MF_DEV_REMOTES" }]
     },
     "@nx/angular:ng-packagr-lite": {
       "cache": true,
@@ -107,12 +98,7 @@
         "ciTargetName": "e2e-ci"
       }
     },
-    {
-      "plugin": "@nx/eslint/plugin",
-      "options": {
-        "targetName": "lint"
-      }
-    }
+    { "plugin": "@nx/eslint/plugin", "options": { "targetName": "lint" } }
   ],
   "generators": {
     "@nx/angular:application": {
@@ -125,8 +111,7 @@
       "linter": "eslint",
       "unitTestRunner": "vitest-analog"
     },
-    "@nx/angular:component": {
-      "style": "css"
-    }
-  }
+    "@nx/angular:component": { "style": "css" }
+  },
+  "nxCloudId": "696a04e7fcac1eebcb327429"
 }
